@@ -5,6 +5,7 @@ const DEFAULTS = {
   maxPages: 40,
   perPattern: 3,
   dedupe: true,
+  focus: true,
   fresh: false,
   headed: false,
   seeds: '',
@@ -20,6 +21,12 @@ const DEFAULTS = {
 };
 
 const fa = (n) => Number(n).toLocaleString('fa-IR');
+
+const KIND_LABEL = {
+  home: 'صفحه اصلی', search: 'جستجو', listing: 'دسته و فیلتر', product: 'محصول', cart: 'سبد خرید',
+  checkout: 'پروسه خرید', auth: 'ورود و ثبت‌نام', panel: 'پنل کاربر', blog: 'بلاگ', post: 'مطلب بلاگ',
+  contact: 'تماس با ما', terms: 'قوانین و مقررات', about: 'درباره ما', faq: 'سوالات متداول', landing: 'لندینگ', other: 'سایر'
+};
 
 export default function App() {
   const [form, setForm] = useState(() => {
@@ -96,7 +103,7 @@ export default function App() {
     // Earlier runs first (from disk, or from the start event of a resumed run)
     const startEv = [...events].reverse().find((e) => e.type === 'start');
     const previous = startEv ? startEv.previous || [] : (saved ? saved.pages.map((p) => ({
-      index: p.index, url: p.url, pattern: p.pattern,
+      index: p.index, url: p.url, pattern: p.pattern, kind: p.kind,
       shots: Object.fromEntries(Object.entries(p.shots || {}).map(([vp, sh]) => [vp, { files: sh.files.map((f) => `pages/${p.slug}/${f}`) }]))
     })) : []);
     for (const p of previous) map.set(p.index, { ...p, old: true, shots: { ...p.shots }, errors: [] });
@@ -188,6 +195,11 @@ export default function App() {
           </div>
 
           <label className="check">
+            <input type="checkbox" checked={form.focus} onChange={set('focus')} />
+            <span>فقط صفحه‌های مهم: جستجو و فیلتر، محصول، سبد و پروسه خرید، پنل، بلاگ، قوانین و تماس (از لندینگ‌ها یکی کافی است)</span>
+          </label>
+
+          <label className="check">
             <input type="checkbox" checked={form.dedupe} onChange={set('dedupe')} />
             <span>از هر قالب فقط یک نمونه (اگر یک دسته‌بندی گرفته شد، بقیه دسته‌ها رد می‌شوند)</span>
           </label>
@@ -249,6 +261,9 @@ export default function App() {
           </div>
           {fatal && <p className="error">{fatal.message}</p>}
           {done && <p className="ok">تمام شد: {fa(done.pages)} صفحه جدید، {fa(done.filled)} نمای جاافتاده تکمیل شد، {fa(done.skipped)} صفحه تکراری رد شد{done.failed ? `، ${fa(done.failed)} صفحه باز نشد` : ''}. در مجموع {fa(done.total)} صفحه در <code dir="ltr">{done.outDir}</code> است. این پوشه را کامیت و پوش کنید.</p>}
+          {done && done.missing && done.missing.length > 0 && (
+            <p className="muted">پیدا نشد: {done.missing.map((k) => KIND_LABEL[k] || k).join('، ')}. اگر آدرسشان را می‌دانید، در «تنظیمات بیشتر» به «آدرس‌های اضافه» بدهید.</p>
+          )}
           {visiting && <p className="muted" dir="auto">در حال باز کردن: <span dir="ltr">{visiting.url}</span></p>}
           {logs.length > 0 && <p className="muted">{logs[logs.length - 1].message}</p>}
           {generalErrors.length > 0 && (
@@ -258,8 +273,8 @@ export default function App() {
           )}
           {skipped.length > 0 && (
             <details className="skipped">
-              <summary>{fa(skipped.length)} صفحه با قالب تکراری رد شد</summary>
-              <ul>{skipped.map((e) => <li key={e.url} dir="ltr">{e.url} <span className="muted">= #{e.sameAs}</span></li>)}</ul>
+              <summary>{fa(skipped.length)} صفحه رد شد (قالب تکراری یا نوع صفحه‌ای که کافی بود)</summary>
+              <ul>{skipped.map((e) => <li key={e.url}><span dir="ltr">{e.url}</span> <span className="muted">{e.reason === 'focus' ? `${KIND_LABEL[e.kind] || e.kind} کافی بود` : `= #${e.sameAs}`}</span></li>)}</ul>
             </details>
           )}
           {!pages.length && !running && <p className="muted">هنوز چیزی گرفته نشده است.</p>}
@@ -279,6 +294,7 @@ export default function App() {
                     </button>
                   )}
                   <a dir="ltr" href={p.url} target="_blank" rel="noreferrer">{p.url}</a>
+                  {p.kind && <span className="tag kind">{KIND_LABEL[p.kind] || p.kind}</span>}
                   <span className="tag" dir="ltr">{p.pattern}</span>
                 </div>
                 <div className="thumbs">

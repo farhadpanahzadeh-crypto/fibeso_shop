@@ -51,6 +51,7 @@ function captureOptions(b) {
     maxVisits: clamp(b.maxVisits, 1, 2000, 150),
     perPattern: clamp(b.perPattern, 1, 50, 3),
     dedupe: b.dedupe !== false,
+    focus: b.focus !== false,
     fresh: !!b.fresh,
     seeds: String(b.seeds || '').split(/\s+/).filter((x) => /^https?:\/\//.test(x)).slice(0, 100),
     maxDepth: clamp(b.maxDepth, 0, 10, 4),

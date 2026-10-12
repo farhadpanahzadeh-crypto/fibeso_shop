@@ -127,6 +127,7 @@ code { font-size: 0.85em; word-break: break-all; }
 .page__meta a { color: var(--primary); word-break: break-all; }
 .num { font-weight: 800; }
 .tag { padding: 0 8px; border-radius: 999px; background: var(--bg); color: var(--muted); }
+.tag.kind { border: 1px solid var(--primary); background: transparent; color: var(--primary); font-weight: 700; }
 
 .thumbs { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; align-items: flex-start; }
 .thumb { display: grid; gap: 4px; text-decoration: none; color: var(--muted); font-size: 0.8rem; }

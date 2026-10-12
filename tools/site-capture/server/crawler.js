@@ -72,13 +72,125 @@ export function patternOf(u) {
   return '/' + out.join('/');
 }
 
+/* ---------------------------------------------------------------------------
+   Page kinds, in capture order. The goal is the shopping flow (search and
+   filters, product, cart and checkout, user panel) plus blog, terms and contact;
+   landing pages and unrecognised pages are capped in focus mode.
+   ------------------------------------------------------------------------- */
+export const KINDS = [
+  ['home', 'صفحه اصلی'],
+  ['search', 'جستجو'],
+  ['listing', 'دسته و فیلتر'],
+  ['product', 'محصول'],
+  ['cart', 'سبد خرید'],
+  ['checkout', 'پروسه خرید'],
+  ['auth', 'ورود و ثبت‌نام'],
+  ['panel', 'پنل کاربر'],
+  ['blog', 'بلاگ'],
+  ['post', 'مطلب بلاگ'],
+  ['contact', 'تماس با ما'],
+  ['terms', 'قوانین و مقررات'],
+  ['about', 'درباره ما'],
+  ['faq', 'سوالات متداول'],
+  ['landing', 'لندینگ'],
+  ['other', 'سایر']
+];
+const RANK = Object.fromEntries(KINDS.map(([k], i) => [k, i]));
+// Kinds the user wants; the summary reports the ones that were not found
+const TARGETS = ['home', 'search', 'listing', 'product', 'cart', 'checkout', 'panel', 'blog', 'post', 'contact', 'terms', 'landing'];
+// Focus mode: at most this many layouts of these kinds
+const FOCUS_CAP = { landing: 1, other: 1, about: 1, faq: 1 };
+
+const ID_PARAM = /[?&](id|pid|product_?id|post_?id|p)=/i;
+const SEARCH_PARAM = /[?&](q|s|query|keyword|keywords|term|search|text)=/i;
+const KIND_RULES = [
+  ['search', /(\/search\b|جستجو)/],
+  ['cart', /(\/cart\b|\/basket\b|\/bag\b|سبد)/],
+  ['checkout', /(checkout|\/shipping|\/payment|\/order\/(confirm|review)|\/address-?select)/],
+  ['auth', /(\/login|\/log-in|\/signin|\/sign-in|\/signup|\/register|\/auth\b|\/otp)/],
+  ['panel', /(\/profile|\/account|\/panel|\/dashboard|\/my-|\/my\b|\/orders?\b|\/wishlist|\/favou?rites?|\/wallet|\/tickets?|\/notifications?|\/user\b)/],
+  ['post', /(\/(blog|mag|magazine|news|articles?|posts?)\/.+|\/(post|article)(\.html?|[-_]))/],
+  ['blog', /\/(blog|mag|magazine|news|articles?)\b/],
+  ['contact', /(contact|تماس)/],
+  ['terms', /(terms|rules|policy|privacy|conditions|قوانین|مقررات|حریم)/],
+  ['about', /(about|درباره)/],
+  ['faq', /(faq|\/help\b|راهنما|سوالات)/],
+  ['listing', /(\/product-?s?\/list|\/product-?list|\/products-list)/],
+  ['product', /(\/product([-_/.]|$)|\/products\/[^/]+$|\/p\/|\/dkp-|\/item\/|\/tpi-)/],
+  ['listing', /(\/category|\/categories|\/cat\/|\/products\b|\/list\b|\/shop\b|\/brands?\b|\/c\/|\/collections?\b|\/store\b|\/tag\/)/],
+  ['landing', /(landing|\/lp\b|campaign|promo|\/events?\b|festival|\/special|\/offers?\b|\/sale\b|\/deals?\b|amazing|incredible|\/page\/)/]
+];
+export function kindOfUrl(u) {
+  if (SEARCH_PARAM.test(u.search)) return 'search';
+  const s = (safeDecode(u.pathname) + safeDecode(u.search)).toLowerCase();
+  if (u.pathname === '/' || u.pathname === '') return 'home';
+  for (const [k, re] of KIND_RULES) if (re.test(s)) return k;
+  return 'other';
+}
+function safeDecode(x) { try { return decodeURIComponent(x); } catch { return x; } }
+
+/* When the address says nothing, the page itself often does */
+async function kindFromDom(page) {
+  return page.evaluate(() => {
+    const visible = (el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; };
+    const buy = [...document.querySelectorAll('button, a')]
+      .filter((b) => /افزودن به سبد|اضافه به سبد|add to (cart|basket)/i.test(b.textContent || '') && visible(b)).length;
+    const filters = document.querySelectorAll('input[type="checkbox"], input[type="radio"]').length;
+    const prose = [...document.querySelectorAll('article p, main p')].reduce((n, p) => n + (p.textContent || '').trim().length, 0);
+    if (filters > 5) return 'listing';
+    if (buy >= 1 && buy <= 2) return 'product';
+    if (prose > 2500) return 'post';
+    return null;
+  }).catch(() => null);
+}
+
+/* Type a query into the site's own search box and return the results URL */
+const SEARCH_INPUT = ['input[type="search"]', 'input[name="q"]', 'input[name*="search" i]', 'input[name*="keyword" i]',
+  'input[placeholder*="جستجو"]', 'input[placeholder*="جست"]', 'input[placeholder*="search" i]', 'input[aria-label*="جستجو"]']
+  .map((x) => x + ':visible').join(', ');
+const SEARCH_TRIGGER = ['[aria-label*="جستجو"]', '[aria-label*="search" i]', 'button[class*="search" i]', '[class*="search" i] button', '[class*="search" i][role="button"]']
+  .map((x) => x + ':visible').join(', ');
+async function discoverSearch(page, term) {
+  let input = page.locator(SEARCH_INPUT).first();
+  if (!await input.count()) {
+    await page.locator(SEARCH_TRIGGER).first().click({ timeout: 3000 }).catch(() => {});
+    await page.waitForTimeout(800);
+    input = page.locator(SEARCH_INPUT).first();
+    if (!await input.count()) return null;
+  }
+  const before = page.url();
+  await input.click({ timeout: 3000 }).catch(() => {});
+  await input.fill(term, { timeout: 3000 });
+  await page.waitForTimeout(600);
+  await input.press('Enter');
+  await page.waitForURL((u) => u.href !== before, { timeout: 15000 }).catch(() => {});
+  const after = page.url();
+  return after !== before ? after : null;
+}
+
+/* Put one product in the cart so cart and checkout pages are not empty */
+async function tryAddToCart(page) {
+  const btn = page.locator('button:visible, a:visible, [role="button"]:visible')
+    .filter({ hasText: /افزودن به سبد|اضافه به سبد|add to (cart|basket)/i }).first();
+  if (!await btn.count()) return false;
+  await btn.scrollIntoViewIfNeeded({ timeout: 3000 }).catch(() => {});
+  await btn.click({ timeout: 5000 }).catch(() => {});
+  await page.waitForTimeout(2500);
+  return true;
+}
+
+// Common addresses tried when no link to that kind of page was found
+const GUESSES = ['/search?q=' + encodeURIComponent('لپ تاپ'), '/cart', '/checkout/cart', '/checkout', '/contact', '/contact-us',
+  '/terms', '/rules', '/terms-and-conditions', '/privacy', '/blog', '/mag', '/faq', '/about', '/about-us', '/login', '/profile'];
+
 function normalise(href, origin, keepQuery) {
   let u;
   try { u = new URL(href, origin); } catch { return null; }
   if (u.origin !== origin) return null;
   if (!/^https?:$/.test(u.protocol)) return null;
   u.hash = '';
-  if (!keepQuery) u.search = '';
+  // Search results and ?id= pages (product.php?id=12) need their query; others lose it
+  if (!keepQuery && !SEARCH_PARAM.test(u.search) && !ID_PARAM.test(u.search)) u.search = '';
   if (SKIP_EXT.test(u.pathname) || SKIP_WORDS.test(u.pathname + u.search)) return null;
   u.pathname = u.pathname.replace(/\/index\.(html?|php|aspx?)$/i, '/');
   if (u.pathname.length > 1 && u.pathname.endsWith('/')) u.pathname = u.pathname.slice(0, -1);
@@ -235,6 +347,7 @@ export async function capture(options, emit = () => {}) {
     quality: 80,
     saveHtml: true,
     dedupe: true,          // skip pages whose layout matches one already captured
+    focus: true,           // shopping-flow pages first; one landing page is enough
     threshold: 0.7,
     seeds: [],             // extra start URLs (e.g. user-panel pages)
     fresh: false,          // ignore (and delete) the previous captures of this site
@@ -271,46 +384,60 @@ export async function capture(options, emit = () => {}) {
   manifest.failed = [];
   manifest.runs.push(run);
 
-  const templates = manifest.pages.filter((p) => p.fingerprint).map((p) => ({ ...p.fingerprint, index: p.index, slug: p.slug }));
+  const templates = manifest.pages.filter((p) => p.fingerprint).map((p) => ({ ...p.fingerprint, index: p.index, slug: p.slug, kind: p.kind || kindOfUrl(new URL(p.url)) }));
   const captured = new Set(manifest.pages.map((p) => p.url));
   const seen = new Set([...captured, ...manifest.skipped.map((s) => s.url)]);
   const patternCount = {};
-  for (const u of seen) { try { const k = patternOf(new URL(u)); patternCount[k] = (patternCount[k] || 0) + 1; } catch { /* ignore */ } }
+  for (const u of seen) { try { const x = new URL(u); const k = patternOf(x) + (kindOfUrl(x) === 'search' ? '?search' : ''); patternCount[k] = (patternCount[k] || 0) + 1; } catch { /* ignore */ } }
   let index = manifest.pages.reduce((m, p) => Math.max(m, p.index), 0);
 
+  /* Queue ordered by page kind (see KINDS): forced pages first, then search and
+     filters, product, cart, checkout... Guessed addresses come after real links. */
   const queue = [];
-  // Signed in: user-panel links jump the queue (still subject to template dedupe)
-  const PANEL = /(profile|account|panel|dashboard|my-|\/my\b|orders?|address|wishlist|favou?rites?|wallet|tickets?|notifications?|user)/i;
-  const enqueue = (u, depth, forced) => {
+  const kindCount = {};
+  for (const p of manifest.pages) { p.kind = p.kind || kindOfUrl(new URL(p.url)); kindCount[p.kind] = (kindCount[p.kind] || 0) + 1; }
+  const enqueue = (u, depth, forced, guess) => {
     if (!u || seen.has(u.href)) return;
     seen.add(u.href);
-    const item = { url: u, depth, forced };
-    if (forced || (hasAuth && PANEL.test(u.pathname))) queue.unshift(item); else queue.push(item);
+    queue.push({ url: u, depth, forced, guess: guess || undefined, kind: kindOfUrl(u) });
   };
+  // Signed in: user-panel pages right after the forced ones
+  const score = (q) => (q.forced ? -1000 : 0) + (hasAuth && q.kind === 'panel' ? -500 : 0) + RANK[q.kind] * 2 + (q.guess ? 1 : 0);
+  const takeNext = () => {
+    let best = 0;
+    for (let i = 1; i < queue.length; i++) if (score(queue[i]) < score(queue[best])) best = i;
+    return queue.splice(best, 1)[0];
+  };
+  const capped = (kind) => opts.focus && FOCUS_CAP[kind] != null && (kindCount[kind] || 0) >= FOCUS_CAP[kind];
   // Seeds keep their query string: panel pages often need it
   for (const s of [...seeds].reverse()) enqueue(normalise(s, origin, true), 0, true);
+  const startNorm = normalise(start.href, origin, true).href;
+  let siteDown = false;
   enqueue(normalise(start.href, origin, true), 0, true);
   for (const f of retry) { try { enqueue(new URL(f.url), f.depth || 0, !!f.forced); } catch { /* skip */ } }
   // Continue where the last run stopped...
   for (const q of manifest.pending || []) {
     let u = null;
     try { u = new URL(q.url); } catch { /* skip */ }
-    enqueue(u, q.depth, !!q.forced);
+    enqueue(u, q.depth, !!q.forced, !!q.guess);
   }
   // ...and follow links found on earlier pages that were never opened (this also
   // brings back pages whose capture was deleted from the list)
   for (const p of [...manifest.pages, ...manifest.skipped]) {
     for (const href of p.links || []) enqueue(normalise(href, origin, opts.keepQuery), (p.depth || 0) + 1, false);
   }
+  for (const g of GUESSES) enqueue(normalise(origin + g, origin, opts.keepQuery), 1, false, true);
+  let searchTried = !!kindCount.search;
+  const cartFilled = {};
 
   emit({
     type: 'start', outDir, auth: hasAuth, seeds: seeds.length,
-    resumed: !!prev, previous: manifest.pages.map((p) => ({ index: p.index, url: p.url, pattern: p.pattern, slug: p.slug, shots: Object.fromEntries(Object.entries(p.shots || {}).map(([vp, sh]) => [vp, { files: sh.files.map((f) => rel(p.slug, f)), height: sh.height }])) })),
+    resumed: !!prev, previous: manifest.pages.map((p) => ({ index: p.index, url: p.url, pattern: p.pattern, kind: p.kind, slug: p.slug, shots: Object.fromEntries(Object.entries(p.shots || {}).map(([vp, sh]) => [vp, { files: sh.files.map((f) => rel(p.slug, f)), height: sh.height }])) })),
     previousSkipped: manifest.skipped.length, queued: queue.length
   });
 
   const save = async () => {
-    manifest.pending = queue.map((q) => ({ url: q.url.href, depth: q.depth, forced: q.forced || undefined }));
+    manifest.pending = queue.map((q) => ({ url: q.url.href, depth: q.depth, forced: q.forced || undefined, guess: q.guess }));
     await fs.writeFile(manifestFile, JSON.stringify(manifest, null, 2), 'utf8');
   };
 
@@ -353,6 +480,7 @@ export async function capture(options, emit = () => {}) {
       await p2.waitForTimeout(600);
       entry.shots[vp] = await shoot(p2, dir, vp, opts);
       emit({ type: 'shot', index: entry.index, viewport: vp, files: entry.shots[vp].files.map((f) => rel(entry.slug, f)), height: entry.shots[vp].height });
+      if (entry.kind === 'product') await fillCart(p2, vp);
       return true;
     } catch (err) {
       emit({ type: 'error', index: entry.index, url: entry.url, viewport: vp, message: String(err.message || err).split('\n')[0] });
@@ -360,6 +488,12 @@ export async function capture(options, emit = () => {}) {
     } finally {
       await p2.close();
     }
+  };
+
+  const fillCart = async (page, vp) => {
+    if (cartFilled[vp]) return;
+    cartFilled[vp] = true;
+    if (await tryAddToCart(page)) emit({ type: 'log', message: 'یک محصول به سبد اضافه شد تا صفحه سبد و پروسه خرید خالی نباشد.' });
   };
 
   let visits = 0;
@@ -381,8 +515,12 @@ export async function capture(options, emit = () => {}) {
     /* ---------- 2. Discover and capture new page types ---------- */
     while (queue.length && fresh < opts.maxPages && visits < opts.maxVisits) {
       if (opts.signal?.aborted) { emit({ type: 'log', message: 'متوقف شد؛ دفعه بعد از همین‌جا ادامه می‌دهد.' }); break; }
-      const { url, depth, forced } = queue.shift();
-      const pattern = patternOf(url);
+      const { url, depth, forced, guess } = takeNext();
+      let kind = kindOfUrl(url);
+      // A guessed address is only tried while that kind of page is still missing
+      if (guess && kindCount[kind]) continue;
+      if (!forced && kind !== 'other' && capped(kind)) continue;
+      const pattern = patternOf(url) + (kind === 'search' ? '?search' : '');
       patternCount[pattern] = (patternCount[pattern] || 0) + 1;
       if (!forced && patternCount[pattern] > opts.perPattern) continue;
 
@@ -395,9 +533,25 @@ export async function capture(options, emit = () => {}) {
         const res = await openPage(page, url.href, emit);
         const finalUrl = new URL(page.url());
         if (finalUrl.origin !== origin) throw new Error('redirected off-site to ' + finalUrl.origin);
+        if (guess && res && res.status() >= 400) { emit({ type: 'log', message: `${url.pathname} در این سایت وجود ندارد.` }); continue; }
+        const finalNorm = normalise(finalUrl.href, origin, true);
+        if (finalNorm && finalNorm.href !== url.href) {
+          if (captured.has(finalNorm.href)) continue;   // e.g. /checkout sent back to a page we already have
+          kind = kindOfUrl(finalNorm);                  // e.g. /checkout -> /login
+        }
+        if (kind === 'other') kind = (await kindFromDom(page)) || kind;
+        else if (kind === 'listing' && await kindFromDom(page) === 'product') kind = 'product';
+        if (!forced && capped(kind)) {
+          const links = await harvestLinks(page, depth);
+          manifest.skipped.push({ url: url.href, kind, reason: 'focus', depth, links });
+          emit({ type: 'skip', url: url.href, kind, reason: 'focus' });
+          continue;
+        }
 
         const fp = await fingerprint(page);
-        const match = opts.dedupe ? sameTemplate(fp, templates, opts.threshold) : null;
+        // Focus mode: each wanted kind gets its own sample even if it shares a layout
+        const pool = opts.focus ? templates.filter((t) => t.kind === kind) : templates;
+        const match = opts.dedupe ? sameTemplate(fp, pool, opts.threshold) : null;
         if (match && !(forced && hasAuth)) {
           const links = await harvestLinks(page, depth);
           manifest.skipped.push({ url: url.href, sameAs: match.index, depth, links });
@@ -411,10 +565,11 @@ export async function capture(options, emit = () => {}) {
         const slug = slugFor(index, url);
         const dir = path.join(outDir, 'pages', slug);
         await fs.mkdir(dir, { recursive: true });
-        templates.push({ ...fp, index, slug });
-        entry = { index, url: url.href, finalUrl: page.url(), status: res ? res.status() : null, pattern, slug, depth, capturedAt: new Date().toISOString(), shots: {}, error: null, fingerprint: fp };
+        templates.push({ ...fp, index, slug, kind });
+        entry = { index, url: url.href, finalUrl: page.url(), status: res ? res.status() : null, pattern, kind, slug, depth, capturedAt: new Date().toISOString(), shots: {}, error: null, fingerprint: fp };
         captured.add(url.href);
-        emit({ type: 'page', index, url: url.href, pattern, queued: queue.length });
+        kindCount[kind] = (kindCount[kind] || 0) + 1;
+        emit({ type: 'page', index, url: url.href, pattern, kind, queued: queue.length });
 
         await autoScroll(page);
         await page.waitForTimeout(600);
@@ -423,13 +578,32 @@ export async function capture(options, emit = () => {}) {
         entry.notes = await pageNotes(page);
         if (opts.saveHtml) await fs.writeFile(path.join(dir, 'page.html'), await page.content(), 'utf8');
         entry.links = await harvestLinks(page, depth);
+        if (kind === 'product') await fillCart(page, first);
 
         for (const vp of opts.viewports.slice(1)) await shootViewport(vp, entry, dir);
+
+        // Search results: use the site's own search box once (home page has one)
+        if (!searchTried) {
+          searchTried = true;
+          const sp = await contexts[first].newPage();
+          try {
+            await openPage(sp, url.href, emit);
+            const found = await discoverSearch(sp, 'لپ تاپ');
+            const su = found && normalise(found, origin, true);
+            if (su && !seen.has(su.href)) {
+              enqueue(su, depth + 1, true);
+              emit({ type: 'log', message: 'صفحه نتیجه جستجو پیدا شد.' });
+            }
+          } catch { /* no search box */ } finally { await sp.close(); }
+        }
       } catch (err) {
         const message = String(err.message || err).split('\n')[0];
         if (entry) entry.error = message;
+        else if (guess) continue;   // a guessed address that does not open is simply not there
         else { manifest.failed.push({ url: url.href, depth, forced: forced || undefined, error: message }); run.failed += 1; }
         emit({ type: 'error', index: entry ? entry.index : null, url: url.href, viewport: opts.viewports[0], message });
+        // The site itself does not open: stop instead of trying every other address
+        if (!entry && url.href === startNorm && !manifest.pages.length) { siteDown = true; break; }
       } finally {
         await page.close();
       }
@@ -445,7 +619,9 @@ export async function capture(options, emit = () => {}) {
   run.visits = visits;
   await save();
   if (!run.captured && !run.filled) {
-    emit({ type: 'log', message: run.failed
+    emit({ type: 'log', message: siteDown
+      ? 'خود سایت باز نشد. آدرس را در مرورگر خودتان امتحان کنید؛ اگر باز می‌شود ولی اینجا نه، «نمایش مرورگر» را در تنظیمات بیشتر روشن کنید.'
+      : run.failed
       ? `${run.failed} صفحه باز نشد (خطاها بالا آمده‌اند). اتصال اینترنت و باز شدن سایت در مرورگر را بررسی کنید، یا «نمایش مرورگر» را روشن کنید؛ این صفحه‌ها دفعه بعد دوباره امتحان می‌شوند.`
       : manifest.pages.length
         ? 'صفحه جدیدی پیدا نشد؛ همه نوع صفحه‌ها قبلاً گرفته شده‌اند. برای گرفتن دوباره، تیک «از اول» را بزنید یا صفحه‌ای را حذف کنید.'
@@ -454,7 +630,8 @@ export async function capture(options, emit = () => {}) {
   emit({
     type: 'done', outDir,
     pages: run.captured, skipped: run.skipped, filled: run.filled, failed: run.failed,
-    total: manifest.pages.length, pending: queue.length
+    total: manifest.pages.length, pending: queue.length,
+    kinds: kindCount, missing: TARGETS.filter((k) => !kindCount[k])
   });
   return manifest;
 }
