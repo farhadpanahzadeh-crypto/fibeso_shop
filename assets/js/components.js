@@ -81,40 +81,11 @@
     items.forEach(function (el) { observer.observe(el); });
   }
 
-  /* Filter chips: [data-filter-group=X] buttons filter [data-filter-list=X] items */
-  function initFilters(root) {
-    root.querySelectorAll('[data-filter-group]').forEach(function (group) {
-      var name = group.getAttribute('data-filter-group');
-      var list = root.querySelector('[data-filter-list="' + name + '"]');
-      var empty = root.querySelector('[data-filter-empty="' + name + '"]');
-      var status = root.querySelector('[data-filter-status="' + name + '"]');
-      if (!list) return;
-
-      group.addEventListener('click', function (event) {
-        var button = event.target.closest('[data-filter]');
-        if (!button) return;
-        var value = button.getAttribute('data-filter');
-        group.querySelectorAll('[data-filter]').forEach(function (b) {
-          b.setAttribute('aria-pressed', String(b === button));
-        });
-        var shown = 0;
-        Array.prototype.forEach.call(list.children, function (item) {
-          var match = value === 'all' || item.getAttribute('data-category') === value;
-          item.hidden = !match;
-          if (match) shown += 1;
-        });
-        if (empty) empty.hidden = shown > 0;
-        if (status) status.textContent = toPersianDigits(shown) + ' مورد نمایش داده شد';
-      });
-    });
-  }
-
   window.UI = {
     toPersianDigits: toPersianDigits,
     toLatinDigits: toLatinDigits,
     initAccordions: initAccordions,
     initReveal: initReveal,
-    initCounters: initCounters,
-    initFilters: initFilters
+    initCounters: initCounters
   };
 })();

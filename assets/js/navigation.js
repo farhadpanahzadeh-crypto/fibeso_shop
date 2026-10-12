@@ -8,10 +8,16 @@
   var label = document.querySelector('[data-nav-label]');
   var desktop = window.matchMedia('(min-width: 64rem)');
 
+  var backdrop = document.querySelector('[data-backdrop]');
+
   function setOpen(open) {
     toggle.setAttribute('aria-expanded', String(open));
     label.textContent = open ? 'بستن منو' : 'باز کردن منو';
     nav.hidden = !open && !desktop.matches;
+    nav.classList.toggle('is-drawer', open && !desktop.matches);
+    if (header) header.classList.toggle('has-drawer', open && !desktop.matches);
+    if (backdrop) backdrop.hidden = !(open && !desktop.matches);
+    document.body.style.overflow = open && !desktop.matches ? 'hidden' : '';
   }
 
   if (nav && toggle) {
@@ -23,7 +29,12 @@
 
     // Close after choosing a link (in-page anchors) on mobile
     nav.addEventListener('click', function (event) {
-      if (event.target.closest('a') && !desktop.matches) setOpen(false);
+      if (event.target.closest('[data-nav-close]')) {
+        setOpen(false);
+        toggle.focus();
+      } else if (event.target.closest('a') && !desktop.matches) {
+        setOpen(false);
+      }
     });
 
     document.addEventListener('keydown', function (event) {

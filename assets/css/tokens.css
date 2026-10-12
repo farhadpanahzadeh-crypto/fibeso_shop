@@ -30,12 +30,16 @@
 }
 
 :root {
-  /* ---- Brand palette (PROVISIONAL — replace with supplied HEX values) ---- */
-  --brand-primary: #1e40af;        /* main blue: outlines, links, primary buttons */
-  --brand-primary-strong: #1e3a8a; /* hover / pressed / dark surfaces */
-  --brand-primary-soft: #eef2ff;   /* tinted surfaces behind icons */
-  --brand-accent: #b45309;         /* sparing highlight (badges, accents) */
-  --brand-ink: #0f172a;            /* headings / body text */
+  /* ---- Brand palette (PROVISIONAL — replace with supplied HEX values) ----
+     Structure follows the reference store: deep navy for chrome and banners,
+     sky blue for rail headers, discount pills and category rings. */
+  --brand-primary: #1b2d63;        /* navy: header CTAs, banners, footer */
+  --brand-primary-strong: #12204a; /* hover / pressed */
+  --brand-primary-soft: #eaf3fb;   /* tinted surfaces */
+  --brand-secondary: #0b78b8;      /* sky: rail headers, discount pills, rings */
+  --brand-secondary-soft: #d8eefa; /* brand tiles, price chips */
+  --brand-accent: #b45309;         /* "used / stock" condition badge */
+  --brand-ink: #111827;            /* headings / body text */
 
   /* ---- Neutrals ---- */
   --neutral-0: #ffffff;
@@ -48,20 +52,23 @@
   --neutral-800: #1e293b;
 
   /* ---- Semantic colors (components use these, never raw hex) ---- */
-  --color-bg: var(--neutral-50);
+  --color-bg: var(--neutral-0);
   --color-surface: var(--neutral-0);
   --color-surface-muted: var(--neutral-100);
   --color-surface-inverse: var(--brand-primary-strong);
   --color-text: var(--brand-ink);
   --color-text-muted: var(--neutral-600);
   --color-text-inverse: var(--neutral-0);
-  --color-text-inverse-muted: #c7d2fe;
+  --color-text-inverse-muted: #c9d5ef;
   --color-border: var(--neutral-200);
   --color-border-strong: var(--neutral-300);
   --color-primary: var(--brand-primary);
   --color-primary-hover: var(--brand-primary-strong);
   --color-on-primary: var(--neutral-0);
   --color-primary-soft: var(--brand-primary-soft);
+  --color-secondary: var(--brand-secondary);
+  --color-secondary-soft: var(--brand-secondary-soft);
+  --color-on-secondary: var(--neutral-0);
   --color-accent: var(--brand-accent);
   --color-on-accent: var(--neutral-0);
   --color-success: #15803d;
@@ -70,6 +77,8 @@
   --color-danger-soft: #fef2f2;
   --color-focus: var(--brand-primary);
   --color-glass: rgb(255 255 255 / 0.72);
+  --color-star: #f59e0b;
+  --color-accent-soft: #fef3c7;
 
   /* ---- Typography ---- */
   --font-sans: "Vazirmatn", Tahoma, "Segoe UI", system-ui, sans-serif;

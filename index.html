@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>فیبسو | طراحی سایت، فروشگاه اینترنتی و خدمات فناوری</title>
-  <meta name="description" content="فیبسو؛ طراحی و توسعه وب‌سایت، فروشگاه اینترنتی، سئو، طراحی رابط کاربری، هاست و پشتیبانی فنی برای کسب‌وکارهای ایرانی.">
-  <meta name="theme-color" content="#1e3a8a">
+  <title>فیبسو | فروشگاه تجهیزات شبکه و لپ‌تاپ نو و استوک</title>
+  <meta name="description" content="خرید تجهیزات شبکه (مودم، روتر، سوییچ، اکسس پوینت، کابل و رک)، لپ‌تاپ نو و استوک با گارانتی و قطعات لپ‌تاپ نو و دست دوم از فروشگاه فیبسو.">
+  <meta name="theme-color" content="#1b2d63">
   <link rel="icon" href="assets/images/logo-mark.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/vazirmatn/vazirmatn-arabic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/css/tokens.css">
@@ -14,8 +14,10 @@
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/pages/home.css">
   <script>document.documentElement.classList.add('js');</script>
-  <script src="assets/js/navigation.js" defer></script>
+  <script src="assets/js/data/products.js" defer></script>
   <script src="assets/js/components.js" defer></script>
+  <script src="assets/js/navigation.js" defer></script>
+  <script src="assets/js/shop.js" defer></script>
   <script src="assets/js/pages/home.js" defer></script>
   <script src="assets/js/main.js" defer></script>
 </head>
@@ -24,437 +26,410 @@
 
   <!-- ===================== Header ===================== -->
   <header class="site-header" data-header>
-    <div class="container site-header__inner">
-      <a class="brand" href="index.html" aria-label="فیبسو — صفحه اصلی">
+    <div class="container site-header__main">
+      <button class="icon-btn nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" data-nav-toggle>
+        <span class="visually-hidden" data-nav-label>باز کردن منو</span>
+        <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+
+      <a class="brand" href="index.html" aria-label="فروشگاه فیبسو — صفحه اصلی">
         <img class="brand__mark" src="assets/images/logo-mark.svg" alt="" width="40" height="40">
         <span>فیبسو</span>
       </a>
 
-      <nav class="site-nav" id="site-nav" aria-label="منوی اصلی" data-nav>
-        <ul class="site-nav__list">
-          <li><a class="site-nav__link" href="#top" aria-current="page">خانه</a></li>
-          <li><a class="site-nav__link" href="#services">خدمات</a></li>
-          <li><a class="site-nav__link" href="#portfolio">نمونه‌کارها</a></li>
-          <li><a class="site-nav__link" href="#process">فرایند همکاری</a></li>
-          <li><a class="site-nav__link" href="#blog">وبلاگ</a></li>
-          <li><a class="site-nav__link" href="#faq">سوالات متداول</a></li>
-          <li><a class="site-nav__link" href="#contact">تماس با ما</a></li>
-        </ul>
-        <a class="btn btn--primary btn--block site-nav__cta" href="#contact">درخواست مشاوره رایگان</a>
-      </nav>
+      <form class="search" role="search" action="#results" data-search>
+        <button class="search__btn" type="submit" aria-label="جستجو">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <label class="visually-hidden" for="search-q">جستجوی محصولات</label>
+        <input class="search__input" id="search-q" name="q" type="search" placeholder="جستجوی محصولات" autocomplete="off">
+      </form>
 
-      <div class="site-header__actions">
-        <a class="header-phone" href="tel:+982100000000">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
-          <span class="ltr">۰۲۱-۰۰۰۰۰۰۰۰</span>
-        </a>
-        <a class="btn btn--primary" href="#contact">درخواست مشاوره</a>
-        <button class="nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" data-nav-toggle>
-          <span class="visually-hidden" data-nav-label>باز کردن منو</span>
-          <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      <div class="header-actions">
+        <button class="icon-btn icon-btn--round" type="button" aria-label="ورود یا ثبت‌نام" data-account>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+        </button>
+        <button class="icon-btn icon-btn--round" type="button" aria-label="علاقه‌مندی‌ها" data-wish-trigger>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+          <span class="icon-btn__count" data-wish-count hidden>۰</span>
+        </button>
+        <button class="icon-btn icon-btn--round" type="button" aria-label="سبد خرید" aria-controls="cart-drawer" data-cart-trigger>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="icon-btn__count" data-cart-count hidden>۰</span>
         </button>
       </div>
     </div>
+
+    <nav class="site-nav" id="site-nav" aria-label="منوی اصلی" data-nav>
+      <div class="container site-nav__inner">
+        <div class="site-nav__drawer-head">
+          <p class="site-nav__title">منوی فروشگاه</p>
+          <button class="icon-btn" type="button" aria-label="بستن منو" data-nav-close>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="cat-menu" data-cat-menu>
+          <button class="cat-menu__trigger" type="button" aria-expanded="false" aria-controls="cat-menu-panel" data-cat-menu-trigger>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+            دسته‌بندی محصولات
+          </button>
+          <div class="cat-menu__panel" id="cat-menu-panel" hidden>
+            <div>
+              <p class="cat-menu__title"><a href="#new-laptops">لپ‌تاپ</a></p>
+              <ul class="cat-menu__links">
+                <li><a href="#results" data-filter='{"cat":"laptop","condition":"new"}' data-filter-label="لپ‌تاپ نو">لپ‌تاپ نو</a></li>
+                <li><a href="#results" data-filter='{"cat":"laptop","condition":"used"}' data-filter-label="لپ‌تاپ استوک">لپ‌تاپ استوک (کارکرده)</a></li>
+                <li><a href="#results" data-filter='{"q":"گیمینگ"}' data-filter-label="لپ‌تاپ گیمینگ">لپ‌تاپ گیمینگ</a></li>
+                <li><a href="#results" data-filter='{"q":"مهندسی|Precision|ZBook"}' data-filter-label="لپ‌تاپ مهندسی">لپ‌تاپ مهندسی و طراحی</a></li>
+              </ul>
+            </div>
+            <div>
+              <p class="cat-menu__title"><a href="#network">تجهیزات شبکه</a></p>
+              <ul class="cat-menu__links">
+                <li><a href="#results" data-filter='{"sub":"router"}' data-filter-label="مودم و روتر">مودم و روتر</a></li>
+                <li><a href="#results" data-filter='{"sub":"switch"}' data-filter-label="سوییچ شبکه">سوییچ شبکه</a></li>
+                <li><a href="#results" data-filter='{"sub":"ap"}' data-filter-label="اکسس پوینت">اکسس پوینت</a></li>
+                <li><a href="#results" data-filter='{"sub":"nic"}' data-filter-label="کارت شبکه">کارت شبکه</a></li>
+              </ul>
+            </div>
+            <div>
+              <p class="cat-menu__title"><a href="#network">زیرساخت و اتصالات</a></p>
+              <ul class="cat-menu__links">
+                <li><a href="#results" data-filter='{"sub":"rack"}' data-filter-label="رک">رک و تجهیزات رک</a></li>
+                <li><a href="#results" data-filter='{"sub":"cable"}' data-filter-label="کابل و پچ‌کورد">کابل و پچ‌کورد</a></li>
+                <li><a href="#results" data-filter='{"cat":"network","condition":"used"}' data-filter-label="تجهیزات شبکه استوک">تجهیزات شبکه استوک</a></li>
+              </ul>
+            </div>
+            <div>
+              <p class="cat-menu__title"><a href="#parts">قطعات و لوازم جانبی</a></p>
+              <ul class="cat-menu__links">
+                <li><a href="#results" data-filter='{"q":"رم"}' data-filter-label="رم لپ‌تاپ">رم لپ‌تاپ</a></li>
+                <li><a href="#results" data-filter='{"q":"SSD"}' data-filter-label="هارد SSD">هارد SSD</a></li>
+                <li><a href="#results" data-filter='{"q":"شارژر"}' data-filter-label="شارژر لپ‌تاپ">شارژر لپ‌تاپ</a></li>
+                <li><a href="#results" data-filter='{"cat":"parts","condition":"used"}' data-filter-label="قطعات دست دوم">قطعات دست دوم</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="#top" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>خانه</a></li>
+          <li><a class="site-nav__link" href="#offers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m9 15 6-6"/><circle cx="9.5" cy="9.5" r=".8"/><circle cx="14.5" cy="14.5" r=".8"/></svg>تخفیف‌ها</a></li>
+          <li><a class="site-nav__link" href="#new-laptops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>لپ‌تاپ نو</a></li>
+          <li><a class="site-nav__link" href="#used-laptops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>لپ‌تاپ استوک</a></li>
+          <li><a class="site-nav__link" href="#network"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v4M5 16v-2h14v2"/></svg>تجهیزات شبکه</a></li>
+          <li><a class="site-nav__link" href="#parts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>قطعات نو و دست دوم</a></li>
+          <li><a class="site-nav__link" href="#services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><path d="M16 9h2a2 2 0 0 1 2 2v10M8 7h4M8 11h4M8 15h4M3 21h18"/></svg>خرید سازمانی <span class="nav-badge">جدید</span></a></li>
+        </ul>
+      </div>
+    </nav>
   </header>
 
   <main id="main">
-    <!-- ===================== Hero ===================== -->
-    <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="container hero__grid">
-        <div class="hero__content">
-          <span class="badge">شریک فنی کسب‌وکارهای آنلاین</span>
-          <h1 class="hero__title" id="hero-title">وب‌سایتی بسازید که <em>مشتری می‌آورد</em>، نه فقط بازدید</h1>
-          <p class="hero__lead">از طراحی و توسعه تا سئو، میزبانی و پشتیبانی؛ فیبسو همه نیازهای فنی کسب‌وکار شما را در یک تیم متخصص و با یک برنامه شفاف پوشش می‌دهد.</p>
-          <div class="hero__actions">
-            <a class="btn btn--primary" href="#contact">
-              شروع پروژه
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-            </a>
-            <a class="btn btn--outline" href="#services">مشاهده خدمات</a>
+    <!-- ===================== Hero slider ===================== -->
+    <section class="hero" id="top" aria-label="پیشنهادهای ویژه">
+      <div class="slider" data-slider aria-roledescription="carousel" aria-label="بنرهای اصلی">
+        <article class="slide" data-slide aria-roledescription="slide" aria-label="۱ از ۳">
+          <img class="slide__bg" src="assets/images/banners/hero-1.svg" alt="" width="1600" height="520" fetchpriority="high">
+          <div class="container slide__content">
+            <p class="slide__kicker">قدرت در کار و بازی</p>
+            <h2 class="slide__title">لپ‌تاپ‌های نو با گارانتی معتبر</h2>
+            <a class="slide__btn" href="#new-laptops">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
           </div>
-          <ul class="hero__trust">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>قرارداد و زمان‌بندی مکتوب</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>پشتیبانی پس از تحویل</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>کدنویسی اختصاصی و سریع</li>
+        </article>
+        <article class="slide" data-slide aria-roledescription="slide" aria-label="۲ از ۳" hidden>
+          <img class="slide__bg" src="assets/images/banners/hero-2.svg" alt="" width="1600" height="520" loading="lazy">
+          <div class="container slide__content">
+            <p class="slide__kicker">شبکه‌ای پایدار برای کسب‌وکار شما</p>
+            <h2 class="slide__title">روتر، سوییچ و اکسس پوینت</h2>
+            <a class="slide__btn" href="#network">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+          </div>
+        </article>
+        <article class="slide" data-slide aria-roledescription="slide" aria-label="۳ از ۳" hidden>
+          <img class="slide__bg" src="assets/images/banners/hero-3.svg" alt="" width="1600" height="520" loading="lazy">
+          <div class="container slide__content">
+            <p class="slide__kicker">تست‌شده، درجه‌بندی‌شده، با ضمانت</p>
+            <h2 class="slide__title">لپ‌تاپ و قطعات استوک</h2>
+            <a class="slide__btn" href="#used-laptops">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+          </div>
+        </article>
+
+        <button class="slider__arrow slider__arrow--prev" type="button" data-slide-prev aria-label="اسلاید قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+        <button class="slider__arrow slider__arrow--next" type="button" data-slide-next aria-label="اسلاید بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+        <div class="slider__bar">
+          <div class="slider__dots">
+            <button type="button" data-slide-to="0" aria-label="نمایش اسلاید ۱"></button>
+            <button type="button" data-slide-to="1" aria-label="نمایش اسلاید ۲"></button>
+            <button type="button" data-slide-to="2" aria-label="نمایش اسلاید ۳"></button>
+          </div>
+          <button class="slider__pause" type="button" data-slider-pause aria-pressed="false" aria-label="توقف اسلایدها">
+            <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
+            <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17 5v14L6 12z"/></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== Category circles ===================== -->
+    <section class="section categories" aria-labelledby="cat-title">
+      <div class="container">
+        <h2 class="visually-hidden" id="cat-title">دسته‌بندی‌های اصلی</h2>
+        <ul class="cat-circles">
+          <li><a class="cat-circle" href="#results" data-filter='{"cat":"laptop","condition":"new"}' data-filter-label="لپ‌تاپ نو"><span class="cat-circle__ring"><img src="assets/images/groups/laptops-new.svg" alt="" width="400" height="400"></span><span class="cat-circle__name">لپ‌تاپ نو</span></a></li>
+          <li><a class="cat-circle" href="#results" data-filter='{"cat":"laptop","condition":"used"}' data-filter-label="لپ‌تاپ استوک"><span class="cat-circle__ring"><img src="assets/images/groups/laptops-used.svg" alt="" width="400" height="400"></span><span class="cat-circle__name">لپ‌تاپ استوک</span></a></li>
+          <li><a class="cat-circle" href="#results" data-filter='{"sub":"router"}' data-filter-label="مودم و روتر"><span class="cat-circle__ring"><img src="assets/images/products/router.svg" alt="" width="400" height="400"></span><span class="cat-circle__name">مودم و روتر</span></a></li>
+          <li><a class="cat-circle" href="#results" data-filter='{"sub":"switch"}' data-filter-label="سوییچ شبکه"><span class="cat-circle__ring"><img src="assets/images/products/switch.svg" alt="" width="400" height="400"></span><span class="cat-circle__name">سوییچ شبکه</span></a></li>
+          <li><a class="cat-circle" href="#results" data-filter='{"sub":"ap"}' data-filter-label="اکسس پوینت"><span class="cat-circle__ring"><img src="assets/images/products/access-point.svg" alt="" width="400" height="400"></span><span class="cat-circle__name">اکسس پوینت</span></a></li>
+          <li><a class="cat-circle" href="#results" data-filter='{"sub":"cable"}' data-filter-label="کابل و پچ‌کورد"><span class="cat-circle__ring"><img src="assets/images/products/cable.svg" alt="" width="400" height="400"></span><span class="cat-circle__name">کابل و پچ‌کورد</span></a></li>
+          <li><a class="cat-circle" href="#results" data-filter='{"sub":"rack|nic"}' data-filter-label="رک و کارت شبکه"><span class="cat-circle__ring"><img src="assets/images/products/rack.svg" alt="" width="400" height="400"></span><span class="cat-circle__name">رک و کارت شبکه</span></a></li>
+          <li><a class="cat-circle" href="#results" data-filter='{"cat":"parts"}' data-filter-label="قطعات لپ‌تاپ"><span class="cat-circle__ring"><img src="assets/images/groups/parts.svg" alt="" width="400" height="400"></span><span class="cat-circle__name">قطعات لپ‌تاپ</span></a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== Search / filter results (shown on demand) ===================== -->
+    <section class="section section--tight results" id="results" aria-labelledby="results-title" hidden>
+      <div class="container">
+        <div class="rail">
+          <div class="rail__head">
+            <h2 class="rail__title" id="results-title" tabindex="-1">نتایج</h2>
+            <button class="view-all" type="button" data-results-close>بستن نتایج</button>
+          </div>
+          <p class="results__status" role="status" data-results-status></p>
+          <ul class="product-grid" data-results-list></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--tight" id="offers" aria-labelledby="offers-title">
+      <div class="container">
+        <div class="rail rail--accent">
+          <div class="rail__head">
+            <h2 class="rail__title" id="offers-title">تخفیف‌های فیبسو ٪</h2>
+            <div class="rail__tools">
+              <div class="scroller__controls">
+                <button class="round-btn" type="button" data-scroll-prev="offers" aria-label="محصولات قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+                <button class="round-btn" type="button" data-scroll-next="offers" aria-label="محصولات بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+              </div>
+              <a class="view-all" href="#results" data-filter='{"tag":"offer"}' data-filter-label="تخفیف‌های فیبسو ٪">نمایش همه <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+            </div>
+          </div>
+          <div class="scroller" data-scroller="offers">
+            <ul class="scroller__track" data-rail='{"tag":"offer"}' aria-label="تخفیف‌های فیبسو ٪">
+              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== Triple banners ===================== -->
+    <section class="section section--tight" aria-label="بنرهای تبلیغاتی">
+      <div class="container banner-row">
+        <a class="promo" href="#network"><img src="assets/images/banners/promo-1.svg" alt="" width="800" height="360" loading="lazy"><span class="promo__text"><span class="promo__kicker">شبکه خانگی و اداری</span><span class="promo__title">روترهای وای‌فای ۶</span><span class="promo__btn">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></span></span></a>
+        <a class="promo" href="#used-laptops"><img src="assets/images/banners/promo-2.svg" alt="" width="800" height="360" loading="lazy"><span class="promo__text"><span class="promo__kicker">اقتصادی و مطمئن</span><span class="promo__title">لپ‌تاپ استوک درجه A</span><span class="promo__btn">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></span></span></a>
+        <a class="promo" href="#parts"><img src="assets/images/banners/promo-3.svg" alt="" width="800" height="360" loading="lazy"><span class="promo__text"><span class="promo__kicker">ارتقای سرعت لپ‌تاپ</span><span class="promo__title">رم و SSD نو و استوک</span><span class="promo__btn">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></span></span></a>
+      </div>
+    </section>
+
+    <section class="section section--tight" id="network" aria-labelledby="network-title">
+      <div class="container">
+        <div class="rail">
+          <div class="rail__head">
+            <h2 class="rail__title" id="network-title">تجهیزات شبکه</h2>
+            <div class="rail__tools">
+              <div class="scroller__controls">
+                <button class="round-btn" type="button" data-scroll-prev="network" aria-label="محصولات قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+                <button class="round-btn" type="button" data-scroll-next="network" aria-label="محصولات بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+              </div>
+              <a class="view-all" href="#results" data-filter='{"cat":"network"}' data-filter-label="تجهیزات شبکه">نمایش همه <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+            </div>
+          </div>
+          <div class="scroller" data-scroller="network">
+            <ul class="scroller__track" data-rail='{"cat":"network"}' aria-label="تجهیزات شبکه">
+              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="net-brands-title">
+      <div class="container">
+        <h2 class="section-title" id="net-brands-title">برترین برندهای شبکه</h2>
+        <ul class="brand-tiles">
+          <li><a class="brand-tile" href="#results" data-filter='{"q":"میکروتیک"}' data-filter-label="میکروتیک"><span class="brand-tile__img"><img src="assets/images/products/router.svg" alt="" width="400" height="400"></span><span class="brand-tile__name">میکروتیک</span></a></li>
+          <li><a class="brand-tile" href="#results" data-filter='{"q":"سیسکو"}' data-filter-label="سیسکو"><span class="brand-tile__img"><img src="assets/images/products/switch.svg" alt="" width="400" height="400"></span><span class="brand-tile__name">سیسکو</span></a></li>
+          <li><a class="brand-tile" href="#results" data-filter='{"q":"یوبیکیوتی"}' data-filter-label="یوبیکیوتی"><span class="brand-tile__img"><img src="assets/images/products/access-point.svg" alt="" width="400" height="400"></span><span class="brand-tile__name">یوبیکیوتی</span></a></li>
+          <li><a class="brand-tile" href="#results" data-filter='{"q":"تی‌پی‌لینک"}' data-filter-label="تی‌پی‌لینک"><span class="brand-tile__img"><img src="assets/images/products/router.svg" alt="" width="400" height="400"></span><span class="brand-tile__name">تی‌پی‌لینک</span></a></li>
+          <li><a class="brand-tile" href="#results" data-filter='{"q":"اینتل"}' data-filter-label="اینتل"><span class="brand-tile__img"><img src="assets/images/products/nic.svg" alt="" width="400" height="400"></span><span class="brand-tile__name">اینتل</span></a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== Wide banner ===================== -->
+    <section class="section section--tight" aria-label="بنر ویژه">
+      <div class="container">
+        <a class="wide-banner" href="#network">
+          <img src="assets/images/banners/wide.svg" alt="" width="1600" height="300" loading="lazy">
+          <span class="wide-banner__text">
+            <span class="wide-banner__kicker">راهکار کامل زیرساخت</span>
+            <span class="wide-banner__title">رک، سوییچ و کارت شبکه برای اتاق سرور</span>
+            <span class="promo__btn">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <section class="section section--tight" id="new-laptops" aria-labelledby="new-laptops-title">
+      <div class="container">
+        <div class="rail">
+          <div class="rail__head">
+            <h2 class="rail__title" id="new-laptops-title">لپ‌تاپ‌های نو</h2>
+            <div class="rail__tools">
+              <div class="scroller__controls">
+                <button class="round-btn" type="button" data-scroll-prev="new-laptops" aria-label="محصولات قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+                <button class="round-btn" type="button" data-scroll-next="new-laptops" aria-label="محصولات بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+              </div>
+              <a class="view-all" href="#results" data-filter='{"cat":"laptop","condition":"new"}' data-filter-label="لپ‌تاپ‌های نو">نمایش همه <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+            </div>
+          </div>
+          <div class="scroller" data-scroller="new-laptops">
+            <ul class="scroller__track" data-rail='{"cat":"laptop","condition":"new"}' aria-label="لپ‌تاپ‌های نو">
+              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--tight" id="used-laptops" aria-labelledby="used-laptops-title">
+      <div class="container">
+        <div class="rail">
+          <div class="rail__head">
+            <h2 class="rail__title" id="used-laptops-title">لپ‌تاپ‌های استوک (کارکرده)</h2>
+            <div class="rail__tools">
+              <div class="scroller__controls">
+                <button class="round-btn" type="button" data-scroll-prev="used-laptops" aria-label="محصولات قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+                <button class="round-btn" type="button" data-scroll-next="used-laptops" aria-label="محصولات بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+              </div>
+              <a class="view-all" href="#results" data-filter='{"cat":"laptop","condition":"used"}' data-filter-label="لپ‌تاپ‌های استوک (کارکرده)">نمایش همه <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+            </div>
+          </div>
+          <p class="rail__note">همه لپ‌تاپ‌های استوک تست فنی شده‌اند و بر اساس ظاهر درجه‌بندی می‌شوند: <strong>درجه A</strong> بدون خط و خش محسوس، <strong>درجه B</strong> دارای آثار جزئی استفاده.</p>
+          <div class="scroller" data-scroller="used-laptops">
+            <ul class="scroller__track" data-rail='{"cat":"laptop","condition":"used"}' aria-label="لپ‌تاپ‌های استوک (کارکرده)">
+              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="laptop-brands-title">
+      <div class="container">
+        <h2 class="section-title" id="laptop-brands-title">برترین‌های لپ‌تاپ</h2>
+        <ul class="brand-tiles">
+          <li><a class="brand-tile" href="#results" data-filter='{"q":"لنوو"}' data-filter-label="لنوو"><span class="brand-tile__img"><img src="assets/images/products/laptop-business.svg" alt="" width="400" height="400"></span><span class="brand-tile__name">لنوو</span></a></li>
+          <li><a class="brand-tile" href="#results" data-filter='{"q":"دل"}' data-filter-label="دل"><span class="brand-tile__img"><img src="assets/images/products/laptop-workstation.svg" alt="" width="400" height="400"></span><span class="brand-tile__name">دل</span></a></li>
+          <li><a class="brand-tile" href="#results" data-filter='{"q":"اچ‌پی"}' data-filter-label="اچ‌پی"><span class="brand-tile__img"><img src="assets/images/products/laptop-ultrabook.svg" alt="" width="400" height="400"></span><span class="brand-tile__name">اچ‌پی</span></a></li>
+          <li><a class="brand-tile" href="#results" data-filter='{"q":"ایسوس"}' data-filter-label="ایسوس"><span class="brand-tile__img"><img src="assets/images/products/laptop-gaming.svg" alt="" width="400" height="400"></span><span class="brand-tile__name">ایسوس</span></a></li>
+          <li><a class="brand-tile" href="#results" data-filter='{"q":"ایسر"}' data-filter-label="ایسر"><span class="brand-tile__img"><img src="assets/images/products/laptop-business.svg" alt="" width="400" height="400"></span><span class="brand-tile__name">ایسر</span></a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ===================== Shop by price / use ===================== -->
+    <section class="section section--tight" aria-label="انتخاب سریع لپ‌تاپ">
+      <div class="container finder">
+        <div class="finder__box">
+          <h2 class="finder__title">لپ‌تاپ بر اساس قیمت</h2>
+          <ul class="chip-grid">
+              <li><a class="chip-tile chip-tile--sky" href="#results" data-filter='{"cat":"laptop","condition":"used","max":15000000}' data-filter-label="لپ‌تاپ اقتصادی استوک">لپ‌تاپ اقتصادی استوک</a></li>
+              <li><a class="chip-tile chip-tile--sky" href="#results" data-filter='{"cat":"laptop","max":20000000}' data-filter-label="تا ۲۰ میلیون">تا ۲۰ میلیون</a></li>
+              <li><a class="chip-tile chip-tile--sky" href="#results" data-filter='{"cat":"laptop","max":35000000}' data-filter-label="تا ۳۵ میلیون">تا ۳۵ میلیون</a></li>
+              <li><a class="chip-tile chip-tile--sky" href="#results" data-filter='{"cat":"laptop","max":50000000}' data-filter-label="تا ۵۰ میلیون">تا ۵۰ میلیون</a></li>
+              <li><a class="chip-tile chip-tile--sky" href="#results" data-filter='{"cat":"laptop","max":80000000}' data-filter-label="تا ۸۰ میلیون">تا ۸۰ میلیون</a></li>
+              <li><a class="chip-tile chip-tile--sky" href="#results" data-filter='{"cat":"laptop","min":80000000}' data-filter-label="بالای ۸۰ میلیون">بالای ۸۰ میلیون</a></li>
           </ul>
         </div>
-        <div class="hero__visual">
-          <img src="assets/images/hero-illustration.svg" alt="تصویر داشبورد مدیریت وب‌سایت با نمودار رشد بازدید و فروش" width="560" height="460" fetchpriority="high">
+        <div class="finder__box">
+          <h2 class="finder__title">لپ‌تاپ بر اساس کاربرد</h2>
+          <ul class="chip-grid">
+              <li><a class="chip-tile" href="#results" data-filter='{"q":"گیمینگ"}' data-filter-label="گیمینگ">گیمینگ</a></li>
+              <li><a class="chip-tile" href="#results" data-filter='{"q":"مهندسی|Precision|ZBook"}' data-filter-label="مهندسی و طراحی">مهندسی و طراحی</a></li>
+              <li><a class="chip-tile" href="#results" data-filter='{"q":"ThinkPad|EliteBook|Latitude"}' data-filter-label="اداری و تجاری">اداری و تجاری</a></li>
+              <li><a class="chip-tile" href="#results" data-filter='{"cat":"laptop","max":35000000}' data-filter-label="دانشجویی">دانشجویی</a></li>
+              <li><a class="chip-tile" href="#results" data-filter='{"q":"13.3|۱۳.۳|X1 Carbon"}' data-filter-label="سبک و الترابوک">سبک و الترابوک</a></li>
+              <li><a class="chip-tile" href="#results" data-filter='{"cat":"laptop","condition":"used","grade":"A"}' data-filter-label="استوک درجه A">استوک درجه A</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--tight" id="parts" aria-labelledby="parts-title">
+      <div class="container">
+        <div class="rail">
+          <div class="rail__head">
+            <h2 class="rail__title" id="parts-title">قطعات و لوازم جانبی نو و دست دوم</h2>
+            <div class="rail__tools">
+              <div class="scroller__controls">
+                <button class="round-btn" type="button" data-scroll-prev="parts" aria-label="محصولات قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+                <button class="round-btn" type="button" data-scroll-next="parts" aria-label="محصولات بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+              </div>
+              <a class="view-all" href="#results" data-filter='{"cat":"parts"}' data-filter-label="قطعات و لوازم جانبی نو و دست دوم">نمایش همه <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+            </div>
+          </div>
+          <div class="scroller" data-scroller="parts">
+            <ul class="scroller__track" data-rail='{"cat":"parts"}' aria-label="قطعات و لوازم جانبی نو و دست دوم">
+              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ===================== Services ===================== -->
-    <section class="section section--muted services" id="services" aria-labelledby="services-title">
+    <section class="section services" id="services" aria-labelledby="services-title">
       <div class="container">
-        <header class="section-head">
-          <span class="section-head__eyebrow">خدمات ما</span>
-          <h2 class="section-head__title" id="services-title">هر آنچه برای حضور حرفه‌ای در وب نیاز دارید</h2>
-          <p class="section-head__lead">خدمات ما مکمل یکدیگرند؛ می‌توانید یک سرویس مشخص را انتخاب کنید یا کل مسیر را به ما بسپارید.</p>
-        </header>
-
-        <ul class="grid grid--2 services__grid">
-          <li class="reveal">
-            <article class="service-card">
-              <span class="icon-tile" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg>
-              </span>
-              <h3 class="service-card__title">طراحی و توسعه وب‌سایت</h3>
-              <p class="service-card__text">وب‌سایت شرکتی، خدماتی یا شخصی با کدنویسی تمیز، سرعت بالا و ساختاری که به‌راحتی قابل مدیریت و توسعه باشد.</p>
-              <div class="service-card__tags"><span class="badge">واکنش‌گرا</span><span class="badge">پنل مدیریت</span></div>
-            </article>
+        <h2 class="section-title" id="services-title">چرا از فیبسو خرید کنید؟</h2>
+        <ul class="services__grid">
+          <li class="service-card">
+            <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <h3 class="service-card__title">ضمانت سلامت کالا</h3>
+            <p class="service-card__text">کالاهای نو با گارانتی معتبر و کالاهای استوک با ضمانت تست و سلامت فنی</p>
           </li>
-          <li class="reveal">
-            <article class="service-card">
-              <span class="icon-tile" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.25"/><circle cx="18" cy="20" r="1.25"/><path d="M2.5 3h2.6l2.4 11.2a2 2 0 0 0 2 1.6h8.1a2 2 0 0 0 2-1.5L21.5 7H6"/></svg>
-              </span>
-              <h3 class="service-card__title">فروشگاه اینترنتی</h3>
-              <p class="service-card__text">فروشگاه آنلاین با درگاه پرداخت، مدیریت موجودی، کد تخفیف و گزارش فروش؛ آماده برای رشد کسب‌وکار شما.</p>
-              <div class="service-card__tags"><span class="badge">درگاه پرداخت</span><span class="badge">انبارداری</span></div>
-            </article>
+          <li class="service-card">
+            <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+            <h3 class="service-card__title">تست و درجه‌بندی استوک</h3>
+            <p class="service-card__text">هر لپ‌تاپ و قطعه دست دوم پیش از فروش تست می‌شود و وضعیت ظاهری آن شفاف درج می‌شود</p>
           </li>
-          <li class="reveal">
-            <article class="service-card">
-              <span class="icon-tile" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-7"/><path d="M15 7h5v5"/></svg>
-              </span>
-              <h3 class="service-card__title">سئو و بهینه‌سازی</h3>
-              <p class="service-card__text">بهبود رتبه در نتایج جستجو با سئوی فنی، تولید محتوای هدفمند و بهینه‌سازی سرعت و تجربه کاربری.</p>
-              <div class="service-card__tags"><span class="badge">سئوی فنی</span><span class="badge">استراتژی محتوا</span></div>
-            </article>
+          <li class="service-card">
+            <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><path d="M16 9h2a2 2 0 0 1 2 2v10M8 7h4M8 11h4M8 15h4M3 21h18"/></svg></span>
+            <h3 class="service-card__title">خرید سازمانی و پیش‌فاکتور</h3>
+            <p class="service-card__text">تأمین تجهیزات شبکه و لپ‌تاپ برای شرکت‌ها با پیش‌فاکتور رسمی و قیمت عمده</p>
           </li>
-          <li class="reveal">
-            <article class="service-card">
-              <span class="icon-tile" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-              </span>
-              <h3 class="service-card__title">طراحی رابط و تجربه کاربری</h3>
-              <p class="service-card__text">طراحی رابط کاربری مبتنی بر تحقیق، وایرفریم و نمونه اولیه تعاملی تا کاربران سریع‌تر به هدفشان برسند.</p>
-              <div class="service-card__tags"><span class="badge">UI/UX</span><span class="badge">نمونه اولیه</span></div>
-            </article>
-          </li>
-          <li class="reveal">
-            <article class="service-card">
-              <span class="icon-tile" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01"/></svg>
-              </span>
-              <h3 class="service-card__title">هاست، سرور و امنیت</h3>
-              <p class="service-card__text">میزبانی پایدار، گواهی SSL، پشتیبان‌گیری خودکار و پایش امنیتی تا وب‌سایت شما همیشه در دسترس بماند.</p>
-              <div class="service-card__tags"><span class="badge">SSL</span><span class="badge">بکاپ روزانه</span></div>
-            </article>
-          </li>
-          <li class="reveal">
-            <article class="service-card">
-              <span class="icon-tile" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2zM3 15a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2z"/><path d="M18 17v1a3 3 0 0 1-3 3h-3"/></svg>
-              </span>
-              <h3 class="service-card__title">پشتیبانی و نگهداری</h3>
-              <p class="service-card__text">به‌روزرسانی، رفع اشکال، افزودن قابلیت‌های جدید و پاسخ‌گویی سریع تیم فنی در تمام روزهای سال.</p>
-              <div class="service-card__tags"><span class="badge">تیکت ۲۴ ساعته</span><span class="badge">قرارداد ماهانه</span></div>
-            </article>
+          <li class="service-card">
+            <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2zM3 15a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2z"/><path d="M18 17v1a3 3 0 0 1-3 3h-3"/></svg></span>
+            <h3 class="service-card__title">مشاوره فنی پیش از خرید</h3>
+            <p class="service-card__text">کارشناسان شبکه و سخت‌افزار در انتخاب تجهیزات مناسب کنار شما هستند</p>
           </li>
         </ul>
       </div>
     </section>
 
     <!-- ===================== Stats ===================== -->
-    <!-- SAMPLE FIGURES: replace with the company's verified numbers before launch. -->
+    <!-- SAMPLE FIGURES: replace with the shop's verified numbers before launch. -->
     <section class="stats" aria-label="فیبسو در یک نگاه">
       <div class="container">
         <ul class="stats__grid">
-          <li class="stat">
-            <span class="stat__value" data-count="250" data-suffix="+">۲۵۰+</span>
-            <span class="stat__label">پروژه تحویل‌شده</span>
-          </li>
-          <li class="stat">
-            <span class="stat__value" data-count="12">۱۲</span>
-            <span class="stat__label">سال تجربه</span>
-          </li>
-          <li class="stat">
-            <span class="stat__value" data-count="98" data-suffix="٪">۹۸٪</span>
-            <span class="stat__label">رضایت مشتریان</span>
-          </li>
-          <li class="stat">
-            <span class="stat__value">۲۴/۷</span>
-            <span class="stat__label">پشتیبانی فنی</span>
-          </li>
+          <li class="stat"><span class="stat__value" data-count="15" data-suffix=" هزار+">۱۵ هزار+</span><span class="stat__label">سفارش موفق</span></li>
+          <li class="stat"><span class="stat__value" data-count="3200" data-suffix="+">۳۲۰۰+</span><span class="stat__label">کالای نو و استوک</span></li>
+          <li class="stat"><span class="stat__value" data-count="450" data-suffix="+">۴۵۰+</span><span class="stat__label">مشتری سازمانی</span></li>
+          <li class="stat"><span class="stat__value" data-count="8">۸</span><span class="stat__label">سال تجربه</span></li>
         </ul>
-      </div>
-    </section>
-
-    <!-- ===================== Why us ===================== -->
-    <section class="section why" aria-labelledby="why-title">
-      <div class="container why__grid">
-        <div class="why__intro">
-          <header class="section-head">
-            <span class="section-head__eyebrow">چرا فیبسو؟</span>
-            <h2 class="section-head__title" id="why-title">تیمی که نتیجه را اندازه می‌گیرد</h2>
-            <p class="section-head__lead">ما پیش از شروع، هدف قابل‌اندازه‌گیری تعریف می‌کنیم و در پایان هر مرحله گزارش شفاف تحویل می‌دهیم.</p>
-          </header>
-          <ul class="check-list">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>یک مدیر پروژه اختصاصی، از جلسه اول تا تحویل</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>قیمت‌گذاری مرحله‌ای بدون هزینه پنهان</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>تحویل کامل کد و دسترسی‌ها به شما</li>
-          </ul>
-        </div>
-
-        <ul class="why__features">
-          <li class="feature reveal">
-            <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></span>
-            <h3 class="feature__title">سرعت بارگذاری بالا</h3>
-            <p class="feature__text">بهینه‌سازی تصاویر، کش و کد سبک برای امتیاز خوب در Core Web Vitals.</p>
-          </li>
-          <li class="feature reveal">
-            <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
-            <h3 class="feature__title">امنیت از ابتدا</h3>
-            <p class="feature__text">به‌روزرسانی منظم، رمزنگاری و محافظت در برابر حملات رایج وب.</p>
-          </li>
-          <li class="feature reveal">
-            <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></span>
-            <h3 class="feature__title">سازگار با موبایل</h3>
-            <p class="feature__text">چیدمانی که روی گوشی، تبلت و دسکتاپ به یک اندازه خوانا و کاربردی است.</p>
-          </li>
-          <li class="feature reveal">
-            <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
-            <h3 class="feature__title">ارتباط شفاف</h3>
-            <p class="feature__text">گزارش هفتگی پیشرفت و پاسخ‌گویی در کمتر از یک روز کاری.</p>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ===================== Process ===================== -->
-    <section class="section section--muted process" id="process" aria-labelledby="process-title">
-      <div class="container">
-        <header class="section-head">
-          <span class="section-head__eyebrow">فرایند همکاری</span>
-          <h2 class="section-head__title" id="process-title">از ایده تا راه‌اندازی در چهار گام</h2>
-        </header>
-        <ol class="grid grid--4 process__list">
-          <li class="step reveal">
-            <h3 class="step__title">جلسه نیازسنجی</h3>
-            <p class="step__text">اهداف، مخاطبان و رقبای شما را بررسی می‌کنیم و دامنه پروژه را مشخص می‌کنیم.</p>
-          </li>
-          <li class="step reveal">
-            <h3 class="step__title">طراحی و تأیید</h3>
-            <p class="step__text">ساختار صفحات و طرح گرافیکی را آماده و پیش از توسعه با شما نهایی می‌کنیم.</p>
-          </li>
-          <li class="step reveal">
-            <h3 class="step__title">توسعه و تست</h3>
-            <p class="step__text">پیاده‌سازی، تست روی دستگاه‌های مختلف و بهینه‌سازی سرعت و سئوی فنی.</p>
-          </li>
-          <li class="step reveal">
-            <h3 class="step__title">راه‌اندازی و پشتیبانی</h3>
-            <p class="step__text">انتشار نهایی، آموزش پنل مدیریت و همراهی تیم پشتیبانی پس از تحویل.</p>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ===================== Portfolio ===================== -->
-    <section class="section portfolio" id="portfolio" aria-labelledby="portfolio-title">
-      <div class="container">
-        <header class="section-head">
-          <span class="section-head__eyebrow">نمونه‌کارها</span>
-          <h2 class="section-head__title" id="portfolio-title">پروژه‌هایی که با افتخار تحویل داده‌ایم</h2>
-        </header>
-
-        <div class="tabs" role="group" aria-label="فیلتر نمونه‌کارها" data-filter-group="portfolio">
-          <button class="tabs__tab" type="button" aria-pressed="true" data-filter="all">همه</button>
-          <button class="tabs__tab" type="button" aria-pressed="false" data-filter="web">وب‌سایت</button>
-          <button class="tabs__tab" type="button" aria-pressed="false" data-filter="shop">فروشگاه</button>
-          <button class="tabs__tab" type="button" aria-pressed="false" data-filter="app">اپلیکیشن</button>
-        </div>
-
-        <ul class="grid grid--3" data-filter-list="portfolio">
-          <li class="portfolio__item" data-category="shop">
-            <article class="card">
-              <div class="card__media"><img src="assets/images/portfolio/shop-fashion.svg" alt="صفحه اصلی فروشگاه پوشاک با شبکه محصولات" width="640" height="400" loading="lazy"></div>
-              <div class="card__body">
-                <span class="badge">فروشگاه</span>
-                <h3 class="card__title">فروشگاه اینترنتی پوشاک</h3>
-                <p class="card__text">فروشگاه چندفروشنده با فیلتر پیشرفته محصولات و پرداخت آنلاین.</p>
-              </div>
-            </article>
-          </li>
-          <li class="portfolio__item" data-category="web">
-            <article class="card">
-              <div class="card__media"><img src="assets/images/portfolio/web-clinic.svg" alt="وب‌سایت کلینیک با فرم نوبت‌دهی" width="640" height="400" loading="lazy"></div>
-              <div class="card__body">
-                <span class="badge">وب‌سایت</span>
-                <h3 class="card__title">وب‌سایت کلینیک تخصصی</h3>
-                <p class="card__text">معرفی پزشکان، رزرو آنلاین نوبت و بخش مقالات سلامت.</p>
-              </div>
-            </article>
-          </li>
-          <li class="portfolio__item" data-category="app">
-            <article class="card">
-              <div class="card__media"><img src="assets/images/portfolio/app-dashboard.svg" alt="داشبورد تحت وب با نمودار و جدول گزارش" width="640" height="400" loading="lazy"></div>
-              <div class="card__body">
-                <span class="badge">اپلیکیشن</span>
-                <h3 class="card__title">داشبورد مدیریت فروش</h3>
-                <p class="card__text">اپلیکیشن تحت وب برای گزارش‌گیری لحظه‌ای از فروش شعبه‌ها.</p>
-              </div>
-            </article>
-          </li>
-          <li class="portfolio__item" data-category="web">
-            <article class="card">
-              <div class="card__media"><img src="assets/images/portfolio/web-corporate.svg" alt="وب‌سایت شرکتی با بخش معرفی خدمات" width="640" height="400" loading="lazy"></div>
-              <div class="card__body">
-                <span class="badge">وب‌سایت</span>
-                <h3 class="card__title">وب‌سایت شرکت ساختمانی</h3>
-                <p class="card__text">معرفی پروژه‌ها، گالری تصاویر و فرم درخواست همکاری.</p>
-              </div>
-            </article>
-          </li>
-          <li class="portfolio__item" data-category="shop">
-            <article class="card">
-              <div class="card__media"><img src="assets/images/portfolio/shop-digital.svg" alt="فروشگاه کالای دیجیتال با صفحه جزئیات محصول" width="640" height="400" loading="lazy"></div>
-              <div class="card__body">
-                <span class="badge">فروشگاه</span>
-                <h3 class="card__title">فروشگاه کالای دیجیتال</h3>
-                <p class="card__text">مقایسه محصولات، ارسال سریع و باشگاه مشتریان.</p>
-              </div>
-            </article>
-          </li>
-          <li class="portfolio__item" data-category="app">
-            <article class="card">
-              <div class="card__media"><img src="assets/images/portfolio/app-booking.svg" alt="اپلیکیشن رزرو با تقویم و لیست زمان‌ها" width="640" height="400" loading="lazy"></div>
-              <div class="card__body">
-                <span class="badge">اپلیکیشن</span>
-                <h3 class="card__title">سامانه رزرو آنلاین</h3>
-                <p class="card__text">رزرو زمان، یادآور پیامکی و پنل مدیریت برای کسب‌وکارهای خدماتی.</p>
-              </div>
-            </article>
-          </li>
-        </ul>
-        <p class="portfolio__empty" data-filter-empty="portfolio" hidden>در این دسته هنوز نمونه‌کاری منتشر نشده است.</p>
-        <p class="visually-hidden" aria-live="polite" data-filter-status="portfolio"></p>
-      </div>
-    </section>
-
-    <!-- ===================== Blog preview ===================== -->
-    <section class="section section--muted blog" id="blog" aria-labelledby="blog-title">
-      <div class="container">
-        <header class="section-head">
-          <span class="section-head__eyebrow">وبلاگ</span>
-          <h2 class="section-head__title" id="blog-title">تازه‌ترین مقاله‌ها</h2>
-          <p class="section-head__lead">نکته‌های کاربردی درباره طراحی سایت، سئو و فروش آنلاین.</p>
-        </header>
-        <ul class="grid grid--3">
-          <li class="reveal">
-            <article class="card">
-              <div class="card__media"><img src="assets/images/blog/seo-checklist.svg" alt="چک‌لیست سئو روی صفحه نمایش" width="640" height="400" loading="lazy"></div>
-              <div class="card__body">
-                <span class="badge">سئو</span>
-                <h3 class="card__title">چک‌لیست سئوی فنی پیش از انتشار سایت</h3>
-                <p class="card__text">ده موردی که پیش از راه‌اندازی هر وب‌سایت باید بررسی شود.</p>
-                <p class="card__meta"><time datetime="2026-09-28">۶ مهر ۱۴۰۵</time><span>۷ دقیقه مطالعه</span></p>
-              </div>
-            </article>
-          </li>
-          <li class="reveal">
-            <article class="card">
-              <div class="card__media"><img src="assets/images/blog/site-speed.svg" alt="نمودار سرعت بارگذاری صفحه" width="640" height="400" loading="lazy"></div>
-              <div class="card__body">
-                <span class="badge">توسعه وب</span>
-                <h3 class="card__title">چرا سرعت سایت روی فروش اثر می‌گذارد؟</h3>
-                <p class="card__text">رابطه زمان بارگذاری با نرخ تبدیل و راه‌های ساده برای بهبود آن.</p>
-                <p class="card__meta"><time datetime="2026-09-14">۲۳ شهریور ۱۴۰۵</time><span>۵ دقیقه مطالعه</span></p>
-              </div>
-            </article>
-          </li>
-          <li class="reveal">
-            <article class="card">
-              <div class="card__media"><img src="assets/images/blog/online-shop.svg" alt="سبد خرید و کارت محصول در فروشگاه اینترنتی" width="640" height="400" loading="lazy"></div>
-              <div class="card__body">
-                <span class="badge">فروشگاه اینترنتی</span>
-                <h3 class="card__title">راهنمای انتخاب پلتفرم فروشگاه اینترنتی</h3>
-                <p class="card__text">مقایسه گزینه‌های رایج برای راه‌اندازی فروشگاه آنلاین در ایران.</p>
-                <p class="card__meta"><time datetime="2026-08-31">۹ شهریور ۱۴۰۵</time><span>۹ دقیقه مطالعه</span></p>
-              </div>
-            </article>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ===================== FAQ ===================== -->
-    <section class="section faq" id="faq" aria-labelledby="faq-title">
-      <div class="container">
-        <header class="section-head">
-          <span class="section-head__eyebrow">سوالات متداول</span>
-          <h2 class="section-head__title" id="faq-title">پاسخ پرسش‌های رایج</h2>
-        </header>
-        <div class="faq__wrap accordion" data-accordion>
-          <div class="accordion__item">
-            <h3 class="accordion__heading">
-              <button class="accordion__trigger" type="button" aria-expanded="true" aria-controls="faq-1" id="faq-1-btn">
-                طراحی یک وب‌سایت چقدر زمان می‌برد؟
-                <svg class="accordion__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </button>
-            </h3>
-            <div class="accordion__panel" id="faq-1" role="region" aria-labelledby="faq-1-btn">
-              <p>وب‌سایت‌های شرکتی معمولاً بین سه تا شش هفته و فروشگاه‌های اینترنتی بین شش تا ده هفته زمان می‌برند. زمان‌بندی دقیق پس از جلسه نیازسنجی در قرارداد ثبت می‌شود.</p>
-            </div>
-          </div>
-          <div class="accordion__item">
-            <h3 class="accordion__heading">
-              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-2" id="faq-2-btn">
-                هزینه پروژه چگونه محاسبه می‌شود؟
-                <svg class="accordion__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </button>
-            </h3>
-            <div class="accordion__panel" id="faq-2" role="region" aria-labelledby="faq-2-btn" hidden>
-              <p>هزینه بر اساس تعداد صفحات، امکانات مورد نیاز و میزان طراحی اختصاصی برآورد می‌شود و به‌صورت مرحله‌ای پرداخت می‌گردد.</p>
-            </div>
-          </div>
-          <div class="accordion__item">
-            <h3 class="accordion__heading">
-              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-3" id="faq-3-btn">
-                آیا پس از تحویل، سایت را خودم می‌توانم مدیریت کنم؟
-                <svg class="accordion__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </button>
-            </h3>
-            <div class="accordion__panel" id="faq-3" role="region" aria-labelledby="faq-3-btn" hidden>
-              <p>بله. همه وب‌سایت‌ها پنل مدیریت فارسی دارند و جلسه آموزشی برای کار با آن برگزار می‌شود.</p>
-            </div>
-          </div>
-          <div class="accordion__item">
-            <h3 class="accordion__heading">
-              <button class="accordion__trigger" type="button" aria-expanded="false" aria-controls="faq-4" id="faq-4-btn">
-                هاست و دامنه را هم شما تهیه می‌کنید؟
-                <svg class="accordion__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-              </button>
-            </h3>
-            <div class="accordion__panel" id="faq-4" role="region" aria-labelledby="faq-4-btn" hidden>
-              <p>در صورت تمایل، تهیه دامنه، هاست و گواهی SSL را انجام می‌دهیم؛ مالکیت دامنه همیشه به نام خود شما ثبت می‌شود.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===================== CTA / contact ===================== -->
-    <section class="section" id="contact" aria-labelledby="cta-title">
-      <div class="container">
-        <div class="cta-band">
-          <div>
-            <h2 class="cta-band__title" id="cta-title">مشاوره رایگان می‌خواهید؟</h2>
-            <p class="cta-band__text">شماره‌تان را بگذارید؛ کارشناسان ما برای بررسی پروژه با شما تماس می‌گیرند.</p>
-          </div>
-          <form class="cta-band__form" novalidate data-callback-form>
-            <div class="field">
-              <label class="field__label" for="cta-phone">شماره موبایل</label>
-              <input class="input" id="cta-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="مثلاً ۰۹۱۲۱۲۳۴۵۶۷" dir="ltr" aria-describedby="cta-phone-error" required>
-              <p class="field__error" id="cta-phone-error"></p>
-            </div>
-            <button class="btn btn--light cta-band__submit" type="submit">درخواست تماس</button>
-            <p class="form-status" role="status" data-form-status></p>
-          </form>
-        </div>
       </div>
     </section>
   </main>
@@ -464,32 +439,32 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <a class="brand" href="index.html" aria-label="فیبسو — صفحه اصلی">
+          <a class="brand" href="index.html" aria-label="فروشگاه فیبسو — صفحه اصلی">
             <img class="brand__mark" src="assets/images/logo-mark-inverse.svg" alt="" width="40" height="40">
             <span>فیبسو</span>
           </a>
-          <p class="footer-about">ارائه‌دهنده خدمات طراحی وب‌سایت، فروشگاه اینترنتی، سئو و پشتیبانی فنی برای کسب‌وکارهایی که می‌خواهند آنلاین رشد کنند.</p>
+          <p class="footer-about">فروشگاه تخصصی تجهیزات شبکه، لپ‌تاپ نو و استوک و قطعات لپ‌تاپ؛ با تست فنی، ضمانت سلامت و مشاوره پیش از خرید.</p>
         </div>
-        <nav aria-labelledby="footer-services-title">
-          <h2 class="footer-title" id="footer-services-title">خدمات</h2>
+        <nav aria-labelledby="footer-cat-title">
+          <h2 class="footer-title" id="footer-cat-title">دسته‌بندی‌ها</h2>
           <ul class="footer-links">
-            <li><a href="#services">طراحی وب‌سایت</a></li>
-            <li><a href="#services">فروشگاه اینترنتی</a></li>
-            <li><a href="#services">سئو و بهینه‌سازی</a></li>
-            <li><a href="#services">پشتیبانی و نگهداری</a></li>
+            <li><a href="#new-laptops">لپ‌تاپ نو</a></li>
+            <li><a href="#used-laptops">لپ‌تاپ استوک</a></li>
+            <li><a href="#network">تجهیزات شبکه</a></li>
+            <li><a href="#parts">قطعات و لوازم جانبی</a></li>
           </ul>
         </nav>
-        <nav aria-labelledby="footer-links-title">
-          <h2 class="footer-title" id="footer-links-title">دسترسی سریع</h2>
+        <nav aria-labelledby="footer-help-title">
+          <h2 class="footer-title" id="footer-help-title">خدمات مشتریان</h2>
           <ul class="footer-links">
-            <li><a href="#portfolio">نمونه‌کارها</a></li>
-            <li><a href="#process">فرایند همکاری</a></li>
-            <li><a href="#blog">وبلاگ</a></li>
-            <li><a href="#faq">سوالات متداول</a></li>
+            <li><a href="#services">ضمانت سلامت کالا</a></li>
+            <li><a href="#used-laptops">درجه‌بندی کالای استوک</a></li>
+            <li><a href="#services">خرید سازمانی</a></li>
+            <li><a href="#offers">تخفیف‌ها</a></li>
           </ul>
         </nav>
         <div>
-          <h2 class="footer-title">تماس با ما</h2>
+          <h2 class="footer-title">ارتباط با ما</h2>
           <ul class="footer-contact">
             <li>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -507,10 +482,31 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© <span data-year>۱۴۰۵</span> فیبسو. همه حقوق محفوظ است.</p>
-        <p>طراحی و توسعه: تیم فیبسو</p>
+        <p>© ۱۴۰۵ فروشگاه فیبسو. همه حقوق محفوظ است.</p>
+        <p>قیمت‌ها به تومان است.</p>
       </div>
     </div>
   </footer>
+
+  <a class="to-top" href="#top" aria-label="بازگشت به بالای صفحه" data-to-top hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+  </a>
+
+  <!-- ===================== Mini cart ===================== -->
+  <div class="backdrop" data-backdrop hidden></div>
+  <aside class="drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" data-cart-drawer hidden>
+    <div class="drawer__head">
+      <h2 class="drawer__title" id="cart-title">سبد خرید</h2>
+      <button class="icon-btn" type="button" aria-label="بستن سبد خرید" data-cart-close>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="drawer__body" data-cart-body></div>
+    <div class="drawer__foot" data-cart-foot hidden>
+      <p class="drawer__total"><span>جمع کل</span><span data-cart-total>۰ تومان</span></p>
+      <button class="btn btn--primary btn--block" type="button" disabled aria-describedby="checkout-note">ادامه فرایند خرید</button>
+      <p class="drawer__note" id="checkout-note">صفحه تکمیل سفارش در مرحله بعد ساخته می‌شود.</p>
+    </div>
+  </aside>
 </body>
 </html>

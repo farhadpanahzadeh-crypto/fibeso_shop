@@ -1,33 +1,33 @@
 #!/usr/bin/env python3
-"""Generates the flat SVG illustrations in assets/images/.
+"""Generates the flat SVG product, category and banner illustrations in assets/images/.
 
 Colors mirror the PROVISIONAL brand palette in assets/css/tokens.css. When the
-final palette is supplied, update PALETTE below and re-run:
+final palette is supplied, update P below and re-run:
     python3 scripts/generate-images.py
+These drawings stand in for real product photos until the shop supplies them.
 """
 from pathlib import Path
 
-PALETTE = {
-    "primary": "#1e40af",
-    "primary_strong": "#1e3a8a",
-    "primary_soft": "#eef2ff",
-    "primary_mid": "#c7d2fe",
-    "accent": "#b45309",
-    "accent_soft": "#fef3c7",
-    "ink": "#0f172a",
-    "line": "#e2e8f0",
-    "muted": "#f1f5f9",
-    "gray": "#cbd5e1",
+P = {
+    "navy": "#1b2d63",
+    "navy_mid": "#2c4489",
+    "sky": "#0b78b8",
+    "sky_soft": "#d8eefa",
+    "ink": "#111827",
+    "graphite": "#374151",
+    "steel": "#9ca3af",
+    "silver": "#d1d5db",
+    "line": "#e5e7eb",
+    "muted": "#f3f4f6",
     "white": "#ffffff",
-    "success": "#15803d",
+    "green": "#16a34a",
+    "amber": "#f59e0b",
 }
-P = PALETTE
 ROOT = Path(__file__).resolve().parent.parent / "assets" / "images"
 
 
 def svg(w, h, body):
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
-            f'width="{w}" height="{h}" role="img" aria-hidden="true">{body}</svg>\n')
+    return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}">{body}</svg>\n'
 
 
 def write(rel, content):
@@ -36,169 +36,157 @@ def write(rel, content):
     path.write_text(content, encoding="utf-8")
 
 
-def bars(x, y, widths, h=8, gap=16, color=None):
-    color = color or P["gray"]
-    return "".join(f'<rect x="{x - w}" y="{y + i * gap}" width="{w}" height="{h}" rx="4" fill="{color}"/>'
-                   for i, w in enumerate(widths))
+def g(body, x=0, y=0, s=1):
+    return f'<g transform="translate({x} {y}) scale({s})">{body}</g>'
 
 
-def browser(w, h, inner):
-    """A browser window frame (RTL: dots on the right)."""
-    return (f'<rect width="{w}" height="{h}" fill="{P["muted"]}"/>'
-            f'<rect x="24" y="24" width="{w - 48}" height="{h - 24}" rx="14" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="2"/>'
-            f'<path d="M24 38a14 14 0 0 1 14-14h{w - 76}a14 14 0 0 1 14 14v18H24z" fill="{P["primary_soft"]}"/>'
-            + "".join(f'<circle cx="{w - 48 - i * 16}" cy="40" r="5" fill="{c}"/>'
-                      for i, c in enumerate((P["primary"], P["primary_mid"], P["gray"])))
-            + f'<rect x="48" y="33" width="{w * 0.45:.0f}" height="14" rx="7" fill="{P["white"]}"/>'
-            + inner)
+def shadow(cx, cy, rx):
+    return f'<ellipse cx="{cx}" cy="{cy}" rx="{rx}" ry="8" fill="{P["line"]}"/>'
 
+
+# ---------- Product drawings (400x400 canvas) ----------
+def laptop(body=None, screen=None, deck=None):
+    body = body or P["graphite"]
+    screen = screen or P["sky"]
+    deck = deck or P["silver"]
+    return (f'<rect x="78" y="80" width="244" height="168" rx="12" fill="{body}"/>'
+            f'<rect x="90" y="92" width="220" height="142" rx="4" fill="{screen}"/>'
+            f'<path d="M90 234 190 120l120 114z" fill="{P["white"]}" opacity=".18"/>'
+            f'<circle cx="250" cy="140" r="34" fill="{P["white"]}" opacity=".22"/>'
+            f'<path d="M48 258h304l-16 26H64z" fill="{deck}"/>'
+            f'<rect x="48" y="248" width="304" height="12" rx="4" fill="{body}"/>'
+            f'<rect x="170" y="250" width="60" height="6" rx="3" fill="{P["steel"]}"/>'
+            + shadow(200, 298, 150))
+
+
+def router():
+    ants = "".join(f'<rect x="{x}" y="70" width="12" height="130" rx="6" fill="{P["ink"]}"/>' for x in (96, 150, 238, 292))
+    leds = "".join(f'<circle cx="{150 + i * 20}" cy="262" r="4" fill="{P["green"] if i < 4 else P["sky"]}"/>' for i in range(6))
+    return (ants + f'<path d="M70 210h260l20 70H50z" fill="{P["ink"]}"/>'
+            f'<rect x="50" y="276" width="300" height="16" rx="6" fill="{P["graphite"]}"/>' + leds + shadow(200, 306, 150))
+
+
+def switch():
+    ports = "".join(f'<rect x="{78 + (i % 12) * 20}" y="{176 + (i // 12) * 30}" width="14" height="20" rx="2" fill="{P["ink"]}"/>' for i in range(24))
+    leds = "".join(f'<circle cx="{85 + i * 20}" cy="168" r="2.5" fill="{P["green"]}"/>' for i in range(12))
+    return (f'<rect x="40" y="150" width="320" height="90" rx="8" fill="{P["steel"]}"/>'
+            f'<rect x="48" y="158" width="304" height="74" rx="5" fill="{P["silver"]}"/>' + ports + leds
+            + f'<rect x="324" y="176" width="20" height="50" rx="3" fill="{P["navy"]}"/>' + shadow(200, 256, 160))
+
+
+def access_point():
+    return (f'<ellipse cx="200" cy="210" rx="130" ry="60" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="4"/>'
+            f'<ellipse cx="200" cy="200" rx="130" ry="60" fill="{P["white"]}" stroke="{P["silver"]}" stroke-width="4"/>'
+            f'<circle cx="200" cy="200" r="10" fill="{P["sky"]}"/>'
+            + "".join(f'<path d="M{200 - r} {170 - r * .2}a{r} {r * .6} 0 0 1 {2 * r} 0" fill="none" stroke="{P["sky"]}" stroke-width="6" stroke-linecap="round" opacity="{1 - i * .25}"/>'
+                      for i, r in enumerate((30, 52, 74)))
+            + shadow(200, 286, 130))
+
+
+def cable():
+    return (f'<path d="M80 300c40-120 200-40 240-200" fill="none" stroke="{P["sky"]}" stroke-width="14" stroke-linecap="round"/>'
+            f'<path d="M110 320c60-100 200-20 220-170" fill="none" stroke="{P["navy_mid"]}" stroke-width="14" stroke-linecap="round" opacity=".85"/>'
+            + "".join(f'<g transform="translate({x} {y}) rotate({r})"><rect x="-18" y="-30" width="36" height="46" rx="6" fill="{P["white"]}" stroke="{P["silver"]}" stroke-width="4"/>'
+                      f'<rect x="-12" y="-38" width="24" height="12" rx="2" fill="{P["silver"]}"/></g>'
+                      for x, y, r in ((320, 96, 20), (80, 304, 200)))
+            + shadow(200, 340, 140))
+
+
+def ram():
+    chips = "".join(f'<rect x="{70 + i * 46}" y="150" width="34" height="56" rx="3" fill="{P["ink"]}"/>' for i in range(6))
+    pins = "".join(f'<rect x="{62 + i * 9}" y="232" width="5" height="16" fill="{P["amber"]}"/>' for i in range(31))
+    return (f'<rect x="54" y="130" width="292" height="122" rx="6" fill="{P["green"]}"/>' + chips + pins
+            + f'<rect x="190" y="236" width="14" height="16" fill="{P["white"]}"/>'
+            f'<rect x="70" y="214" width="120" height="10" rx="3" fill="{P["white"]}" opacity=".7"/>' + shadow(200, 270, 150))
+
+
+def ssd():
+    return (f'<rect x="80" y="110" width="240" height="170" rx="14" fill="{P["ink"]}"/>'
+            f'<rect x="96" y="126" width="208" height="138" rx="8" fill="{P["graphite"]}"/>'
+            f'<rect x="120" y="170" width="160" height="16" rx="6" fill="{P["sky"]}"/>'
+            f'<rect x="150" y="200" width="100" height="10" rx="5" fill="{P["steel"]}"/>' + shadow(200, 296, 130))
+
+
+def nic():
+    return (f'<rect x="70" y="140" width="240" height="110" rx="6" fill="{P["navy"]}"/>'
+            f'<rect x="300" y="120" width="30" height="150" rx="4" fill="{P["silver"]}"/>'
+            f'<rect x="306" y="150" width="18" height="24" rx="2" fill="{P["ink"]}"/><rect x="306" y="196" width="18" height="24" rx="2" fill="{P["ink"]}"/>'
+            f'<rect x="130" y="166" width="60" height="60" rx="4" fill="{P["ink"]}"/>'
+            + "".join(f'<rect x="{90 + i * 12}" y="250" width="7" height="16" fill="{P["amber"]}"/>' for i in range(14))
+            + shadow(200, 286, 130))
+
+
+def rack():
+    units = "".join(f'<rect x="130" y="{86 + i * 46}" width="140" height="36" rx="3" fill="{P["graphite"]}"/>'
+                    f'<circle cx="252" cy="{104 + i * 46}" r="4" fill="{P["green"]}"/>'
+                    f'<rect x="144" y="{100 + i * 46}" width="70" height="8" rx="3" fill="{P["steel"]}"/>' for i in range(5))
+    return (f'<rect x="114" y="66" width="172" height="270" rx="10" fill="{P["ink"]}"/>' + units
+            + f'<rect x="124" y="336" width="20" height="10" fill="{P["ink"]}"/><rect x="256" y="336" width="20" height="10" fill="{P["ink"]}"/>'
+            + shadow(200, 352, 110))
+
+
+def mouse():
+    return (f'<rect x="140" y="80" width="120" height="220" rx="60" fill="{P["ink"]}"/>'
+            f'<line x1="200" y1="84" x2="200" y2="170" stroke="{P["graphite"]}" stroke-width="4"/>'
+            f'<rect x="192" y="110" width="16" height="36" rx="8" fill="{P["sky"]}"/>' + shadow(200, 320, 80))
+
+
+def adapter():
+    return (f'<rect x="110" y="150" width="150" height="90" rx="14" fill="{P["ink"]}"/>'
+            f'<path d="M260 195c60 0 40 90 90 90" fill="none" stroke="{P["ink"]}" stroke-width="10" stroke-linecap="round"/>'
+            f'<path d="M110 195c-40 0-30-80-70-80" fill="none" stroke="{P["ink"]}" stroke-width="10" stroke-linecap="round"/>'
+            f'<circle cx="185" cy="195" r="16" fill="{P["graphite"]}"/>' + shadow(200, 300, 130))
+
+
+PRODUCTS = {
+    "laptop-business": laptop(P["graphite"], P["sky"]),
+    "laptop-gaming": laptop(P["ink"], P["navy_mid"], P["graphite"]),
+    "laptop-ultrabook": laptop(P["steel"], P["sky_soft"], P["silver"]),
+    "laptop-workstation": laptop(P["ink"], P["sky"], P["graphite"]),
+    "laptop-used-a": laptop(P["graphite"], P["navy"]),
+    "laptop-used-b": laptop(P["ink"], P["sky"], P["steel"]),
+    "router": router(),
+    "switch": switch(),
+    "access-point": access_point(),
+    "cable": cable(),
+    "ram": ram(),
+    "ssd": ssd(),
+    "nic": nic(),
+    "rack": rack(),
+    "mouse": mouse(),
+    "adapter": adapter(),
+}
+for name, body in PRODUCTS.items():
+    write(f"products/{name}.svg", svg(400, 400, body))
+
+# ---------- Brand / group tiles (transparent; tile color comes from CSS) ----------
+write("groups/laptops-new.svg", svg(400, 400, g(PRODUCTS["laptop-ultrabook"], 40, 20, .85) + g(PRODUCTS["laptop-business"], 0, 120, .7)))
+write("groups/laptops-used.svg", svg(400, 400, g(PRODUCTS["laptop-used-a"], 50, 30, .8) + g(PRODUCTS["laptop-used-b"], -10, 120, .7)))
+write("groups/network.svg", svg(400, 400, g(router(), 40, -10, .8) + g(switch(), 0, 150, .9)))
+write("groups/parts.svg", svg(400, 400, g(ram(), 40, 0, .8) + g(ssd(), 30, 140, .75)))
+
+# ---------- Banners (navy panels with art; text is HTML) ----------
+def banner(w, h, art):
+    return svg(w, h, f'<rect width="{w}" height="{h}" fill="{P["navy"]}"/>'
+                     f'<path d="M{w * .45} {h}L{w} 0V{h}z" fill="{P["navy_mid"]}" opacity=".55"/>'
+                     f'<path d="M{w * .62} {h}L{w} {h * .35}V{h}z" fill="{P["sky"]}" opacity=".18"/>' + art)
+
+
+write("banners/hero-1.svg", banner(1600, 520, g(PRODUCTS["laptop-gaming"], 120, 20, 1.15) + g(PRODUCTS["laptop-ultrabook"], 420, 90, .95)))
+write("banners/hero-2.svg", banner(1600, 520, g(router(), 120, 40, 1.05) + g(switch(), 430, 180, .95) + g(access_point(), 360, -40, .7)))
+write("banners/hero-3.svg", banner(1600, 520, g(PRODUCTS["laptop-used-a"], 140, 30, 1.1) + g(ram(), 480, 210, .6) + g(ssd(), 520, 40, .55)))
+write("banners/promo-1.svg", banner(800, 360, g(router(), 30, 20, .8)))
+write("banners/promo-2.svg", banner(800, 360, g(PRODUCTS["laptop-used-b"], 20, 30, .8)))
+write("banners/promo-3.svg", banner(800, 360, g(ram(), 40, 10, .55) + g(ssd(), 120, 150, .5)))
+write("banners/wide.svg", banner(1600, 300, g(rack(), 160, 0, .75) + g(switch(), 380, 90, .75) + g(nic(), 640, 60, .6)))
 
 # ---------- Logo ----------
 def logo(bg, fg):
-    return svg(40, 40,
-               f'<rect width="40" height="40" rx="11" fill="{bg}"/>'
-               f'<path d="M14 11h13v4.5h-8.5v4H25V24h-6.5v5H14z" fill="{fg}"/>'
-               f'<circle cx="27.5" cy="27" r="2.5" fill="{fg}"/>')
+    return svg(40, 40, f'<rect width="40" height="40" rx="11" fill="{bg}"/>'
+                       f'<path d="M14 11h13v4.5h-8.5v4H25V24h-6.5v5H14z" fill="{fg}"/>'
+                       f'<circle cx="27.5" cy="27" r="2.5" fill="{fg}"/>')
 
 
-write("logo-mark.svg", logo(P["primary"], P["white"]))
-write("logo-mark-inverse.svg", logo(P["white"], P["primary_strong"]))
-
-# ---------- Hero ----------
-hero = (
-    f'<rect x="20" y="40" width="440" height="330" rx="22" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="2"/>'
-    f'<path d="M20 62a22 22 0 0 1 22-22h396a22 22 0 0 1 22 22v18H20z" fill="{P["primary_soft"]}"/>'
-    + "".join(f'<circle cx="{436 - i * 18}" cy="60" r="6" fill="{c}"/>'
-              for i, c in enumerate((P["primary"], P["primary_mid"], P["gray"])))
-    # sidebar (right side for RTL)
-    + f'<rect x="368" y="96" width="76" height="258" rx="12" fill="{P["muted"]}"/>'
-    + "".join(f'<rect x="380" y="{116 + i * 34}" width="52" height="12" rx="6" fill="{P["primary"] if i == 0 else P["gray"]}"/>'
-              for i in range(6))
-    # KPI cards
-    + "".join(
-        f'<rect x="{40 + i * 108}" y="96" width="96" height="70" rx="12" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="2"/>'
-        f'<rect x="{96 + i * 108}" y="112" width="28" height="8" rx="4" fill="{P["gray"]}"/>'
-        f'<rect x="{72 + i * 108}" y="132" width="52" height="16" rx="6" fill="{c}"/>'
-        for i, c in enumerate((P["primary"], P["accent"], P["primary_strong"])))
-    # chart panel
-    + f'<rect x="40" y="182" width="312" height="172" rx="14" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="2"/>'
-    + "".join(f'<line x1="60" y1="{220 + i * 32}" x2="332" y2="{220 + i * 32}" stroke="{P["line"]}" stroke-width="2"/>' for i in range(4))
-    + "".join(f'<rect x="{72 + i * 44}" y="{330 - hgt}" width="22" height="{hgt}" rx="5" fill="{P["primary_mid"]}"/>'
-              for i, hgt in enumerate((40, 62, 52, 84, 76, 108)))
-    + f'<polyline points="83,282 127,262 171,270 215,236 259,242 303,206" fill="none" stroke="{P["primary"]}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>'
-    + "".join(f'<circle cx="{x}" cy="{y}" r="5" fill="{P["white"]}" stroke="{P["primary"]}" stroke-width="3"/>'
-              for x, y in ((83, 282), (127, 262), (171, 270), (215, 236), (259, 242), (303, 206)))
-    + f'<rect x="60" y="196" width="60" height="10" rx="5" fill="{P["gray"]}"/>'
-    # floating code card
-    + f'<rect x="300" y="300" width="230" height="130" rx="18" fill="{P["primary_strong"]}"/>'
-    + "".join(f'<rect x="{510 - w}" y="{326 + i * 22}" width="{w}" height="9" rx="4.5" fill="{c}"/>'
-              for i, (w, c) in enumerate(((120, P["primary_mid"]), (160, P["white"]), (96, P["accent_soft"]), (140, P["primary_mid"]))))
-    # floating growth badge
-    + f'<rect x="0" y="0" width="190" height="78" rx="16" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="2" transform="translate(350 4)"/>'
-    + f'<circle cx="502" cy="43" r="20" fill="{P["primary_soft"]}"/>'
-    + f'<path d="M492 50l7-7 5 5 9-10M506 38h7v7" fill="none" stroke="{P["success"]}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
-    + f'<rect x="380" y="28" width="90" height="10" rx="5" fill="{P["gray"]}"/>'
-    + f'<rect x="410" y="46" width="60" height="14" rx="6" fill="{P["ink"]}"/>'
-)
-write("hero-illustration.svg", svg(560, 460, hero))
-
-# ---------- Portfolio / blog thumbnails (640x400) ----------
-W, H = 640, 400
-
-
-def thumb_shop(color):
-    cards = ""
-    for i in range(4):
-        x = 64 + i * 132
-        cards += (f'<rect x="{x}" y="176" width="116" height="180" rx="12" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="2"/>'
-                  f'<rect x="{x + 10}" y="186" width="96" height="92" rx="8" fill="{color if i % 2 == 0 else P["primary_soft"]}"/>'
-                  + bars(x + 106, 292, (70, 44), gap=18)
-                  + f'<rect x="{x + 10}" y="330" width="40" height="14" rx="7" fill="{P["primary"]}"/>')
-    return browser(W, H, f'<rect x="48" y="72" width="544" height="88" rx="12" fill="{P["primary_strong"]}"/>'
-                   + bars(568, 94, (220, 140), h=12, gap=24, color=P["white"]) + cards)
-
-
-def thumb_site(color):
-    return browser(W, H,
-                   f'<rect x="48" y="72" width="544" height="150" rx="12" fill="{P["primary_soft"]}"/>'
-                   + bars(568, 100, (260, 200, 140), h=14, gap=26, color=P["ink"])
-                   + f'<rect x="440" y="182" width="128" height="26" rx="8" fill="{color}"/>'
-                   + f'<circle cx="150" cy="147" r="56" fill="{P["white"]}"/><circle cx="150" cy="147" r="30" fill="{color}"/>'
-                   + "".join(f'<rect x="{48 + i * 186}" y="240" width="172" height="120" rx="12" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="2"/>'
-                             f'<circle cx="{196 + i * 186}" cy="272" r="14" fill="{P["primary_soft"]}"/>'
-                             + bars(204 + i * 186, 300, (120, 90), gap=18) for i in range(3)))
-
-
-def thumb_dash(color):
-    return browser(W, H,
-                   f'<rect x="512" y="72" width="80" height="288" rx="10" fill="{P["primary_strong"]}"/>'
-                   + "".join(f'<rect x="526" y="{94 + i * 30}" width="52" height="10" rx="5" fill="{P["primary_mid"]}"/>' for i in range(6))
-                   + "".join(f'<rect x="{48 + i * 152}" y="72" width="140" height="72" rx="10" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="2"/>'
-                             f'<rect x="{80 + i * 152}" y="104" width="{60 + i * 10}" height="18" rx="6" fill="{color if i == 0 else P["primary_mid"]}"/>' for i in range(3))
-                   + f'<rect x="48" y="160" width="448" height="200" rx="10" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="2"/>'
-                   + f'<polyline points="72,320 132,290 192,300 252,250 312,262 372,212 472,190" fill="none" stroke="{color}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
-                   + f'<polyline points="72,334 132,320 192,326 252,300 312,310 372,282 472,268" fill="none" stroke="{P["primary_mid"]}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>')
-
-
-def thumb_booking(color):
-    cells = ""
-    for r in range(4):
-        for c in range(7):
-            x, y = 80 + c * 40, 140 + r * 44
-            on = (r, c) in ((1, 3), (2, 5))
-            cells += f'<rect x="{x}" y="{y}" width="32" height="32" rx="8" fill="{color if on else P["muted"]}"/>'
-    return browser(W, H,
-                   f'<rect x="56" y="80" width="328" height="280" rx="14" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="2"/>'
-                   + bars(360, 102, (120,), h=14, color=P["ink"]) + cells
-                   + "".join(f'<rect x="404" y="{80 + i * 70}" width="188" height="58" rx="12" fill="{P["primary_soft"] if i else color}"/>'
-                             + bars(580, 100 + i * 70, (110, 70), gap=16, color=P["white"] if i == 0 else P["gray"]) for i in range(4)))
-
-
-def thumb_checklist():
-    rows = "".join(
-        f'<rect x="120" y="{96 + i * 58}" width="400" height="44" rx="10" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="2"/>'
-        f'<rect x="478" y="{106 + i * 58}" width="24" height="24" rx="6" fill="{P["primary"] if i < 3 else P["white"]}" stroke="{P["primary"]}" stroke-width="2"/>'
-        + (f'<path d="M484 {118 + i * 58}l4 4 8-9" fill="none" stroke="{P["white"]}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>' if i < 3 else "")
-        + bars(462, 114 + i * 58, (220 - i * 30,))
-        for i in range(5))
-    return f'<rect width="{W}" height="{H}" fill="{P["primary_soft"]}"/>' + rows
-
-
-def thumb_speed():
-    import math
-    cx, cy, r = 320, 260, 150
-    def pt(a):
-        return cx + r * math.cos(math.radians(a)), cy - r * math.sin(math.radians(a))
-    x1, y1 = pt(180); x2, y2 = pt(0); x3, y3 = pt(55)
-    nx, ny = cx + 110 * math.cos(math.radians(55)), cy - 110 * math.sin(math.radians(55))
-    return (f'<rect width="{W}" height="{H}" fill="{P["primary_soft"]}"/>'
-            f'<path d="M{x1:.0f} {y1:.0f}A{r} {r} 0 0 1 {x2:.0f} {y2:.0f}" fill="none" stroke="{P["primary_mid"]}" stroke-width="28" stroke-linecap="round"/>'
-            f'<path d="M{x1:.0f} {y1:.0f}A{r} {r} 0 0 1 {x3:.0f} {y3:.0f}" fill="none" stroke="{P["primary"]}" stroke-width="28" stroke-linecap="round"/>'
-            f'<line x1="{cx}" y1="{cy}" x2="{nx:.0f}" y2="{ny:.0f}" stroke="{P["ink"]}" stroke-width="8" stroke-linecap="round"/>'
-            f'<circle cx="{cx}" cy="{cy}" r="16" fill="{P["ink"]}"/>'
-            f'<rect x="250" y="300" width="140" height="40" rx="12" fill="{P["white"]}"/>'
-            f'<rect x="276" y="314" width="88" height="12" rx="6" fill="{P["success"]}"/>')
-
-
-def thumb_cart():
-    return (f'<rect width="{W}" height="{H}" fill="{P["primary_soft"]}"/>'
-            f'<rect x="96" y="70" width="230" height="270" rx="18" fill="{P["white"]}" stroke="{P["line"]}" stroke-width="2"/>'
-            f'<rect x="116" y="90" width="190" height="130" rx="12" fill="{P["accent_soft"]}"/>'
-            f'<rect x="166" y="120" width="90" height="70" rx="10" fill="{P["accent"]}"/>'
-            + bars(306, 240, (150, 100), h=10, gap=22)
-            + f'<rect x="116" y="294" width="190" height="30" rx="10" fill="{P["primary"]}"/>'
-            f'<g fill="none" stroke="{P["primary"]}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">'
-            f'<path d="M372 120h34l34 150h120l26-104H420"/></g>'
-            f'<circle cx="452" cy="312" r="18" fill="{P["primary"]}"/><circle cx="550" cy="312" r="18" fill="{P["primary"]}"/>')
-
-
-write("portfolio/shop-fashion.svg", svg(W, H, thumb_shop(P["accent"])))
-write("portfolio/shop-digital.svg", svg(W, H, thumb_shop(P["primary"])))
-write("portfolio/web-clinic.svg", svg(W, H, thumb_site(P["primary"])))
-write("portfolio/web-corporate.svg", svg(W, H, thumb_site(P["accent"])))
-write("portfolio/app-dashboard.svg", svg(W, H, thumb_dash(P["primary"])))
-write("portfolio/app-booking.svg", svg(W, H, thumb_booking(P["primary"])))
-write("blog/seo-checklist.svg", svg(W, H, thumb_checklist()))
-write("blog/site-speed.svg", svg(W, H, thumb_speed()))
-write("blog/online-shop.svg", svg(W, H, thumb_cart()))
+write("logo-mark.svg", logo(P["navy"], P["white"]))
+write("logo-mark-inverse.svg", logo(P["white"], P["navy"]))
 print("ok")
