@@ -1,0 +1,137 @@
+/* ==========================================================================
+   Design tokens — single source of truth for the whole site.
+
+   ⚠ PROVISIONAL BRAND PALETTE
+   The final brand palette has not been supplied yet. The color values in the
+   "Brand palette" block below are temporary placeholders (navy/blue + amber,
+   from the UI/UX Pro Max "Trust & Authority" recommendation). When the real
+   palette arrives, replace ONLY the --brand-* values; every component reads
+   the semantic tokens further down, so nothing else needs to change.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Vazirmatn";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../fonts/vazirmatn/vazirmatn-arabic-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF,
+    U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+@font-face {
+  font-family: "Vazirmatn";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../fonts/vazirmatn/vazirmatn-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304,
+    U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* ---- Brand palette (PROVISIONAL — replace with supplied HEX values) ---- */
+  --brand-primary: #1e40af;        /* main blue: outlines, links, primary buttons */
+  --brand-primary-strong: #1e3a8a; /* hover / pressed / dark surfaces */
+  --brand-primary-soft: #eef2ff;   /* tinted surfaces behind icons */
+  --brand-accent: #b45309;         /* sparing highlight (badges, accents) */
+  --brand-ink: #0f172a;            /* headings / body text */
+
+  /* ---- Neutrals ---- */
+  --neutral-0: #ffffff;
+  --neutral-50: #f8fafc;
+  --neutral-100: #f1f5f9;
+  --neutral-200: #e2e8f0;
+  --neutral-300: #cbd5e1;
+  --neutral-500: #64748b;
+  --neutral-600: #475569;
+  --neutral-800: #1e293b;
+
+  /* ---- Semantic colors (components use these, never raw hex) ---- */
+  --color-bg: var(--neutral-50);
+  --color-surface: var(--neutral-0);
+  --color-surface-muted: var(--neutral-100);
+  --color-surface-inverse: var(--brand-primary-strong);
+  --color-text: var(--brand-ink);
+  --color-text-muted: var(--neutral-600);
+  --color-text-inverse: var(--neutral-0);
+  --color-text-inverse-muted: #c7d2fe;
+  --color-border: var(--neutral-200);
+  --color-border-strong: var(--neutral-300);
+  --color-primary: var(--brand-primary);
+  --color-primary-hover: var(--brand-primary-strong);
+  --color-on-primary: var(--neutral-0);
+  --color-primary-soft: var(--brand-primary-soft);
+  --color-accent: var(--brand-accent);
+  --color-on-accent: var(--neutral-0);
+  --color-success: #15803d;
+  --color-success-soft: #f0fdf4;
+  --color-danger: #b91c1c;
+  --color-danger-soft: #fef2f2;
+  --color-focus: var(--brand-primary);
+  --color-glass: rgb(255 255 255 / 0.72);
+
+  /* ---- Typography ---- */
+  --font-sans: "Vazirmatn", Tahoma, "Segoe UI", system-ui, sans-serif;
+  --fs-xs: 0.8125rem;                                   /* 13px  meta */
+  --fs-sm: 0.9375rem;                                   /* 15px  small */
+  --fs-base: 1rem;                                      /* 16px  body */
+  --fs-md: 1.125rem;                                    /* 18px  lead */
+  --fs-lg: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);     /* card titles */
+  --fs-xl: clamp(1.375rem, 1.15rem + 1vw, 1.875rem);    /* h3 / stats */
+  --fs-2xl: clamp(1.625rem, 1.3rem + 1.5vw, 2.5rem);    /* section h2 */
+  --fs-3xl: clamp(1.875rem, 1.4rem + 2.4vw, 3.25rem);   /* hero h1 */
+  --lh-tight: 1.35;
+  --lh-normal: 1.8;   /* Persian script reads better with generous leading */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+  --fw-black: 800;
+
+  /* ---- Spacing scale (4px base) ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-section: clamp(3.5rem, 2.5rem + 4vw, 6.5rem);
+
+  /* ---- Layout ---- */
+  --container-max: 75rem;     /* 1200px */
+  --container-narrow: 48rem;  /* 768px  text-heavy blocks */
+  --gutter: clamp(1rem, 0.6rem + 2vw, 2rem);
+  --header-height: 4.5rem;
+  /* Breakpoints (reference only — media queries can't read variables):
+     sm 30rem/480px · md 48rem/768px · lg 64rem/1024px · xl 80rem/1280px */
+
+  /* ---- Radii ---- */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-pill: 999px;
+
+  /* ---- Borders & elevation ---- */
+  --border-width: 1px;
+  --border-width-strong: 1.5px;
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
+  --shadow-md: 0 8px 24px -12px rgb(15 23 42 / 0.18);
+  --shadow-lg: 0 18px 40px -20px rgb(30 64 175 / 0.35);
+  --focus-ring: 0 0 0 3px var(--color-surface), 0 0 0 6px var(--color-focus);
+
+  /* ---- Motion ---- */
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --duration-slow: 360ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ---- Controls ---- */
+  --control-height: 3rem;     /* ≥ 44px touch target */
+  --z-header: 50;
+  --z-drawer: 60;
+}
