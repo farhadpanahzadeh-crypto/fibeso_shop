@@ -3,7 +3,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 const DEFAULTS = {
   url: '',
   maxPages: 40,
-  perPattern: 2,
+  perPattern: 3,
+  dedupe: true,
+  seeds: '',
   maxDepth: 4,
   desktop: true,
   mobile: true,
@@ -56,7 +58,10 @@ export default function App() {
     return [...map.values()];
   }, [events]);
 
-  const start = events.find((e) => e.type === 'start');
+  const start = [...events].reverse().find((e) => e.type === 'start');
+  const skipped = events.filter((e) => e.type === 'skip');
+  const visited = events.filter((e) => e.type === 'visited');
+  const logs = events.filter((e) => e.type === 'log');
   const done = events.find((e) => e.type === 'done');
   const fatal = events.find((e) => e.type === 'fatal');
   const formHost = (() => { try { return new URL(form.url).hostname; } catch { return ''; } })();
@@ -108,10 +113,15 @@ export default function App() {
           <div className="row">
             <label className="field"><span>حداکثر صفحه</span>
               <input type="number" min="1" max="500" value={form.maxPages} onChange={set('maxPages')} /></label>
-            <label className="field"><span>از هر نوع صفحه</span>
+            <label className="field"><span>از هر الگوی آدرس</span>
               <input type="number" min="1" max="50" value={form.perPattern} onChange={set('perPattern')} />
-              <small>مثلاً فقط ۲ صفحه محصول، نه هزاران</small></label>
+              <small>چند صفحه با آدرس مشابه باز شود</small></label>
           </div>
+
+          <label className="check">
+            <input type="checkbox" checked={form.dedupe} onChange={set('dedupe')} />
+            <span>از هر قالب فقط یک نمونه (اگر یک دسته‌بندی گرفته شد، بقیه دسته‌ها رد می‌شوند)</span>
+          </label>
 
           <fieldset className="checks">
             <legend>نمایش</legend>
@@ -137,12 +147,25 @@ export default function App() {
                 </select></label>
             </div>
             <label className="check"><input type="checkbox" checked={form.keepQuery} onChange={set('keepQuery')} /> آدرس‌های با پارامتر (?page=2) جدا حساب شوند</label>
-            <label className="check"><input type="checkbox" checked={form.useAuth} onChange={set('useAuth')} /> با حساب واردشده عکس بگیر (برای پنل کاربری)</label>
+            <label className="field"><span>آدرس‌های اضافه (هر خط یک آدرس)</span>
+              <textarea dir="ltr" rows="3" value={form.seeds} onChange={set('seeds')} placeholder="https://www.example.com/profile/orders" />
+              <small>صفحه‌هایی که لینکشان در سایت پیدا نمی‌شود</small></label>
+          </details>
+
+          <fieldset className="panel-box">
+            <legend>پنل کاربری</legend>
+            <ol className="steps">
+              <li>دکمه زیر را بزنید؛ یک مرورگر باز می‌شود.</li>
+              <li>وارد حساب شوید و صفحه‌های پنل (سفارش‌ها، آدرس‌ها، پروفایل، علاقه‌مندی‌ها…) را یکی‌یکی باز کنید.</li>
+              <li>پنجره را ببندید، تیک زیر را بزنید و «شروع» را بزنید.</li>
+            </ol>
             <button type="button" className="btn ghost" disabled={!formHost || running}
               onClick={() => post('/api/login', { url: form.url }).catch((err) => setError(err.message))}>
-              ورود دستی به سایت و ذخیره ورود
+              ورود دستی و ثبت صفحه‌های پنل
             </button>
-          </details>
+            {visited.length > 0 && <p className="muted">{fa(visited.length)} صفحه ثبت شد.</p>}
+            <label className="check"><input type="checkbox" checked={form.useAuth} onChange={set('useAuth')} /> با حساب واردشده عکس بگیر</label>
+          </fieldset>
 
           {error && <p className="error" role="alert">{error}</p>}
 
@@ -160,6 +183,13 @@ export default function App() {
           </div>
           {fatal && <p className="error">{fatal.message}</p>}
           {done && <p className="ok">تمام شد. فایل‌ها در <code dir="ltr">{done.outDir}</code> ذخیره شد. این پوشه را کامیت و پوش کنید.</p>}
+          {logs.length > 0 && <p className="muted">{logs[logs.length - 1].message}</p>}
+          {skipped.length > 0 && (
+            <details className="skipped">
+              <summary>{fa(skipped.length)} صفحه با قالب تکراری رد شد</summary>
+              <ul>{skipped.map((e) => <li key={e.url} dir="ltr">{e.url} <span className="muted">= #{e.sameAs}</span></li>)}</ul>
+            </details>
+          )}
           {!pages.length && !running && <p className="muted">هنوز چیزی گرفته نشده است.</p>}
           {running && !pages.length && <p className="muted">در حال باز کردن سایت…</p>}
           <ul className="pages">

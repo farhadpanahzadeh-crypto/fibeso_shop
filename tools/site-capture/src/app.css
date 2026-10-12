@@ -65,7 +65,7 @@ body {
 .field { display: grid; gap: 6px; font-weight: 600; font-size: 0.95rem; }
 .field small { font-weight: 400; color: var(--muted); font-size: 0.8rem; }
 
-input, select {
+input, select, textarea {
   width: 100%;
   min-width: 0;
   font: inherit;
@@ -147,3 +147,11 @@ code { font-size: 0.85em; word-break: break-all; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+textarea { padding: 10px 12px; min-height: 80px; resize: vertical; }
+.check span { line-height: 1.6; }
+.panel-box { border: 1px dashed var(--border); border-radius: 12px; padding: 12px 14px; display: grid; gap: 10px; margin: 0; }
+.panel-box legend { font-weight: 700; padding: 0 6px; }
+.steps { margin: 0; padding-inline-start: 20px; color: var(--muted); font-size: 0.9rem; }
+.skipped summary { font-size: 0.9rem; color: var(--muted); }
+.skipped ul { margin: 6px 0 0; padding-inline-start: 18px; font-size: 0.8rem; max-height: 200px; overflow: auto; }
