@@ -53,7 +53,7 @@
     var addressBlock = addresses.length
       ? '<div class="choice-list" role="radiogroup" aria-label="آدرس‌های ذخیره‌شده">' + addresses.map(function (a) {
           return '<label class="choice"><input type="radio" name="addressId" value="' + a.id + '"' + (a === def ? ' checked' : '') + '>' +
-            '<span class="choice__body address-card"><span class="address-card__name">' + esc(a.name) + ' — <span class="ltr">' + esc(a.mobile) + '</span></span>' +
+            '<span class="choice__body address-card"><span class="address-card__name">' + esc(a.name) + '، <span class="ltr">' + esc(a.mobile) + '</span></span>' +
             '<span class="choice__text">' + esc(Store.addressText(a)) + '</span></span></label>';
         }).join('') +
         '<label class="choice"><input type="radio" name="addressId" value="new"><span class="choice__body"><span class="choice__title">ارسال به آدرس جدید</span></span></label>' +
@@ -73,7 +73,7 @@
           '<section class="panel" aria-labelledby="pay-title"><h2 class="panel__title" id="pay-title">روش پرداخت</h2>' +
             '<div class="choice-list" role="radiogroup" aria-labelledby="pay-title">' + PAYMENT.map(function (p, i) { return radio('payment', p, i === 0); }).join('') + '</div>' +
             '<p class="field__error" id="pay-error" role="alert"></p>' +
-            '<div class="alert alert--warning checkout-demo-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>' +
+            '<div class="alert alert--warning checkout-demo-note">' + window.icon('warning') +
             '<span>نسخه نمایشی: درگاه پرداخت هنوز متصل نیست. با ثبت سفارش، هیچ پرداختی انجام نمی‌شود و سفارش فقط در همین مرورگر ذخیره می‌شود.</span></div>' +
           '</section>' +
           '<section class="panel"><div class="field"><label class="field__label" for="order-note">توضیحات سفارش (اختیاری)</label>' +
@@ -91,7 +91,7 @@
             '<div><dt>هزینه ارسال</dt><dd data-ship-cost></dd></div>' +
             '<div class="summary__total"><dt>مبلغ قابل پرداخت</dt><dd data-grand-total></dd></div>' +
           '</dl>' +
-          '<label class="check"><input type="checkbox" name="terms" data-rules="required" data-label="پذیرش قوانین" aria-describedby="terms-error"> <span>قوانین و شرایط فروشگاه و <a href="' + Shop.root + 'pages/warranty.html">شرایط ضمانت</a> را می‌پذیرم.</span></label>' +
+          '<label class="check"><input type="checkbox" name="terms" data-rules="required" data-label="پذیرش قوانین" aria-describedby="terms-error"> <span><a href="' + Shop.root + 'pages/terms.html">قوانین فروشگاه</a> و <a href="' + Shop.root + 'pages/warranty.html">شرایط ضمانت</a> را می‌پذیرم.</span></label>' +
           '<p class="field__error" id="terms-error"></p>' +
           '<button class="btn btn--primary btn--block" type="submit">ثبت سفارش</button>' +
         '</aside>' +

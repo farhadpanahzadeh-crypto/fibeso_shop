@@ -1,7 +1,7 @@
 <!-- {"out": "pages/login.html", "title": "ورود و ثبت‌نام | فیبسو", "description": "ورود یا ثبت‌نام در فروشگاه فیبسو با شماره موبایل.", "noindex": true, "css": ["pages/auth.css"], "js": ["pages/login.js"]} -->
   <main id="main" class="auth">
     <div class="auth__card">
-      <a class="brand auth__brand" href="{{root}}index.html" aria-label="فروشگاه فیبسو — صفحه اصلی">
+      <a class="brand auth__brand" href="{{root}}index.html" aria-label="فروشگاه فیبسو، صفحه اصلی">
         <img class="brand__mark" src="{{root}}assets/images/logo-mark.svg" alt="" width="40" height="40">
         <span>فیبسو</span>
       </a>
@@ -16,7 +16,7 @@
           <p class="field__error" id="login-mobile-error"></p>
         </div>
         <button class="btn btn--primary btn--block" type="submit">دریافت کد تأیید</button>
-        <p class="auth__terms">ورود شما به معنای پذیرش <a href="{{root}}pages/warranty.html">شرایط فیبسو</a> است.</p>
+        <p class="auth__terms">ورود شما به معنای پذیرش <a href="{{root}}pages/terms.html">قوانین و حریم خصوصی فیبسو</a> است.</p>
       </form>
 
       <!-- Step 2: one-time code -->
@@ -25,7 +25,7 @@
         <p class="auth__lead">کد تأیید برای شماره <strong class="ltr" data-show-mobile></strong> ارسال شد.
           <button class="link-btn" type="button" data-edit-mobile>ویرایش شماره</button></p>
         <div class="alert alert--warning">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          {{icon:warning}}
           <span>نسخه نمایشی: پیامکی ارسال نمی‌شود. کد <strong class="ltr">12345</strong> را وارد کنید.</span>
         </div>
         <div class="field">

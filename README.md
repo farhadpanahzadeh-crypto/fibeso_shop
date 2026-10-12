@@ -1,7 +1,7 @@
-# فروشگاه فیبسو — Fibeso Shop (front-end)
+# فروشگاه فیبسو / Fibeso Shop (front-end)
 
 Static, RTL Persian storefront for Fibeso: network equipment, new and used (graded)
-laptops, and new/used laptop parts. Plain HTML, CSS and vanilla JavaScript — no
+laptops, and new/used laptop parts. Plain HTML, CSS and vanilla JavaScript: no
 framework and no build step is needed to run it.
 
 ## Run locally

@@ -86,6 +86,25 @@ button {
   border-radius: var(--radius-sm);
 }
 
+/* Phosphor icons (inline SVG, fill = currentColor) */
+.icon {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1.25em;
+  height: 1.25em;
+  vertical-align: -0.2em;
+}
+
+/* Toggle buttons carry both outline and filled glyphs */
+.icon-on,
+[aria-pressed="true"] > .icon-off {
+  display: none;
+}
+
+[aria-pressed="true"] > .icon-on {
+  display: inline-block;
+}
+
 /* Latin strings (phone numbers, e-mails) inside RTL text */
 .ltr {
   direction: ltr;
@@ -136,4 +155,12 @@ button {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.scroll-sentinel {
+  position: absolute;
+  inset-inline-start: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
 }

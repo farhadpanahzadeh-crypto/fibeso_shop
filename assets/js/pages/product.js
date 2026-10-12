@@ -14,10 +14,12 @@
   var CAT_LABEL = { laptop: 'لپ‌تاپ', network: 'تجهیزات شبکه', parts: 'قطعات و لوازم جانبی' };
 
   var SVG = {
-    shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>',
-    truck: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2M15 18H9M19 18h2a1 1 0 0 0 1-1v-3.7a1 1 0 0 0-.2-.6l-3.5-4.3a1 1 0 0 0-.8-.4H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>',
-    box: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg>',
-    share: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>'
+    shield: window.icon('shield-check'),
+    truck: window.icon('truck'),
+    box: window.icon('package'),
+    share: window.icon('share'),
+    minus: window.icon('minus'),
+    plus: window.icon('plus')
   };
 
   if (!p) {
@@ -42,7 +44,7 @@
   var wished = Shop.wishlist().indexOf(p.id) !== -1;
 
   var gradeNote = p.condition === 'used'
-    ? '<p class="pdp__grade"><strong>کالای استوک (کارکرده)' + (p.grade ? ' — درجه ' + p.grade : '') + ':</strong> ' +
+    ? '<p class="pdp__grade"><strong>کالای استوک (کارکرده)' + (p.grade ? '، درجه ' + p.grade : '') + ':</strong> ' +
       'این کالا پیش از فروش تست فنی شده است. ' + (p.grade === 'B' ? 'ممکن است آثار جزئی استفاده روی بدنه دیده شود.' : 'بدنه بدون خط و خش محسوس است.') +
       ' <a href="' + Shop.root + 'pages/warranty.html">درباره درجه‌بندی</a></p>'
     : '';
@@ -116,7 +118,7 @@
       '<div class="tab-panel" id="panel-specs" role="tabpanel" aria-labelledby="tab-specs" tabindex="0" hidden>' +
         '<table class="spec-table"><caption class="visually-hidden">مشخصات فنی ' + esc(p.title) + '</caption><tbody>' +
           '<tr><th scope="row">برند</th><td>' + esc(p.brand) + '</td></tr>' +
-          '<tr><th scope="row">وضعیت</th><td>' + (p.condition === 'used' ? 'استوک' + (p.grade ? ' — درجه ' + p.grade : '') : 'نو') + '</td></tr>' +
+          '<tr><th scope="row">وضعیت</th><td>' + (p.condition === 'used' ? 'استوک' + (p.grade ? '، درجه ' + p.grade : '') : 'نو') + '</td></tr>' +
           p.specs.map(function (s) { return '<tr><th scope="row">' + esc(s[0]) + '</th><td>' + esc(s[1]) + '</td></tr>'; }).join('') +
           '<tr><th scope="row">گارانتی</th><td>' + esc(p.warranty) + '</td></tr>' +
         '</tbody></table>' +

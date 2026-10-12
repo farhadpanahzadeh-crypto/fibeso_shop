@@ -16,7 +16,7 @@
             <h2 class="filters__title" id="filters-title">فیلترها</h2>
             <button class="btn btn--sm btn--danger-text" type="button" data-clear-filters>حذف همه</button>
             <button class="icon-btn filters__close" type="button" aria-label="بستن فیلترها" data-filters-close>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              {{icon:x}}
             </button>
           </div>
           <form class="filters__form" data-filter-form>
@@ -84,7 +84,7 @@
             </div>
             <div class="shop__tools">
               <button class="btn btn--outline btn--sm shop__filter-btn" type="button" aria-controls="filters" aria-expanded="false" data-filters-open>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18M6 12h12M10 19h4"/></svg>
+                {{icon:funnel}}
                 فیلترها <span class="filter-badge" data-filter-badge hidden></span>
               </button>
               <div class="sort">
@@ -103,7 +103,7 @@
           <ul class="chips" aria-label="فیلترهای فعال" data-active-filters></ul>
 
           <ul class="product-grid shop__grid" data-shop-grid>
-            <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>
+            <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>{{skeleton:8}}
           </ul>
           <nav class="pagination" aria-label="صفحه‌بندی محصولات" data-pagination></nav>
         </section>

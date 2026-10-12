@@ -1,5 +1,5 @@
 /* SAMPLE catalogue for the front-end prototype. Titles, prices (Toman), ratings, specs
-   and stock are placeholders — replace with the shop's real catalogue and photos.
+   and stock are placeholders; replace with the shop's real catalogue and photos.
    condition: 'new' | 'used'; used items carry a cosmetic grade (A/B). */
 (function () {
   'use strict';
@@ -20,7 +20,7 @@
       ['پردازنده گرافیکی', o.gpu],
       ['سیستم عامل', 'ویندوز ۱۱ (قابل نصب)']
     ];
-    if (o.condition === 'used') o.specs.push(['وضعیت ظاهری', o.grade === 'A' ? 'درجه A — بدون خط و خش محسوس' : 'درجه B — آثار جزئی استفاده']);
+    if (o.condition === 'used') o.specs.push(['وضعیت ظاهری', o.grade === 'A' ? 'درجه A: بدون خط و خش محسوس' : 'درجه B: آثار جزئی استفاده']);
     return o;
   }
 

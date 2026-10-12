@@ -25,6 +25,12 @@ HEAD = """<!doctype html>
   <title>{title}</title>
   <meta name="description" content="{description}">
   <meta name="theme-color" content="#020411">{robots}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="فیبسو">
+  <meta property="og:locale" content="fa_IR">
+  <meta property="og:title" content="{title}">
+  <meta property="og:description" content="{description}">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" href="{root}assets/images/logo-mark.svg" type="image/svg+xml">
   <link rel="preload" href="{root}assets/fonts/vazirmatn/vazirmatn-arabic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="{root}assets/css/tokens.css">
@@ -33,7 +39,9 @@ HEAD = """<!doctype html>
   <link rel="stylesheet" href="{root}assets/css/components.css">
 {css}
   <script>document.documentElement.classList.add('js');</script>
+  <script src="{root}assets/js/data/icons.js" defer></script>
   <script src="{root}assets/js/data/products.js" defer></script>
+  <script src="{root}assets/js/data/photos.js" defer></script>
   <script src="{root}assets/js/components.js" defer></script>
   <script src="{root}assets/js/navigation.js" defer></script>
   <script src="{root}assets/js/store.js" defer></script>
@@ -47,7 +55,28 @@ HEAD = """<!doctype html>
 """
 
 
+ICON_DIR = ROOT / "assets" / "icons"
+
+
+def icon_svg(match):
+    """{{icon:name}} or {{icon:name extra-class}} -> inline decorative SVG (Phosphor)."""
+    parts = match.group(1).split()
+    src = (ICON_DIR / f"{parts[0]}.svg").read_text(encoding="utf-8")
+    inner = re.search(r"<svg[^>]*>(.*)</svg>", src, re.S).group(1)
+    cls = " ".join(["icon"] + parts[1:])
+    return (f'<svg class="{cls}" viewBox="0 0 256 256" fill="currentColor" '
+            f'aria-hidden="true" focusable="false">{inner}</svg>')
+
+
+SKELETON = ('<li class="skeleton-card" aria-hidden="true"><span class="skeleton skeleton--media"></span>'
+            '<span class="skeleton skeleton--line"></span><span class="skeleton skeleton--line skeleton--short"></span>'
+            '<span class="skeleton skeleton--price"></span></li>')
+
+
 def render(text, root, nav):
+    text = re.sub(r"\{\{icon:([a-z0-9 _-]+)\}\}", icon_svg, text)
+    # {{skeleton:N}} -> N placeholder cards, replaced when scripts render real products
+    text = re.sub(r"\{\{skeleton:(\d+)\}\}", lambda m: SKELETON * int(m.group(1)), text)
     text = text.replace("{{root}}", root)
     for key in NAV_KEYS:
         text = text.replace("{{cur:%s}}" % key, ' aria-current="page"' if key == nav else "")

@@ -9,7 +9,7 @@
           <div class="container slide__content">
             <p class="slide__kicker">قدرت در کار و بازی</p>
             <h2 class="slide__title">لپ‌تاپ‌های نو با گارانتی معتبر</h2>
-            <a class="slide__btn" href="{{root}}pages/shop.html?cat=laptop&amp;condition=new">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+            <a class="slide__btn" href="{{root}}pages/shop.html?cat=laptop&amp;condition=new">خرید {{icon:caret-left}}</a>
           </div>
         </article>
         <article class="slide" data-slide aria-roledescription="slide" aria-label="۲ از ۳" hidden>
@@ -17,7 +17,7 @@
           <div class="container slide__content">
             <p class="slide__kicker">شبکه‌ای پایدار برای کسب‌وکار شما</p>
             <h2 class="slide__title">روتر، سوییچ و اکسس پوینت</h2>
-            <a class="slide__btn" href="{{root}}pages/shop.html?cat=network">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+            <a class="slide__btn" href="{{root}}pages/shop.html?cat=network">خرید {{icon:caret-left}}</a>
           </div>
         </article>
         <article class="slide" data-slide aria-roledescription="slide" aria-label="۳ از ۳" hidden>
@@ -25,12 +25,12 @@
           <div class="container slide__content">
             <p class="slide__kicker">تست‌شده، درجه‌بندی‌شده، با ضمانت</p>
             <h2 class="slide__title">لپ‌تاپ و قطعات استوک</h2>
-            <a class="slide__btn" href="{{root}}pages/shop.html?cat=laptop&amp;condition=used">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+            <a class="slide__btn" href="{{root}}pages/shop.html?cat=laptop&amp;condition=used">خرید {{icon:caret-left}}</a>
           </div>
         </article>
 
-        <button class="slider__arrow slider__arrow--prev" type="button" data-slide-prev aria-label="اسلاید قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
-        <button class="slider__arrow slider__arrow--next" type="button" data-slide-next aria-label="اسلاید بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+        <button class="slider__arrow slider__arrow--prev" type="button" data-slide-prev aria-label="اسلاید قبلی">{{icon:caret-right}}</button>
+        <button class="slider__arrow slider__arrow--next" type="button" data-slide-next aria-label="اسلاید بعدی">{{icon:caret-left}}</button>
         <div class="slider__bar">
           <div class="slider__dots">
             <button type="button" data-slide-to="0" aria-label="نمایش اسلاید ۱"></button>
@@ -38,8 +38,8 @@
             <button type="button" data-slide-to="2" aria-label="نمایش اسلاید ۳"></button>
           </div>
           <button class="slider__pause" type="button" data-slider-pause aria-pressed="false" aria-label="توقف اسلایدها">
-            <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>
-            <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17 5v14L6 12z"/></svg>
+            {{icon:pause icon-pause}}
+            {{icon:play icon-play}}
           </button>
         </div>
       </div>
@@ -70,15 +70,15 @@
             <h2 class="rail__title" id="offers-title">تخفیف‌های فیبسو ٪</h2>
             <div class="rail__tools">
               <div class="scroller__controls">
-                <button class="round-btn" type="button" data-scroll-prev="offers" aria-label="محصولات قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
-                <button class="round-btn" type="button" data-scroll-next="offers" aria-label="محصولات بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+                <button class="round-btn" type="button" data-scroll-prev="offers" aria-label="محصولات قبلی">{{icon:caret-right}}</button>
+                <button class="round-btn" type="button" data-scroll-next="offers" aria-label="محصولات بعدی">{{icon:caret-left}}</button>
               </div>
-              <a class="view-all" href="{{root}}pages/shop.html?tag=offer">نمایش همه <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+              <a class="view-all" href="{{root}}pages/shop.html?tag=offer">نمایش همه {{icon:caret-left}}</a>
             </div>
           </div>
           <div class="scroller" data-scroller="offers">
             <ul class="scroller__track" data-rail='{"tag":"offer"}' aria-label="تخفیف‌های فیبسو ٪">
-              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>
+              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>{{skeleton:6}}
             </ul>
           </div>
         </div>
@@ -88,9 +88,9 @@
     <!-- ===================== Triple banners ===================== -->
     <section class="section section--tight" aria-label="بنرهای تبلیغاتی">
       <div class="container banner-row">
-        <a class="promo" href="{{root}}pages/shop.html?cat=network"><img src="{{root}}assets/images/banners/promo-1.svg" alt="" width="800" height="360" loading="lazy"><span class="promo__text"><span class="promo__kicker">شبکه خانگی و اداری</span><span class="promo__title">روترهای وای‌فای ۶</span><span class="promo__btn">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></span></span></a>
-        <a class="promo" href="{{root}}pages/shop.html?cat=laptop&amp;condition=used"><img src="{{root}}assets/images/banners/promo-2.svg" alt="" width="800" height="360" loading="lazy"><span class="promo__text"><span class="promo__kicker">اقتصادی و مطمئن</span><span class="promo__title">لپ‌تاپ استوک درجه A</span><span class="promo__btn">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></span></span></a>
-        <a class="promo" href="{{root}}pages/shop.html?cat=parts"><img src="{{root}}assets/images/banners/promo-3.svg" alt="" width="800" height="360" loading="lazy"><span class="promo__text"><span class="promo__kicker">ارتقای سرعت لپ‌تاپ</span><span class="promo__title">رم و SSD نو و استوک</span><span class="promo__btn">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></span></span></a>
+        <a class="promo" href="{{root}}pages/shop.html?cat=network"><img src="{{root}}assets/images/banners/promo-1.svg" alt="" width="800" height="360" loading="lazy"><span class="promo__text"><span class="promo__kicker">شبکه خانگی و اداری</span><span class="promo__title">روترهای وای‌فای ۶</span><span class="promo__btn">خرید {{icon:caret-left}}</span></span></a>
+        <a class="promo" href="{{root}}pages/shop.html?cat=laptop&amp;condition=used"><img src="{{root}}assets/images/banners/promo-2.svg" alt="" width="800" height="360" loading="lazy"><span class="promo__text"><span class="promo__kicker">اقتصادی و مطمئن</span><span class="promo__title">لپ‌تاپ استوک درجه A</span><span class="promo__btn">خرید {{icon:caret-left}}</span></span></a>
+        <a class="promo" href="{{root}}pages/shop.html?cat=parts"><img src="{{root}}assets/images/banners/promo-3.svg" alt="" width="800" height="360" loading="lazy"><span class="promo__text"><span class="promo__kicker">ارتقای سرعت لپ‌تاپ</span><span class="promo__title">رم و SSD نو و استوک</span><span class="promo__btn">خرید {{icon:caret-left}}</span></span></a>
       </div>
     </section>
 
@@ -101,15 +101,15 @@
             <h2 class="rail__title" id="network-title">تجهیزات شبکه</h2>
             <div class="rail__tools">
               <div class="scroller__controls">
-                <button class="round-btn" type="button" data-scroll-prev="network" aria-label="محصولات قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
-                <button class="round-btn" type="button" data-scroll-next="network" aria-label="محصولات بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+                <button class="round-btn" type="button" data-scroll-prev="network" aria-label="محصولات قبلی">{{icon:caret-right}}</button>
+                <button class="round-btn" type="button" data-scroll-next="network" aria-label="محصولات بعدی">{{icon:caret-left}}</button>
               </div>
-              <a class="view-all" href="{{root}}pages/shop.html?cat=network">نمایش همه <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+              <a class="view-all" href="{{root}}pages/shop.html?cat=network">نمایش همه {{icon:caret-left}}</a>
             </div>
           </div>
           <div class="scroller" data-scroller="network">
             <ul class="scroller__track" data-rail='{"cat":"network"}' aria-label="تجهیزات شبکه">
-              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>
+              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>{{skeleton:6}}
             </ul>
           </div>
         </div>
@@ -137,7 +137,7 @@
           <span class="wide-banner__text">
             <span class="wide-banner__kicker">راهکار کامل زیرساخت</span>
             <span class="wide-banner__title">رک، سوییچ و کارت شبکه برای اتاق سرور</span>
-            <span class="promo__btn">خرید <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></span>
+            <span class="promo__btn">خرید {{icon:caret-left}}</span>
           </span>
         </a>
       </div>
@@ -150,15 +150,15 @@
             <h2 class="rail__title" id="new-laptops-title">لپ‌تاپ‌های نو</h2>
             <div class="rail__tools">
               <div class="scroller__controls">
-                <button class="round-btn" type="button" data-scroll-prev="new-laptops" aria-label="محصولات قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
-                <button class="round-btn" type="button" data-scroll-next="new-laptops" aria-label="محصولات بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+                <button class="round-btn" type="button" data-scroll-prev="new-laptops" aria-label="محصولات قبلی">{{icon:caret-right}}</button>
+                <button class="round-btn" type="button" data-scroll-next="new-laptops" aria-label="محصولات بعدی">{{icon:caret-left}}</button>
               </div>
-              <a class="view-all" href="{{root}}pages/shop.html?cat=laptop&amp;condition=new">نمایش همه <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+              <a class="view-all" href="{{root}}pages/shop.html?cat=laptop&amp;condition=new">نمایش همه {{icon:caret-left}}</a>
             </div>
           </div>
           <div class="scroller" data-scroller="new-laptops">
             <ul class="scroller__track" data-rail='{"cat":"laptop","condition":"new"}' aria-label="لپ‌تاپ‌های نو">
-              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>
+              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>{{skeleton:6}}
             </ul>
           </div>
         </div>
@@ -172,16 +172,16 @@
             <h2 class="rail__title" id="used-laptops-title">لپ‌تاپ‌های استوک (کارکرده)</h2>
             <div class="rail__tools">
               <div class="scroller__controls">
-                <button class="round-btn" type="button" data-scroll-prev="used-laptops" aria-label="محصولات قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
-                <button class="round-btn" type="button" data-scroll-next="used-laptops" aria-label="محصولات بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+                <button class="round-btn" type="button" data-scroll-prev="used-laptops" aria-label="محصولات قبلی">{{icon:caret-right}}</button>
+                <button class="round-btn" type="button" data-scroll-next="used-laptops" aria-label="محصولات بعدی">{{icon:caret-left}}</button>
               </div>
-              <a class="view-all" href="{{root}}pages/shop.html?cat=laptop&amp;condition=used">نمایش همه <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+              <a class="view-all" href="{{root}}pages/shop.html?cat=laptop&amp;condition=used">نمایش همه {{icon:caret-left}}</a>
             </div>
           </div>
           <p class="rail__note">همه لپ‌تاپ‌های استوک تست فنی شده‌اند و بر اساس ظاهر درجه‌بندی می‌شوند: <strong>درجه A</strong> بدون خط و خش محسوس، <strong>درجه B</strong> دارای آثار جزئی استفاده.</p>
           <div class="scroller" data-scroller="used-laptops">
             <ul class="scroller__track" data-rail='{"cat":"laptop","condition":"used"}' aria-label="لپ‌تاپ‌های استوک (کارکرده)">
-              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>
+              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>{{skeleton:6}}
             </ul>
           </div>
         </div>
@@ -236,15 +236,15 @@
             <h2 class="rail__title" id="parts-title">قطعات و لوازم جانبی نو و دست دوم</h2>
             <div class="rail__tools">
               <div class="scroller__controls">
-                <button class="round-btn" type="button" data-scroll-prev="parts" aria-label="محصولات قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
-                <button class="round-btn" type="button" data-scroll-next="parts" aria-label="محصولات بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+                <button class="round-btn" type="button" data-scroll-prev="parts" aria-label="محصولات قبلی">{{icon:caret-right}}</button>
+                <button class="round-btn" type="button" data-scroll-next="parts" aria-label="محصولات بعدی">{{icon:caret-left}}</button>
               </div>
-              <a class="view-all" href="{{root}}pages/shop.html?cat=parts">نمایش همه <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></a>
+              <a class="view-all" href="{{root}}pages/shop.html?cat=parts">نمایش همه {{icon:caret-left}}</a>
             </div>
           </div>
           <div class="scroller" data-scroller="parts">
             <ul class="scroller__track" data-rail='{"cat":"parts"}' aria-label="قطعات و لوازم جانبی نو و دست دوم">
-              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>
+              <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>{{skeleton:6}}
             </ul>
           </div>
         </div>
@@ -257,22 +257,22 @@
         <h2 class="section-title" id="services-title">چرا از فیبسو خرید کنید؟</h2>
         <ul class="services__grid">
           <li class="service-card">
-            <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span>
+            <span class="icon-tile" aria-hidden="true">{{icon:shield-check}}</span>
             <h3 class="service-card__title">ضمانت سلامت کالا</h3>
             <p class="service-card__text">کالاهای نو با گارانتی معتبر و کالاهای استوک با ضمانت تست و سلامت فنی</p>
           </li>
           <li class="service-card">
-            <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+            <span class="icon-tile" aria-hidden="true">{{icon:check-square}}</span>
             <h3 class="service-card__title">تست و درجه‌بندی استوک</h3>
             <p class="service-card__text">هر لپ‌تاپ و قطعه دست دوم پیش از فروش تست می‌شود و وضعیت ظاهری آن شفاف درج می‌شود</p>
           </li>
           <li class="service-card">
-            <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><path d="M16 9h2a2 2 0 0 1 2 2v10M8 7h4M8 11h4M8 15h4M3 21h18"/></svg></span>
+            <span class="icon-tile" aria-hidden="true">{{icon:buildings}}</span>
             <h3 class="service-card__title">خرید سازمانی و پیش‌فاکتور</h3>
             <p class="service-card__text">تأمین تجهیزات شبکه و لپ‌تاپ برای شرکت‌ها با پیش‌فاکتور رسمی و قیمت عمده</p>
           </li>
           <li class="service-card">
-            <span class="icon-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2zM3 15a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2z"/><path d="M18 17v1a3 3 0 0 1-3 3h-3"/></svg></span>
+            <span class="icon-tile" aria-hidden="true">{{icon:headset}}</span>
             <h3 class="service-card__title">مشاوره فنی پیش از خرید</h3>
             <p class="service-card__text">کارشناسان شبکه و سخت‌افزار در انتخاب تجهیزات مناسب کنار شما هستند</p>
           </li>
@@ -285,9 +285,9 @@
     <section class="stats" aria-label="فیبسو در یک نگاه">
       <div class="container">
         <ul class="stats__grid">
-          <li class="stat"><span class="stat__value" data-count="15" data-suffix=" هزار+">۱۵ هزار+</span><span class="stat__label">سفارش موفق</span></li>
-          <li class="stat"><span class="stat__value" data-count="3200" data-suffix="+">۳۲۰۰+</span><span class="stat__label">کالای نو و استوک</span></li>
-          <li class="stat"><span class="stat__value" data-count="450" data-suffix="+">۴۵۰+</span><span class="stat__label">مشتری سازمانی</span></li>
+          <li class="stat"><span class="stat__value" data-count="14830">۱۴۸۳۰</span><span class="stat__label">سفارش موفق</span></li>
+          <li class="stat"><span class="stat__value" data-count="3187">۳۱۸۷</span><span class="stat__label">کالای نو و استوک</span></li>
+          <li class="stat"><span class="stat__value" data-count="437">۴۳۷</span><span class="stat__label">مشتری سازمانی</span></li>
           <li class="stat"><span class="stat__value" data-count="8">۸</span><span class="stat__label">سال تجربه</span></li>
         </ul>
       </div>

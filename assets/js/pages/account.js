@@ -78,7 +78,7 @@
         '<time datetime="' + o.date + '">' + dateFmt.format(new Date(o.date)) + '</time>' +
         '<span class="status status--' + o.status + '">' + STATUS[o.status] + '</span></header>' +
       '<div class="order__body"><div class="order__thumbs">' + o.items.slice(0, 4).map(function (i) {
-          return '<img src="' + Shop.root + 'assets/images/products/' + i.img + '.svg" alt="' + esc(i.title) + '" width="56" height="56">';
+          return '<img src="' + (Shop.byId(i.id) ? Shop.imageUrl(Shop.byId(i.id)) : Shop.root + 'assets/images/products/' + i.img + '.svg') + '" alt="' + esc(i.title) + '" width="56" height="56">';
         }).join('') + '</div>' +
         '<span>مبلغ کل: <span class="order__total">' + fmt(o.total) + ' تومان</span></span></div>' +
       '<details><summary>جزئیات سفارش</summary><div class="order__detail">' +
@@ -86,7 +86,7 @@
           return '<li><span>' + esc(i.title) + ' × ' + fmt(i.qty) + '</span><strong>' + fmt(i.qty * i.price) + '</strong></li>';
         }).join('') +
         '<li><span>هزینه ارسال</span><strong>' + (o.shipping ? fmt(o.shipping) : 'رایگان / پس‌کرایه') + '</strong></li></ul>' +
-        '<dl class="order__info"><dt>تحویل‌گیرنده</dt><dd>' + esc(o.address.name) + ' — <span class="ltr">' + esc(o.address.mobile) + '</span></dd>' +
+        '<dl class="order__info"><dt>تحویل‌گیرنده</dt><dd>' + esc(o.address.name) + '، <span class="ltr">' + esc(o.address.mobile) + '</span></dd>' +
           '<dt>آدرس</dt><dd>' + esc(Store.addressText(o.address)) + '</dd>' +
           '<dt>روش ارسال</dt><dd>' + esc(o.shippingMethod) + '</dd>' +
           '<dt>روش پرداخت</dt><dd>' + esc(o.payment) + ' (نسخه نمایشی؛ پرداختی انجام نشده)</dd></dl>' +
@@ -190,7 +190,14 @@
     var def = e.target.closest('[data-address-default]');
     var find = function (id) { return Store.addresses().filter(function (a) { return a.id === id; })[0]; };
     if (edit) openAddressDialog(find(edit.getAttribute('data-address-edit')));
-    if (del && window.confirm('این آدرس حذف شود؟')) {
+    // Two-step inline delete instead of window.confirm()
+    if (del && del.getAttribute('data-confirm') !== 'true') {
+      del.setAttribute('data-confirm', 'true');
+      del.textContent = 'حذف شود؟ دوباره بزنید';
+      window.setTimeout(function () {
+        if (document.body.contains(del)) { del.removeAttribute('data-confirm'); del.textContent = 'حذف'; }
+      }, 4000);
+    } else if (del) {
       Store.deleteAddress(del.getAttribute('data-address-delete'));
       renderAddresses();
       Shop.toast('آدرس حذف شد');

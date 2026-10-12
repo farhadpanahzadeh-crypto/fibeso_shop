@@ -27,7 +27,7 @@
 }
 
 .btn:active {
-  transform: translateY(1px);
+  transform: scale(0.98);
 }
 
 .btn--primary {
@@ -523,6 +523,7 @@
 .price__now {
   font-size: var(--fs-md);
   font-weight: var(--fw-black);
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
@@ -575,7 +576,7 @@
   margin: var(--space-3);
   margin-bottom: 0;
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background: var(--color-media);
   overflow: hidden;
 }
 
@@ -631,9 +632,7 @@
   color: var(--color-danger);
 }
 
-.product-card__wish[aria-pressed="true"] svg {
-  fill: currentColor;
-}
+
 
 .product-card__body {
   display: flex;
@@ -679,7 +678,7 @@
 
 .product-card__title {
   font-size: var(--fs-sm);
-  font-weight: var(--fw-bold);
+  font-weight: var(--fw-semibold);
   line-height: 1.7;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -705,7 +704,6 @@
   width: 0.95rem;
   height: 0.95rem;
   color: var(--color-star);
-  fill: currentColor;
 }
 
 .product-card__foot {
@@ -963,7 +961,7 @@
   height: 4rem;
   padding: var(--space-1);
   border-radius: var(--radius-sm);
-  background: var(--color-surface-muted);
+  background: var(--color-media);
   object-fit: contain;
 }
 
@@ -1240,9 +1238,7 @@
   margin-top: var(--space-8);
 }
 
-.btn--pill {
-  border-radius: var(--radius-pill);
-}
+
 
 .btn--outline-light {
   border-color: var(--color-sky);
@@ -1664,7 +1660,7 @@ textarea.input {
 }
 
 .dialog::backdrop {
-  background: rgb(2 4 17 / 0.55);
+  background: var(--color-scrim);
 }
 
 .dialog__head {
@@ -1772,4 +1768,54 @@ textarea.input {
   flex-wrap: wrap;
   gap: var(--space-3);
   margin-top: var(--space-5);
+}
+
+/* ---------- Skeleton loaders (shape matches the product card) ---------- */
+.skeleton-card {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-3);
+}
+
+.skeleton {
+  display: block;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-muted);
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.skeleton--media {
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+}
+
+.skeleton--line {
+  height: 0.9rem;
+}
+
+.skeleton--short {
+  width: 60%;
+}
+
+.skeleton--price {
+  width: 45%;
+  height: 1.2rem;
+  margin-top: var(--space-2);
+}
+
+@keyframes skeleton-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* Smallest phones: two product columns leave ~130px per card */
+@media (max-width: 22.5rem) {
+  .product-grid .price__now {
+    font-size: var(--fs-sm);
+  }
+
+  .product-grid .price__unit {
+    font-size: 0.6875rem;
+  }
 }

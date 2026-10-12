@@ -54,12 +54,26 @@
     });
   }
 
+  /* Scroll state without scroll listeners: two 1px sentinels observed by
+     IntersectionObserver (one at the top, one 600px down the page). */
+  function sentinel(top) {
+    var el = document.createElement('div');
+    el.className = 'scroll-sentinel';
+    el.setAttribute('aria-hidden', 'true');
+    el.style.top = top + 'px';
+    document.body.prepend(el);
+    return el;
+  }
+
+  function watch(top, onChange) {
+    if (!('IntersectionObserver' in window)) return;
+    new IntersectionObserver(function (entries) {
+      onChange(!entries[0].isIntersecting);
+    }).observe(sentinel(top));
+  }
+
   if (header) {
-    var onScroll = function () {
-      header.classList.toggle('is-scrolled', window.scrollY > 8);
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+    watch(8, function (past) { header.classList.toggle('is-scrolled', past); });
   }
 
   /* ---------- Category mega menu ----------
@@ -135,8 +149,6 @@
   /* ---------- Back to top ---------- */
   var toTop = document.querySelector('[data-to-top]');
   if (toTop) {
-    var onScroll = function () { toTop.hidden = window.scrollY < 600; };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    watch(600, function (past) { toTop.hidden = !past; });
   }
 })();

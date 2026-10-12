@@ -30,7 +30,7 @@
 }
 
 :root {
-  /* ---- Brand palette — sampled from the Fibeso website screenshots ----
+  /* ---- Brand palette: sampled from the Fibeso website screenshots ----
      Night black for dark chrome (hero, footer, mobile menu), Fibeso blue for
      actions and highlights, sky blue as the accent on dark, grey page canvas.
      Change values here only; components read the semantic tokens below. */
@@ -85,6 +85,9 @@
   --color-focus: var(--brand-primary);
   --color-glass: rgb(255 255 255 / 0.72);
   --color-star: #f59e0b;
+  --color-media: var(--neutral-0);          /* behind product photos / drawings */
+  --color-tile: var(--brand-primary-soft);  /* brand / category tiles */
+  --color-scrim: rgb(2 4 17 / 0.5);         /* backdrops behind drawers and dialogs */
 
   /* ---- Typography ---- */
   --font-sans: "Vazirmatn", Tahoma, "Segoe UI", system-ui, sans-serif;
@@ -100,6 +103,7 @@
   --lh-normal: 1.8;   /* Persian script reads better with generous leading */
   --fw-regular: 400;
   --fw-medium: 500;
+  --fw-semibold: 600;
   --fw-bold: 700;
   --fw-black: 800;
 
@@ -121,10 +125,12 @@
   --container-narrow: 48rem;  /* 768px  text-heavy blocks */
   --gutter: clamp(1rem, 0.6rem + 2vw, 2rem);
   --header-height: 4.5rem;
-  /* Breakpoints (reference only — media queries can't read variables):
-     sm 30rem/480px · md 48rem/768px · lg 64rem/1024px · xl 80rem/1280px */
+  /* Breakpoints (reference only; media queries can't read variables):
+     sm 30rem/480px, md 48rem/768px, lg 64rem/1024px, xl 80rem/1280px */
 
-  /* ---- Radii ---- */
+  /* ---- Radii (shape lock) ----
+     Controls (buttons, inputs, selects) = md. Cards, panels, banners = lg/xl.
+     Pills only for chips, badges, tabs and circular icon buttons. */
   --radius-sm: 0.5rem;
   --radius-md: 0.875rem;
   --radius-lg: 1.25rem;
@@ -134,8 +140,9 @@
   /* ---- Borders & elevation ---- */
   --border-width: 1px;
   --border-width-strong: 1.5px;
-  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
-  --shadow-md: 0 8px 24px -12px rgb(15 23 42 / 0.18);
+  /* Shadows are tinted with the night hue, never pure black */
+  --shadow-sm: 0 1px 2px rgb(2 4 17 / 0.06);
+  --shadow-md: 0 8px 24px -12px rgb(2 4 17 / 0.2);
   --shadow-lg: 0 18px 40px -20px rgb(2 4 17 / 0.35);
   --focus-ring: 0 0 0 3px var(--color-surface), 0 0 0 6px var(--color-focus);
 
@@ -146,7 +153,79 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* ---- Controls ---- */
-  --control-height: 3rem;     /* ≥ 44px touch target */
+  --control-height: 3rem;     /* 48px, above the 44px touch-target minimum */
   --z-header: 50;
   --z-drawer: 60;
+}
+
+/* ==========================================================================
+   Dark theme: follows the operating-system preference. A page can force a
+   theme with <html data-theme="light|dark">. Only semantic tokens change;
+   brand chrome (hero, banners, footer) is already dark and stays as is.
+   In dark mode the primary action turns sky blue with night-black text so
+   button labels keep AA contrast.
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-bg: #07090f;
+    --color-surface: #0e1220;
+    --color-surface-muted: #161b2c;
+    --color-surface-inverse: #020411;
+    --color-surface-inverse-raised: #121831;
+    --color-text: #eceef3;
+    --color-text-muted: #a7acbb;
+    --color-border: #222839;
+    --color-border-strong: #343b50;
+    --color-primary: var(--brand-sky);
+    --color-primary-hover: #b3e4ff;
+    --color-on-primary: var(--brand-night);
+    --color-primary-soft: #10283b;
+    --color-secondary: var(--brand-sky);
+    --color-secondary-soft: #10283b;
+    --color-on-secondary: var(--brand-night);
+    --color-accent: #f5a35a;
+    --color-accent-soft: #33210f;
+    --color-success: #4ade80;
+    --color-success-soft: #0f2a1b;
+    --color-danger: #f87171;
+    --color-danger-soft: #2e1414;
+    --color-focus: var(--brand-sky);
+    --color-glass: rgb(14 18 32 / 0.78);
+    --color-media: #eef1f6;
+    --color-tile: #dfeaf5;
+    --color-scrim: rgb(0 0 0 / 0.6);
+    --shadow-md: 0 8px 24px -12px rgb(0 0 0 / 0.6);
+    --shadow-lg: 0 18px 40px -20px rgb(0 0 0 / 0.7);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #07090f;
+  --color-surface: #0e1220;
+  --color-surface-muted: #161b2c;
+  --color-surface-inverse-raised: #121831;
+  --color-text: #eceef3;
+  --color-text-muted: #a7acbb;
+  --color-border: #222839;
+  --color-border-strong: #343b50;
+  --color-primary: var(--brand-sky);
+  --color-primary-hover: #b3e4ff;
+  --color-on-primary: var(--brand-night);
+  --color-primary-soft: #10283b;
+  --color-secondary: var(--brand-sky);
+  --color-secondary-soft: #10283b;
+  --color-on-secondary: var(--brand-night);
+  --color-accent: #f5a35a;
+  --color-accent-soft: #33210f;
+  --color-success: #4ade80;
+  --color-success-soft: #0f2a1b;
+  --color-danger: #f87171;
+  --color-danger-soft: #2e1414;
+  --color-focus: var(--brand-sky);
+  --color-glass: rgb(14 18 32 / 0.78);
+  --color-media: #eef1f6;
+  --color-tile: #dfeaf5;
+  --color-scrim: rgb(0 0 0 / 0.6);
 }

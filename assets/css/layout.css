@@ -635,7 +635,7 @@
   position: fixed;
   inset: 0;
   z-index: calc(var(--z-drawer) - 1);
-  background: rgb(15 23 42 / 0.45);
+  background: var(--color-scrim);
 }
 
 .backdrop[hidden] {

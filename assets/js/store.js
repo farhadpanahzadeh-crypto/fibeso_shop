@@ -1,5 +1,5 @@
 /* Front-end persistence for the prototype: account, addresses and orders live in
-   localStorage. There is no backend yet — nothing here is sent anywhere. */
+   localStorage. There is no backend yet; nothing here is sent anywhere. */
 (function () {
   'use strict';
 

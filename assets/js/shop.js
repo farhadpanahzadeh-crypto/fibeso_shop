@@ -9,6 +9,13 @@
 
   var root = document.documentElement.getAttribute('data-root') || '';
   var IMG_BASE = root + 'assets/images/products/';
+  var PHOTO_BASE = root + 'assets/images/photos/';
+  var photos = window.SHOP_PHOTOS || {};
+
+  /* Real photo when one is registered (scripts/import-photos.py), else the drawing */
+  function imageUrl(p) {
+    return photos[p.id] ? PHOTO_BASE + photos[p.id] : IMG_BASE + p.img + '.svg';
+  }
   var PRODUCT_URL = root + 'pages/product.html?id=';
   var CART_KEY = 'fibeso-cart';
   var WISH_KEY = 'fibeso-wishlist';
@@ -69,12 +76,14 @@
   }
 
   /* ---------- Product card ---------- */
+  var ic = window.icon || function () { return ''; };
   var ICON = {
-    heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>',
-    cart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.25"/><circle cx="18" cy="20" r="1.25"/><path d="M2.5 3h2.6l2.4 11.2a2 2 0 0 0 2 1.6h8.1a2 2 0 0 0 2-1.5L21.5 7H6"/><path d="M12 8v5M9.5 10.5h5"/></svg>',
-    star: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>',
-    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
-    bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>'
+    heart: ic('heart', 'icon-off') + ic('heart-fill', 'icon-on'),
+    cart: ic('cart-plus'),
+    star: ic('star-fill'),
+    check: ic('check'),
+    bag: ic('bag'),
+    x: ic('x')
   };
 
   function discountOf(p) {
@@ -103,7 +112,7 @@
 
     return '<article class="product-card' + (p.stock === 0 ? ' product-card--out' : '') + '">' +
       '<div class="product-card__media">' +
-        '<img src="' + IMG_BASE + p.img + '.svg" alt="" width="400" height="400" loading="lazy">' +
+        '<img src="' + imageUrl(p) + '" alt="" width="400" height="400" loading="lazy">' +
         '<div class="product-card__flags">' +
           (off ? '<span class="discount"><span class="visually-hidden">تخفیف </span>-' + formatPrice(off) + '٪</span>' : '') +
         '</div>' +
@@ -241,7 +250,7 @@
     body.innerHTML = '<ul>' + items.map(function (i) {
       var p = i.product;
       return '<li class="cart-line">' +
-        '<img src="' + IMG_BASE + p.img + '.svg" alt="" width="64" height="64">' +
+        '<img src="' + imageUrl(p) + '" alt="" width="64" height="64">' +
         '<div><p class="cart-line__title"><a href="' + PRODUCT_URL + p.id + '">' + escapeHtml(p.title) + '</a></p>' +
         '<p class="cart-line__meta">' + formatPrice(p.price) + ' تومان</p></div>' +
         qtyHTML(p, i.qty) +
@@ -346,7 +355,7 @@
     discountOf: discountOf,
     formatPrice: formatPrice,
     escapeHtml: escapeHtml,
-    imageUrl: function (p) { return IMG_BASE + p.img + '.svg'; },
+    imageUrl: imageUrl,
     productUrl: function (p) { return PRODUCT_URL + p.id; },
     toast: toast,
     icon: ICON,

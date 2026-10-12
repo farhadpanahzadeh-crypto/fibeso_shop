@@ -216,7 +216,7 @@
   height: 3.5rem;
   padding: 0.2rem;
   border-radius: var(--radius-sm);
-  background: var(--color-surface-muted);
+  background: var(--color-media);
   object-fit: contain;
 }
 
