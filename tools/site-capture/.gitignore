@@ -1,0 +1,5 @@
+node_modules/
+dist/
+# captures/ is intentionally NOT ignored: commit it so the screenshots can be reviewed.
+# Saved logins contain session cookies and must never be committed:
+captures/**/auth.json
