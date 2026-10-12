@@ -1,0 +1,14 @@
+<!-- {"out": "pages/post.html", "title": "مطلب | بلاگ فیبسو", "description": "مطلب آموزشی بلاگ فیبسو.", "css": ["pages/content.css"], "js": ["data/posts.js", "pages/blog.js"]} -->
+  <main id="main">
+    <section class="page-hero">
+      <div class="container" data-article-hero></div>
+    </section>
+    <div class="container">
+      <nav class="breadcrumb" aria-label="مسیر صفحه"><ol><li><a href="{{root}}index.html">خانه</a></li><li><a href="{{root}}pages/blog.html">بلاگ</a></li><li aria-current="page" data-crumb-title>مطلب</li></ol></nav>
+      <article class="content content__narrow prose" data-article></article>
+      <section class="section" aria-labelledby="more-title">
+        <h2 class="section-title-start" id="more-title">مطالب دیگر</h2>
+        <ul class="post-grid" data-more-posts></ul>
+      </section>
+    </div>
+  </main>

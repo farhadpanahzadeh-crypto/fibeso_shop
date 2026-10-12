@@ -1,0 +1,35 @@
+<!-- {"out": "pages/product.html", "title": "جزئیات محصول | فیبسو", "description": "مشخصات فنی، قیمت، وضعیت (نو یا استوک) و گارانتی محصول در فروشگاه فیبسو.", "css": ["pages/product.css"], "js": ["pages/product.js"]} -->
+  <main id="main">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="مسیر صفحه">
+        <ol>
+          <li><a href="{{root}}index.html">خانه</a></li>
+          <li><a href="{{root}}pages/shop.html" data-crumb-cat>فروشگاه</a></li>
+          <li aria-current="page" data-crumb-title>محصول</li>
+        </ol>
+      </nav>
+
+      <div data-product-root>
+        <noscript><p class="empty-state">برای مشاهده جزئیات محصول، جاوااسکریپت مرورگر را فعال کنید.</p></noscript>
+      </div>
+    </div>
+
+    <section class="section section--tight" aria-labelledby="related-title" data-related-section hidden>
+      <div class="container">
+        <div class="rail">
+          <div class="rail__head">
+            <h2 class="rail__title" id="related-title">کالاهای مشابه</h2>
+            <div class="rail__tools">
+              <div class="scroller__controls">
+                <button class="round-btn" type="button" data-scroll-prev="related" aria-label="محصولات قبلی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+                <button class="round-btn" type="button" data-scroll-next="related" aria-label="محصولات بعدی"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+              </div>
+            </div>
+          </div>
+          <div class="scroller" data-scroller="related">
+            <ul class="scroller__track" data-related aria-label="کالاهای مشابه"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>

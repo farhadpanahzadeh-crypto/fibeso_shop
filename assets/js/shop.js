@@ -1,5 +1,5 @@
-/* Store building blocks shared by every shop page:
-   product-card rendering, mini cart (localStorage), wishlist, toasts. */
+/* Store building blocks shared by every page: catalogue queries, product-card
+   rendering, cart and wishlist (localStorage), mini cart drawer and toasts. */
 (function () {
   'use strict';
 
@@ -7,14 +7,14 @@
   var byId = {};
   products.forEach(function (p) { byId[p.id] = p; });
 
-  var priceFmt = new Intl.NumberFormat('fa-IR');
-  var IMG_BASE = 'assets/images/products/';
+  var root = document.documentElement.getAttribute('data-root') || '';
+  var IMG_BASE = root + 'assets/images/products/';
+  var PRODUCT_URL = root + 'pages/product.html?id=';
   var CART_KEY = 'fibeso-cart';
   var WISH_KEY = 'fibeso-wishlist';
+  var priceFmt = new Intl.NumberFormat('fa-IR');
 
-  function formatPrice(n) {
-    return priceFmt.format(n);
-  }
+  function formatPrice(n) { return priceFmt.format(n); }
 
   function read(key, fallback) {
     try {
@@ -26,9 +26,7 @@
   }
 
   function write(key, value) {
-    try {
-      window.localStorage.setItem(key, JSON.stringify(value));
-    } catch (e) { /* storage unavailable: state lives for this page view only */ }
+    try { window.localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* page-view only */ }
   }
 
   function escapeHtml(s) {
@@ -37,14 +35,48 @@
     });
   }
 
+  /* ---------- Catalogue queries ----------
+     filter keys: tag, cat, sub ("a|b"), condition, grade, brand, use, q ("a|b"), min, max, stock */
+  function normalize(s) {
+    return String(s).toLowerCase().replace(/[يى]/g, 'ی').replace(/ك/g, 'ک').replace(/‌/g, ' ');
+  }
+
+  function matches(p, f) {
+    if (f.tag && p.tags.indexOf(f.tag) === -1) return false;
+    if (f.cat && p.cat !== f.cat) return false;
+    if (f.sub && String(f.sub).split('|').indexOf(p.sub) === -1) return false;
+    if (f.condition && p.condition !== f.condition) return false;
+    if (f.grade && p.grade !== f.grade) return false;
+    if (f.brand && f.brand.length && [].concat(f.brand).indexOf(p.brand) === -1) return false;
+    if (f.use && (!p.use || p.use.indexOf(f.use) === -1)) return false;
+    if (f.min && p.price < Number(f.min)) return false;
+    if (f.max && p.price > Number(f.max)) return false;
+    if (f.stock && p.stock === 0) return false;
+    if (f.q) {
+      var hay = normalize(p.title + ' ' + p.catLabel + ' ' + (p.brand || ''));
+      var any = normalize(f.q).split('|').some(function (alt) {
+        return alt.split(/\s+/).filter(Boolean).every(function (w) { return hay.indexOf(w) !== -1; });
+      });
+      if (!any) return false;
+    }
+    return true;
+  }
+
+  function query(f) {
+    f = f || {};
+    var list = products.filter(function (p) { return matches(p, f); });
+    return f.limit ? list.slice(0, f.limit) : list;
+  }
+
+  /* ---------- Product card ---------- */
   var ICON = {
     heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>',
     cart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.25"/><circle cx="18" cy="20" r="1.25"/><path d="M2.5 3h2.6l2.4 11.2a2 2 0 0 0 2 1.6h8.1a2 2 0 0 0 2-1.5L21.5 7H6"/><path d="M12 8v5M9.5 10.5h5"/></svg>',
     star: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>',
-    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>'
+    check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
+    bag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>'
   };
 
-  /* ---------- Product card template ---------- */
   function discountOf(p) {
     return p.old ? Math.round((1 - p.price / p.old) * 100) : 0;
   }
@@ -55,55 +87,47 @@
       : '<span class="condition condition--new">نو</span>';
   }
 
+  function priceHTML(p) {
+    if (p.stock === 0) return '<span class="stock-out">ناموجود</span>';
+    return '<div class="price">' +
+      (p.old ? '<del class="price__old"><span class="visually-hidden">قیمت قبلی: </span>' + formatPrice(p.old) + '</del>' : '') +
+      '<span class="price__now">' + formatPrice(p.price) + ' <span class="price__unit">تومان</span></span>' +
+    '</div>';
+  }
+
   function cardHTML(p) {
     var off = discountOf(p);
-    var out = p.stock === 0;
     var wished = wishlist.indexOf(p.id) !== -1;
-    var priceBlock = out
-      ? '<span class="stock-out">ناموجود</span>'
-      : '<div class="price">' +
-          (p.old ? '<del class="price__old"><span class="visually-hidden">قیمت قبلی: </span>' + formatPrice(p.old) + '</del>' : '') +
-          '<span class="price__now">' + formatPrice(p.price) + ' <span class="price__unit">تومان</span></span>' +
-        '</div>';
-    var cartBtn = out ? '' :
+    var cartBtn = p.stock === 0 ? '' :
       '<button class="add-to-cart" type="button" data-add-to-cart="' + p.id + '" aria-label="افزودن ' + escapeHtml(p.title) + ' به سبد خرید">' + ICON.cart + '</button>';
 
-    return '<article class="product-card' + (out ? ' product-card--out' : '') + '">' +
+    return '<article class="product-card' + (p.stock === 0 ? ' product-card--out' : '') + '">' +
       '<div class="product-card__media">' +
-        '<img src="' + IMG_BASE + p.img + '.svg" alt="' + escapeHtml(p.title) + '" width="400" height="400" loading="lazy">' +
+        '<img src="' + IMG_BASE + p.img + '.svg" alt="" width="400" height="400" loading="lazy">' +
         '<div class="product-card__flags">' +
           (off ? '<span class="discount"><span class="visually-hidden">تخفیف </span>-' + formatPrice(off) + '٪</span>' : '') +
         '</div>' +
-        '<button class="product-card__wish" type="button" data-wish="' + p.id + '" aria-pressed="' + wished + '" aria-label="افزودن به علاقه‌مندی‌ها">' + ICON.heart + '</button>' +
+        '<button class="product-card__wish" type="button" data-wish="' + p.id + '" aria-pressed="' + wished + '" aria-label="افزودن ' + escapeHtml(p.title) + ' به علاقه‌مندی‌ها">' + ICON.heart + '</button>' +
       '</div>' +
       '<div class="product-card__body">' +
-        '<h3 class="product-card__title">' + escapeHtml(p.title) + '</h3>' +
+        '<h3 class="product-card__title"><a href="' + PRODUCT_URL + p.id + '">' + escapeHtml(p.title) + '</a></h3>' +
         '<div class="product-card__meta">' + conditionHTML(p) +
           '<span class="product-card__rating">' + ICON.star + formatPrice(p.rating) +
           ' <span>(' + formatPrice(p.reviews) + ')</span><span class="visually-hidden"> نظر</span></span>' +
         '</div>' +
-        '<div class="product-card__foot">' + priceBlock + cartBtn + '</div>' +
+        '<div class="product-card__foot">' + priceHTML(p) + cartBtn + '</div>' +
       '</div>' +
     '</article>';
   }
 
-  /* Render products into a container: wrapTag lets lists use <li>. */
-  function render(container, list, wrapTag) {
+  function render(container, list, wrapTag, emptyHTML) {
     if (!list.length) {
-      container.innerHTML = '<p class="empty-state">محصولی برای نمایش وجود ندارد.</p>';
+      container.innerHTML = emptyHTML || '<li class="empty-state">محصولی برای نمایش وجود ندارد.</li>';
       return;
     }
     container.innerHTML = list.map(function (p) {
       return wrapTag ? '<' + wrapTag + '>' + cardHTML(p) + '</' + wrapTag + '>' : cardHTML(p);
     }).join('');
-  }
-
-  function query(filter) {
-    return products.filter(function (p) {
-      if (filter.tag && p.tags.indexOf(filter.tag) === -1) return false;
-      if (filter.cat && p.cat !== filter.cat) return false;
-      return true;
-    }).slice(0, filter.limit || products.length);
   }
 
   /* ---------- Toast ---------- */
@@ -124,6 +148,11 @@
 
   /* ---------- Wishlist ---------- */
   var wishlist = read(WISH_KEY, []);
+  var listeners = [];
+
+  function emit() {
+    listeners.forEach(function (fn) { fn(); });
+  }
 
   function updateWishCount() {
     document.querySelectorAll('[data-wish-count]').forEach(function (el) {
@@ -132,37 +161,70 @@
     });
   }
 
+  function toggleWish(id) {
+    var i = wishlist.indexOf(id);
+    if (i === -1) wishlist.push(id); else wishlist.splice(i, 1);
+    write(WISH_KEY, wishlist);
+    document.querySelectorAll('[data-wish="' + id + '"]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(i === -1));
+    });
+    updateWishCount();
+    emit();
+    return i === -1;
+  }
+
   /* ---------- Cart ---------- */
   var cart = read(CART_KEY, {}); // { productId: qty }
+  var MAX_QTY = 10;
 
   function cartItems() {
-    return Object.keys(cart).filter(function (id) { return byId[id] && cart[id] > 0; })
+    return Object.keys(cart).filter(function (id) { return byId[id] && cart[id] > 0 && byId[id].stock !== 0; })
       .map(function (id) { return { product: byId[id], qty: cart[id] }; });
   }
 
-  function cartCount() {
-    return cartItems().reduce(function (sum, i) { return sum + i.qty; }, 0);
+  function cartTotals() {
+    var items = cartItems();
+    var subtotal = 0;
+    var listTotal = 0;
+    items.forEach(function (i) {
+      subtotal += i.qty * i.product.price;
+      listTotal += i.qty * (i.product.old || i.product.price);
+    });
+    return {
+      count: items.reduce(function (s, i) { return s + i.qty; }, 0),
+      subtotal: subtotal,
+      savings: listTotal - subtotal,
+      freeShipping: subtotal >= 5000000
+    };
   }
 
   function setQty(id, qty) {
     if (qty <= 0) delete cart[id];
-    else cart[id] = Math.min(qty, 10);
+    else cart[id] = Math.min(qty, MAX_QTY);
     write(CART_KEY, cart);
-    renderCart();
+    renderMiniCart();
+    emit();
+  }
+
+  function clearCart() {
+    cart = {};
+    write(CART_KEY, cart);
+    renderMiniCart();
+    emit();
   }
 
   var drawer = document.querySelector('[data-cart-drawer]');
   var backdrop = document.querySelector('[data-backdrop]');
   var lastFocus = null;
 
-  function renderCart() {
-    var count = cartCount();
+  function renderMiniCart() {
+    var totals = cartTotals();
     document.querySelectorAll('[data-cart-count]').forEach(function (el) {
-      el.textContent = formatPrice(count);
-      el.hidden = count === 0;
+      el.textContent = formatPrice(totals.count);
+      el.hidden = totals.count === 0;
     });
     document.querySelectorAll('[data-cart-trigger]').forEach(function (btn) {
-      btn.setAttribute('aria-label', 'سبد خرید، ' + formatPrice(count) + ' کالا');
+      btn.setAttribute('aria-label', 'سبد خرید، ' + formatPrice(totals.count) + ' کالا');
     });
     if (!drawer) return;
 
@@ -170,9 +232,8 @@
     var foot = drawer.querySelector('[data-cart-foot]');
     var items = cartItems();
     if (!items.length) {
-      body.innerHTML = '<div class="empty-state">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="20" r="1.25"/><circle cx="18" cy="20" r="1.25"/><path d="M2.5 3h2.6l2.4 11.2a2 2 0 0 0 2 1.6h8.1a2 2 0 0 0 2-1.5L21.5 7H6"/></svg>' +
-        '<p>سبد خرید شما خالی است.</p></div>';
+      body.innerHTML = '<div class="empty-state">' + ICON.bag + '<p>سبد خرید شما خالی است.</p>' +
+        '<a class="btn btn--outline" href="' + root + 'pages/shop.html">مشاهده محصولات</a></div>';
       foot.hidden = true;
       return;
     }
@@ -181,16 +242,20 @@
       var p = i.product;
       return '<li class="cart-line">' +
         '<img src="' + IMG_BASE + p.img + '.svg" alt="" width="64" height="64">' +
-        '<div><p class="cart-line__title">' + escapeHtml(p.title) + '</p>' +
+        '<div><p class="cart-line__title"><a href="' + PRODUCT_URL + p.id + '">' + escapeHtml(p.title) + '</a></p>' +
         '<p class="cart-line__meta">' + formatPrice(p.price) + ' تومان</p></div>' +
-        '<div class="qty" role="group" aria-label="تعداد ' + escapeHtml(p.title) + '">' +
-          '<button type="button" data-qty="' + p.id + '" data-step="1" aria-label="افزایش تعداد">+</button>' +
-          '<output aria-live="polite">' + formatPrice(i.qty) + '</output>' +
-          '<button type="button" data-qty="' + p.id + '" data-step="-1" aria-label="' + (i.qty === 1 ? 'حذف از سبد' : 'کاهش تعداد') + '">−</button>' +
-        '</div></li>';
+        qtyHTML(p, i.qty) +
+        '</li>';
     }).join('') + '</ul>';
-    var total = items.reduce(function (sum, i) { return sum + i.qty * i.product.price; }, 0);
-    drawer.querySelector('[data-cart-total]').textContent = formatPrice(total) + ' تومان';
+    drawer.querySelector('[data-cart-total]').textContent = formatPrice(totals.subtotal) + ' تومان';
+  }
+
+  function qtyHTML(p, qty) {
+    return '<div class="qty" role="group" aria-label="تعداد ' + escapeHtml(p.title) + '">' +
+      '<button type="button" data-qty="' + p.id + '" data-step="1" aria-label="افزایش تعداد"' + (qty >= MAX_QTY ? ' disabled' : '') + '>+</button>' +
+      '<output aria-live="polite">' + formatPrice(qty) + '</output>' +
+      '<button type="button" data-qty="' + p.id + '" data-step="-1" aria-label="' + (qty === 1 ? 'حذف از سبد' : 'کاهش تعداد') + '">−</button>' +
+    '</div>';
   }
 
   function openCart() {
@@ -205,7 +270,7 @@
   function closeCart() {
     if (!drawer || drawer.hidden) return;
     drawer.hidden = true;
-    if (backdrop && !document.querySelector('[data-nav]:not([hidden]).is-drawer')) backdrop.hidden = true;
+    if (backdrop) backdrop.hidden = true;
     document.body.style.overflow = '';
     if (lastFocus) lastFocus.focus();
   }
@@ -215,33 +280,38 @@
     var add = event.target.closest('[data-add-to-cart]');
     if (add) {
       var id = add.getAttribute('data-add-to-cart');
-      setQty(id, (cart[id] || 0) + 1);
+      var amount = Number(add.getAttribute('data-amount') || 1);
+      setQty(id, (cart[id] || 0) + amount);
       add.classList.add('is-added');
       window.setTimeout(function () { add.classList.remove('is-added'); }, 900);
-      toast('«' + byId[id].title.split('،')[0] + '» به سبد خرید اضافه شد');
+      toast('«' + byId[id].title.split(' ').slice(0, 5).join(' ') + '…» به سبد خرید اضافه شد');
       return;
     }
 
     var wish = event.target.closest('[data-wish]');
     if (wish) {
-      var wid = wish.getAttribute('data-wish');
-      var i = wishlist.indexOf(wid);
-      if (i === -1) wishlist.push(wid); else wishlist.splice(i, 1);
-      write(WISH_KEY, wishlist);
-      document.querySelectorAll('[data-wish="' + wid + '"]').forEach(function (b) {
-        b.setAttribute('aria-pressed', String(i === -1));
-      });
-      updateWishCount();
-      toast(i === -1 ? 'به علاقه‌مندی‌ها اضافه شد' : 'از علاقه‌مندی‌ها حذف شد');
+      var added = toggleWish(wish.getAttribute('data-wish'));
+      toast(added ? 'به علاقه‌مندی‌ها اضافه شد' : 'از علاقه‌مندی‌ها حذف شد');
       return;
     }
 
     var qty = event.target.closest('[data-qty]');
     if (qty) {
       var qid = qty.getAttribute('data-qty');
+      var container = qty.closest('[data-cart-drawer], [data-cart-page]');
       setQty(qid, (cart[qid] || 0) + Number(qty.getAttribute('data-step')));
-      var stillThere = drawer && drawer.querySelector('[data-qty="' + qid + '"]');
-      (stillThere || drawer.querySelector('[data-cart-close]')).focus();
+      // Keep keyboard focus on the same control after the list re-renders
+      if (container) {
+        var same = container.querySelector('[data-qty="' + qid + '"][data-step="' + qty.getAttribute('data-step') + '"]');
+        (same || container.querySelector('[data-qty]') || container).focus();
+      }
+      return;
+    }
+
+    var removeBtn = event.target.closest('[data-remove]');
+    if (removeBtn) {
+      setQty(removeBtn.getAttribute('data-remove'), 0);
+      toast('کالا از سبد خرید حذف شد');
       return;
     }
 
@@ -253,15 +323,40 @@
     if (event.key === 'Escape') closeCart();
   });
 
-  renderCart();
+  // Keep counts in sync when another tab changes the cart or wishlist
+  window.addEventListener('storage', function (event) {
+    if (event.key === CART_KEY) { cart = read(CART_KEY, {}); renderMiniCart(); emit(); }
+    if (event.key === WISH_KEY) { wishlist = read(WISH_KEY, []); updateWishCount(); emit(); }
+  });
+
+  renderMiniCart();
   updateWishCount();
 
   window.Shop = {
+    root: root,
     products: products,
+    byId: function (id) { return byId[id]; },
     query: query,
+    matches: matches,
     render: render,
+    cardHTML: cardHTML,
+    conditionHTML: conditionHTML,
+    priceHTML: priceHTML,
+    qtyHTML: qtyHTML,
+    discountOf: discountOf,
     formatPrice: formatPrice,
+    escapeHtml: escapeHtml,
+    imageUrl: function (p) { return IMG_BASE + p.img + '.svg'; },
+    productUrl: function (p) { return PRODUCT_URL + p.id; },
     toast: toast,
-    wishlist: function () { return wishlist.slice(); }
+    icon: ICON,
+    wishlist: function () { return wishlist.slice(); },
+    toggleWish: toggleWish,
+    cartItems: cartItems,
+    cartTotals: cartTotals,
+    cartQty: function (id) { return cart[id] || 0; },
+    setQty: setQty,
+    clearCart: clearCart,
+    onChange: function (fn) { listeners.push(fn); }
   };
 })();

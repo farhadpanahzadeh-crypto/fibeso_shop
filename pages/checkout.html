@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-root="../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تکمیل سفارش | فیبسو</title>
+  <meta name="description" content="ثبت آدرس، انتخاب روش ارسال و پرداخت سفارش در فروشگاه فیبسو.">
+  <meta name="theme-color" content="#020411">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../assets/images/logo-mark.svg" type="image/svg+xml">
+  <link rel="preload" href="../assets/fonts/vazirmatn/vazirmatn-arabic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/pages/cart.css">
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="../assets/js/data/products.js" defer></script>
+  <script src="../assets/js/components.js" defer></script>
+  <script src="../assets/js/navigation.js" defer></script>
+  <script src="../assets/js/store.js" defer></script>
+  <script src="../assets/js/shop.js" defer></script>
+  <script src="../assets/js/pages/checkout.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+</head>
+<body class="page-checkout">
+  <a class="skip-link" href="#main">پرش به محتوای اصلی</a>
+
+  <header class="site-header" data-header>
+    <div class="container site-header__main">
+      <button class="icon-btn nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" data-nav-toggle>
+        <span class="visually-hidden" data-nav-label>باز کردن منو</span>
+        <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+
+      <a class="brand" href="../index.html" aria-label="فروشگاه فیبسو — صفحه اصلی">
+        <img class="brand__mark" src="../assets/images/logo-mark.svg" alt="" width="40" height="40">
+        <span>فیبسو</span>
+      </a>
+
+      <form class="search" role="search" action="../pages/shop.html" method="get" data-search>
+        <button class="search__btn" type="submit" aria-label="جستجو">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+        <label class="visually-hidden" for="search-q">جستجوی محصولات</label>
+        <input class="search__input" id="search-q" name="q" type="search" placeholder="جستجوی محصولات" autocomplete="off">
+      </form>
+
+      <div class="header-actions">
+        <a class="icon-btn icon-btn--round" href="../pages/account.html" aria-label="حساب کاربری" data-account-link>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+        </a>
+        <a class="icon-btn icon-btn--round" href="../pages/account.html#wishlist" aria-label="علاقه‌مندی‌ها">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+          <span class="icon-btn__count" data-wish-count hidden>۰</span>
+        </a>
+        <button class="icon-btn icon-btn--round" type="button" aria-label="سبد خرید" aria-controls="cart-drawer" data-cart-trigger>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="icon-btn__count" data-cart-count hidden>۰</span>
+        </button>
+      </div>
+    </div>
+
+    <nav class="site-nav" id="site-nav" aria-label="منوی اصلی" data-nav>
+      <div class="container site-nav__inner">
+        <div class="site-nav__drawer-head">
+          <p class="site-nav__title">منوی فروشگاه</p>
+          <button class="icon-btn" type="button" aria-label="بستن منو" data-nav-close>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <div class="cat-menu" data-cat-menu>
+          <button class="cat-menu__trigger" type="button" aria-expanded="false" aria-controls="cat-menu-panel" data-cat-menu-trigger>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/></svg>
+            دسته‌بندی محصولات
+            <svg class="cat-menu__caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="cat-menu__panel" id="cat-menu-panel" hidden>
+            <ul class="cat-menu__mains">
+              <li class="cat-menu__item">
+                <button class="cat-menu__main" type="button" aria-expanded="true" aria-controls="cat-sub-laptop" data-cat-main>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>
+                  <span>لپ‌تاپ</span>
+                  <svg class="cat-menu__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <div class="cat-menu__sub" id="cat-sub-laptop">
+                  <a class="cat-menu__all" href="../pages/shop.html?cat=laptop">مشاهده همه لپ‌تاپ</a>
+                  <div class="cat-menu__groups">
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">بر اساس وضعیت</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?cat=laptop&amp;condition=new">لپ‌تاپ نو</a></li><li><a href="../pages/shop.html?cat=laptop&amp;condition=used">لپ‌تاپ استوک (کارکرده)</a></li><li><a href="../pages/shop.html?cat=laptop&amp;condition=used&amp;grade=A">استوک درجه A</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">بر اساس کاربرد</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?q=%DA%AF%DB%8C%D9%85%DB%8C%D9%86%DA%AF">لپ‌تاپ گیمینگ</a></li><li><a href="../pages/shop.html?q=%D9%85%D9%87%D9%86%D8%AF%D8%B3%DB%8C|Precision|ZBook">مهندسی و طراحی</a></li><li><a href="../pages/shop.html?q=ThinkPad|EliteBook|Latitude">اداری و تجاری</a></li><li><a href="../pages/shop.html?cat=laptop&amp;max=35000000">دانشجویی و اقتصادی</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">برندها</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?cat=laptop&amp;q=%D9%84%D9%86%D9%88%D9%88">لنوو</a></li><li><a href="../pages/shop.html?cat=laptop&amp;q=%D8%AF%D9%84">دل</a></li><li><a href="../pages/shop.html?cat=laptop&amp;q=%D8%A7%DA%86%E2%80%8C%D9%BE%DB%8C">اچ‌پی</a></li><li><a href="../pages/shop.html?cat=laptop&amp;q=%D8%A7%DB%8C%D8%B3%D9%88%D8%B3">ایسوس</a></li><li><a href="../pages/shop.html?cat=laptop&amp;q=%D8%A7%DB%8C%D8%B3%D8%B1">ایسر</a></li></ul>
+                  </div>
+                  </div>
+                </div>
+              </li>
+              <li class="cat-menu__item">
+                <button class="cat-menu__main" type="button" aria-expanded="false" aria-controls="cat-sub-network" data-cat-main>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v4M5 16v-2h14v2"/></svg>
+                  <span>تجهیزات شبکه</span>
+                  <svg class="cat-menu__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <div class="cat-menu__sub" id="cat-sub-network" hidden>
+                  <a class="cat-menu__all" href="../pages/shop.html?cat=network">مشاهده همه تجهیزات شبکه</a>
+                  <div class="cat-menu__groups">
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">بر اساس نوع</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?sub=router">مودم و روتر</a></li><li><a href="../pages/shop.html?sub=switch">سوییچ شبکه</a></li><li><a href="../pages/shop.html?sub=ap">اکسس پوینت</a></li><li><a href="../pages/shop.html?sub=nic">کارت شبکه</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">بر اساس وضعیت</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?cat=network&amp;condition=new">تجهیزات شبکه نو</a></li><li><a href="../pages/shop.html?cat=network&amp;condition=used">تجهیزات شبکه استوک</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">برندها</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?q=%D9%85%DB%8C%DA%A9%D8%B1%D9%88%D8%AA%DB%8C%DA%A9">میکروتیک</a></li><li><a href="../pages/shop.html?q=%D8%B3%DB%8C%D8%B3%DA%A9%D9%88">سیسکو</a></li><li><a href="../pages/shop.html?q=%DB%8C%D9%88%D8%A8%DB%8C%DA%A9%DB%8C%D9%88%D8%AA%DB%8C">یوبیکیوتی</a></li><li><a href="../pages/shop.html?q=%D8%AA%DB%8C%E2%80%8C%D9%BE%DB%8C%E2%80%8C%D9%84%DB%8C%D9%86%DA%A9">تی‌پی‌لینک</a></li></ul>
+                  </div>
+                  </div>
+                </div>
+              </li>
+              <li class="cat-menu__item">
+                <button class="cat-menu__main" type="button" aria-expanded="false" aria-controls="cat-sub-infra" data-cat-main>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M4 8h16M4 14h16M8 5h.01M8 11h.01M8 17h.01"/></svg>
+                  <span>زیرساخت و اتصالات</span>
+                  <svg class="cat-menu__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <div class="cat-menu__sub" id="cat-sub-infra" hidden>
+                  <a class="cat-menu__all" href="../pages/shop.html?sub=rack|cable">مشاهده همه زیرساخت و اتصالات</a>
+                  <div class="cat-menu__groups">
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">رک</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?sub=rack">رک دیواری و ایستاده</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">کابل و اتصالات</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?sub=cable">کابل و پچ‌کورد</a></li><li><a href="../pages/shop.html?q=Cat6">پچ‌کورد Cat6</a></li></ul>
+                  </div>
+                  </div>
+                </div>
+              </li>
+              <li class="cat-menu__item">
+                <button class="cat-menu__main" type="button" aria-expanded="false" aria-controls="cat-sub-parts" data-cat-main>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>
+                  <span>قطعات لپ‌تاپ</span>
+                  <svg class="cat-menu__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <div class="cat-menu__sub" id="cat-sub-parts" hidden>
+                  <a class="cat-menu__all" href="../pages/shop.html?cat=parts&amp;q=%D8%B1%D9%85|SSD|%D8%B4%D8%A7%D8%B1%DA%98%D8%B1">مشاهده همه قطعات لپ‌تاپ</a>
+                  <div class="cat-menu__groups">
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">حافظه</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?q=%D8%B1%D9%85">رم لپ‌تاپ</a></li><li><a href="../pages/shop.html?q=SSD">هارد SSD</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">تغذیه</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?q=%D8%B4%D8%A7%D8%B1%DA%98%D8%B1">شارژر لپ‌تاپ</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">بر اساس وضعیت</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?cat=parts&amp;condition=new">قطعات نو</a></li><li><a href="../pages/shop.html?cat=parts&amp;condition=used">قطعات دست دوم</a></li></ul>
+                  </div>
+                  </div>
+                </div>
+              </li>
+              <li class="cat-menu__item">
+                <button class="cat-menu__main" type="button" aria-expanded="false" aria-controls="cat-sub-accessory" data-cat-main>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="6"/><path d="M12 6v4"/></svg>
+                  <span>لوازم جانبی</span>
+                  <svg class="cat-menu__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <div class="cat-menu__sub" id="cat-sub-accessory" hidden>
+                  <a class="cat-menu__all" href="../pages/shop.html?q=%D9%85%D8%A7%D9%88%D8%B3|%D8%B4%D8%A7%D8%B1%DA%98%D8%B1">مشاهده همه لوازم جانبی</a>
+                  <div class="cat-menu__groups">
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">ورودی</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?q=%D9%85%D8%A7%D9%88%D8%B3">ماوس</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">شارژ و برق</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?q=%D8%B4%D8%A7%D8%B1%DA%98%D8%B1">شارژر لپ‌تاپ</a></li></ul>
+                  </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="../index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>خانه</a></li>
+          <li><a class="site-nav__link" href="../pages/shop.html?tag=offer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m9 15 6-6"/><circle cx="9.5" cy="9.5" r=".8"/><circle cx="14.5" cy="14.5" r=".8"/></svg>تخفیف‌ها</a></li>
+          <li><a class="site-nav__link" href="../pages/shop.html?cat=laptop&amp;condition=new"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>لپ‌تاپ نو</a></li>
+          <li><a class="site-nav__link" href="../pages/shop.html?cat=laptop&amp;condition=used"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>لپ‌تاپ استوک</a></li>
+          <li><a class="site-nav__link" href="../pages/shop.html?cat=network"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v4M5 16v-2h14v2"/></svg>تجهیزات شبکه</a></li>
+          <li><a class="site-nav__link" href="../pages/shop.html?cat=parts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="1.5"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>قطعات نو و دست دوم</a></li>
+          <li><a class="site-nav__link" href="../pages/b2b.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/><path d="M16 9h2a2 2 0 0 1 2 2v10M8 7h4M8 11h4M8 15h4M3 21h18"/></svg>خرید سازمانی <span class="nav-badge">جدید</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" class="page-section">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="مسیر صفحه">
+        <ol>
+          <li><a href="../index.html">خانه</a></li>
+          <li><a href="../pages/cart.html">سبد خرید</a></li>
+          <li aria-current="page">تکمیل سفارش</li>
+        </ol>
+      </nav>
+      <ol class="steps" aria-label="مراحل خرید" data-steps>
+        <li class="is-done"><span>سبد خرید</span></li>
+        <li aria-current="step"><span>اطلاعات ارسال</span></li>
+        <li><span>پرداخت</span></li>
+      </ol>
+      <div data-checkout>
+        <noscript><p class="empty-state">برای تکمیل سفارش، جاوااسکریپت مرورگر را فعال کنید.</p></noscript>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a class="brand" href="../index.html" aria-label="فروشگاه فیبسو — صفحه اصلی">
+            <img class="brand__mark" src="../assets/images/logo-mark-inverse.svg" alt="" width="40" height="40">
+            <span>فیبسو</span>
+          </a>
+          <p class="footer-about">فروشگاه تخصصی تجهیزات شبکه، لپ‌تاپ نو و استوک و قطعات لپ‌تاپ؛ با تست فنی، ضمانت سلامت و مشاوره پیش از خرید.</p>
+        </div>
+        <nav aria-labelledby="footer-cat-title">
+          <h2 class="footer-title" id="footer-cat-title">فروشگاه</h2>
+          <ul class="footer-links">
+            <li><a href="../pages/shop.html?cat=laptop&amp;condition=new">لپ‌تاپ نو</a></li>
+            <li><a href="../pages/shop.html?cat=laptop&amp;condition=used">لپ‌تاپ استوک</a></li>
+            <li><a href="../pages/shop.html?cat=network">تجهیزات شبکه</a></li>
+            <li><a href="../pages/shop.html?cat=parts">قطعات و لوازم جانبی</a></li>
+            <li><a href="../pages/shop.html?tag=offer">تخفیف‌ها</a></li>
+          </ul>
+        </nav>
+        <nav aria-labelledby="footer-help-title">
+          <h2 class="footer-title" id="footer-help-title">راهنما و خدمات</h2>
+          <ul class="footer-links">
+            <li><a href="../pages/warranty.html">ضمانت و درجه‌بندی استوک</a></li>
+            <li><a href="../pages/faq.html">سوالات متداول</a></li>
+            <li><a href="../pages/b2b.html">خرید سازمانی</a></li>
+            <li><a href="../pages/blog.html">بلاگ</a></li>
+            <li><a href="../pages/about.html">درباره فیبسو</a></li>
+            <li><a href="../pages/contact.html">تماس با ما</a></li>
+          </ul>
+        </nav>
+        <div>
+          <h2 class="footer-title">ارتباط با فیبسو</h2>
+          <ul class="footer-contact">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>تهران، شهرک گلستان، خیابان هوانیروز، بام‌لند، برج صدف، طبقه همکف، واحد ۲۰۱۰</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+              <a href="tel:+982182801845"><span class="ltr">۰۲۱-۸۲۸۰۱۸۴۵</span></a>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+              <a href="mailto:info@fibeso.com"><span class="ltr">info@fibeso.com</span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© ۱۴۰۵ فروشگاه فیبسو. همه حقوق محفوظ است.</p>
+        <p>قیمت‌ها به تومان است.</p>
+      </div>
+    </div>
+  </footer>
+
+  <a class="to-top" href="#main" aria-label="بازگشت به بالای صفحه" data-to-top hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+  </a>
+
+  <!-- ===================== Mini cart ===================== -->
+  <div class="backdrop" data-backdrop hidden></div>
+  <aside class="drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" data-cart-drawer hidden>
+    <div class="drawer__head">
+      <h2 class="drawer__title" id="cart-title">سبد خرید</h2>
+      <button class="icon-btn" type="button" aria-label="بستن سبد خرید" data-cart-close>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="drawer__body" data-cart-body></div>
+    <div class="drawer__foot" data-cart-foot hidden>
+      <p class="drawer__total"><span>جمع کل</span><span data-cart-total>۰ تومان</span></p>
+      <a class="btn btn--primary btn--block" href="../pages/checkout.html">ادامه فرایند خرید</a>
+      <a class="btn btn--outline btn--block" href="../pages/cart.html">مشاهده سبد خرید</a>
+    </div>
+  </aside>
+</body>
+</html>

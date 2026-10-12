@@ -1,0 +1,365 @@
+/* Product detail */
+
+.pdp {
+  display: grid;
+  gap: var(--space-6);
+  padding-bottom: var(--space-8);
+}
+
+@media (min-width: 48rem) {
+  .pdp {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 80rem) {
+  .pdp {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) 20rem;
+    align-items: start;
+  }
+}
+
+/* Gallery */
+.pdp__gallery {
+  position: relative;
+  aspect-ratio: 1;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+}
+
+.pdp__gallery img {
+  width: 100%;
+  height: 100%;
+  padding: 10%;
+  object-fit: contain;
+}
+
+.pdp__gallery-tools {
+  position: absolute;
+  top: var(--space-3);
+  inset-inline-end: var(--space-3);
+  display: grid;
+  gap: var(--space-2);
+}
+
+/* .discount is direction:ltr for the minus sign, so place it with a physical
+   side here: inset-inline-start would resolve to the left. */
+.pdp__gallery .discount {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+}
+
+/* Info */
+.pdp__info {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+.pdp__brand {
+  color: var(--color-primary-hover);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  text-decoration: none;
+}
+
+.pdp__title {
+  font-size: var(--fs-xl);
+  line-height: 1.6;
+}
+
+.pdp__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.pdp__meta .product-card__rating {
+  font-size: var(--fs-sm);
+}
+
+.pdp__grade {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-accent-soft);
+  font-size: var(--fs-sm);
+}
+
+.pdp__keyspecs-title {
+  font-size: var(--fs-md);
+}
+
+.keyspecs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.keyspecs li {
+  display: grid;
+  gap: 0.15rem;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+}
+
+.keyspecs dt,
+.keyspecs__label {
+  color: var(--color-text-muted);
+  font-size: var(--fs-xs);
+}
+
+.keyspecs__value {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+}
+
+/* Buy box */
+.buybox {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+}
+
+@media (min-width: 48rem) {
+  .buybox {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 80rem) {
+  .buybox {
+    grid-column: auto;
+    position: sticky;
+    top: calc(var(--header-height) + 5rem);
+  }
+}
+
+.buybox__rows {
+  display: grid;
+  gap: var(--space-3);
+  font-size: var(--fs-sm);
+}
+
+.buybox__rows li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.buybox__rows svg {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-top: 0.15rem;
+  color: var(--color-primary);
+}
+
+.buybox__price {
+  display: grid;
+  justify-items: end;
+  gap: var(--space-1);
+  padding-top: var(--space-4);
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.buybox__price .price__now {
+  font-size: var(--fs-xl);
+}
+
+.buybox__old {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.buybox__actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.buybox__actions .btn {
+  flex: 1;
+}
+
+.buybox .qty button {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.in-stock {
+  color: var(--color-success);
+  font-weight: var(--fw-bold);
+}
+
+/* Sticky mobile buy bar */
+.buybar {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--gutter);
+  border-top: var(--border-width) solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: 0 -8px 24px -16px rgb(2 4 17 / 0.4);
+}
+
+.buybar .btn {
+  flex-shrink: 0;
+}
+
+@media (min-width: 48rem) {
+  .buybar {
+    display: none;
+  }
+}
+
+@media (max-width: 47.99rem) {
+  .page-product .site-footer {
+    padding-bottom: 6rem;
+  }
+
+  .page-product .to-top {
+    bottom: 5.5rem;
+  }
+}
+
+/* Tabs */
+.pdp-tabs {
+  padding-bottom: var(--space-8);
+}
+
+.pdp-tabs .tab-panel {
+  max-width: 56rem;
+}
+
+.pdp-desc p + p {
+  margin-top: var(--space-3);
+}
+
+/* Reviews */
+.reviews {
+  display: grid;
+  gap: var(--space-6);
+}
+
+@media (min-width: 64rem) {
+  .reviews {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.review-list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.review {
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.review__head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-sm);
+}
+
+.review__author {
+  font-weight: var(--fw-bold);
+}
+
+.review__text {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.rating-input {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.rating-input input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.rating-input label {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  color: var(--color-border-strong);
+  cursor: pointer;
+}
+
+.rating-input label svg {
+  width: 1.75rem;
+  height: 1.75rem;
+  fill: currentColor;
+}
+
+.rating-input input:checked ~ label,
+.rating-input label:hover,
+.rating-input label:hover ~ label {
+  color: var(--color-star);
+}
+
+.rating-input input:focus-visible + label {
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+.pdp-missing {
+  padding-block: var(--space-16);
+}
+
+.pdp-wish[aria-pressed="true"] {
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.pdp-wish[aria-pressed="true"] svg {
+  fill: currentColor;
+}
+
+.buybox {
+  min-width: 0;
+}
+
+.buybox__rows span {
+  flex: 1;
+  min-width: 0;
+}
+
+.buybox__actions {
+  flex-wrap: wrap;
+}
+
+.buybox__actions .btn {
+  flex: 1 1 9rem;
+}

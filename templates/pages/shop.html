@@ -1,0 +1,112 @@
+<!-- {"out": "pages/shop.html", "title": "فروشگاه | فیبسو", "description": "خرید لپ‌تاپ نو و استوک، تجهیزات شبکه و قطعات لپ‌تاپ با فیلتر بر اساس وضعیت، برند و قیمت در فروشگاه فیبسو.", "nav": "", "css": ["pages/shop.css"], "js": ["pages/shop.js"]} -->
+  <main id="main">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="مسیر صفحه">
+        <ol>
+          <li><a href="{{root}}index.html">خانه</a></li>
+          <li><a href="{{root}}pages/shop.html">فروشگاه</a></li>
+          <li aria-current="page" data-crumb>همه محصولات</li>
+        </ol>
+      </nav>
+
+      <div class="shop">
+        <!-- Filters: sidebar on desktop, bottom sheet on mobile -->
+        <aside class="filters" id="filters" aria-labelledby="filters-title" data-filters>
+          <div class="filters__head">
+            <h2 class="filters__title" id="filters-title">فیلترها</h2>
+            <button class="btn btn--sm btn--danger-text" type="button" data-clear-filters>حذف همه</button>
+            <button class="icon-btn filters__close" type="button" aria-label="بستن فیلترها" data-filters-close>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <form class="filters__form" data-filter-form>
+            <fieldset class="filter-group">
+              <legend class="filter-group__title">وضعیت کالا</legend>
+              <label class="check"><input type="radio" name="condition" value=""> همه</label>
+              <label class="check"><input type="radio" name="condition" value="new"> نو <span class="check__count" data-count-for="condition:new"></span></label>
+              <label class="check"><input type="radio" name="condition" value="used"> استوک (کارکرده) <span class="check__count" data-count-for="condition:used"></span></label>
+            </fieldset>
+            <fieldset class="filter-group">
+              <legend class="filter-group__title">دسته‌بندی</legend>
+              <label class="check"><input type="radio" name="cat" value=""> همه دسته‌ها</label>
+              <label class="check"><input type="radio" name="cat" value="laptop"> لپ‌تاپ <span class="check__count" data-count-for="cat:laptop"></span></label>
+              <label class="check"><input type="radio" name="cat" value="network"> تجهیزات شبکه <span class="check__count" data-count-for="cat:network"></span></label>
+              <label class="check"><input type="radio" name="cat" value="parts"> قطعات و لوازم جانبی <span class="check__count" data-count-for="cat:parts"></span></label>
+            </fieldset>
+            <fieldset class="filter-group">
+              <legend class="filter-group__title">برند</legend>
+              <div class="filter-group__scroll" data-brand-list></div>
+            </fieldset>
+            <fieldset class="filter-group">
+              <legend class="filter-group__title">محدوده قیمت (تومان)</legend>
+              <div class="price-range">
+                <div class="field">
+                  <label class="field__label" for="f-min">از</label>
+                  <select class="input" id="f-min" name="min">
+                    <option value="">بدون حداقل</option>
+                    <option value="1000000">۱ میلیون</option>
+                    <option value="5000000">۵ میلیون</option>
+                    <option value="15000000">۱۵ میلیون</option>
+                    <option value="35000000">۳۵ میلیون</option>
+                    <option value="80000000">۸۰ میلیون</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label class="field__label" for="f-max">تا</label>
+                  <select class="input" id="f-max" name="max">
+                    <option value="">بدون حداکثر</option>
+                    <option value="5000000">۵ میلیون</option>
+                    <option value="15000000">۱۵ میلیون</option>
+                    <option value="20000000">۲۰ میلیون</option>
+                    <option value="35000000">۳۵ میلیون</option>
+                    <option value="50000000">۵۰ میلیون</option>
+                    <option value="80000000">۸۰ میلیون</option>
+                  </select>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="filter-group">
+              <legend class="visually-hidden">گزینه‌های دیگر</legend>
+              <label class="check"><input type="checkbox" name="stock" value="1"> فقط کالاهای موجود</label>
+              <label class="check"><input type="checkbox" name="tag" value="offer"> فقط کالاهای تخفیف‌دار</label>
+            </fieldset>
+          </form>
+          <div class="filters__foot">
+            <button class="btn btn--primary btn--block" type="button" data-filters-close>نمایش <span data-result-count>۰</span> کالا</button>
+          </div>
+        </aside>
+
+        <section class="shop__main" aria-labelledby="shop-title">
+          <header class="shop__head">
+            <div>
+              <h1 class="shop__title" id="shop-title" data-shop-title>همه محصولات</h1>
+              <p class="shop__count" role="status" data-shop-status></p>
+            </div>
+            <div class="shop__tools">
+              <button class="btn btn--outline btn--sm shop__filter-btn" type="button" aria-controls="filters" aria-expanded="false" data-filters-open>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18M6 12h12M10 19h4"/></svg>
+                فیلترها <span class="filter-badge" data-filter-badge hidden></span>
+              </button>
+              <div class="sort">
+                <label class="sort__label" for="sort">مرتب‌سازی:</label>
+                <select class="input sort__select" id="sort" data-sort>
+                  <option value="">پیشنهاد فیبسو</option>
+                  <option value="cheap">ارزان‌ترین</option>
+                  <option value="expensive">گران‌ترین</option>
+                  <option value="discount">بیشترین تخفیف</option>
+                  <option value="popular">محبوب‌ترین</option>
+                </select>
+              </div>
+            </div>
+          </header>
+
+          <ul class="chips" aria-label="فیلترهای فعال" data-active-filters></ul>
+
+          <ul class="product-grid shop__grid" data-shop-grid>
+            <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>
+          </ul>
+          <nav class="pagination" aria-label="صفحه‌بندی محصولات" data-pagination></nav>
+        </section>
+      </div>
+    </div>
+  </main>

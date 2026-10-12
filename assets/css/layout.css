@@ -746,3 +746,8 @@
 .icon-btn__count[hidden] {
   display: none;
 }
+
+.icon-btn.is-signed-in {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}

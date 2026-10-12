@@ -1,0 +1,20 @@
+<!-- {"out": "pages/cart.html", "title": "سبد خرید | فیبسو", "description": "مشاهده و ویرایش سبد خرید در فروشگاه فیبسو.", "noindex": true, "css": ["pages/cart.css"], "js": ["pages/cart.js"]} -->
+  <main id="main" class="page-section">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="مسیر صفحه">
+        <ol>
+          <li><a href="{{root}}index.html">خانه</a></li>
+          <li aria-current="page">سبد خرید</li>
+        </ol>
+      </nav>
+      <ol class="steps" aria-label="مراحل خرید">
+        <li aria-current="step"><span>سبد خرید</span></li>
+        <li><span>اطلاعات ارسال</span></li>
+        <li><span>پرداخت</span></li>
+      </ol>
+      <h1 class="cart-title">سبد خرید <span class="text-muted" data-cart-heading-count></span></h1>
+      <div data-cart-page>
+        <noscript><p class="empty-state">برای مشاهده سبد خرید، جاوااسکریپت مرورگر را فعال کنید.</p></noscript>
+      </div>
+    </div>
+  </main>

@@ -1,0 +1,12 @@
+<!-- {"out": "404.html", "title": "صفحه پیدا نشد | فیبسو", "description": "صفحه مورد نظر پیدا نشد.", "nav": "", "css": ["pages/content.css"]} -->
+  <main id="main" class="container not-found">
+    <p class="not-found__code" aria-hidden="true">۴۰۴</p>
+    <h1>صفحه مورد نظر پیدا نشد</h1>
+    <p class="text-muted">ممکن است آدرس اشتباه باشد یا این صفحه جابه‌جا شده باشد. محصول مورد نظرتان را جستجو کنید:</p>
+    <form class="search" role="search" action="{{root}}pages/shop.html" method="get">
+      <button class="search__btn" type="submit" aria-label="جستجو"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
+      <label class="visually-hidden" for="nf-q">جستجوی محصولات</label>
+      <input class="search__input" id="nf-q" name="q" type="search" placeholder="مثلاً ThinkPad یا روتر">
+    </form>
+    <div class="form-actions"><a class="btn btn--primary" href="{{root}}index.html">صفحه اصلی</a><a class="btn btn--outline" href="{{root}}pages/shop.html">فروشگاه</a></div>
+  </main>

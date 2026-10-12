@@ -1,0 +1,45 @@
+<!-- {"out": "pages/login.html", "title": "ورود و ثبت‌نام | فیبسو", "description": "ورود یا ثبت‌نام در فروشگاه فیبسو با شماره موبایل.", "noindex": true, "css": ["pages/auth.css"], "js": ["pages/login.js"]} -->
+  <main id="main" class="auth">
+    <div class="auth__card">
+      <a class="brand auth__brand" href="{{root}}index.html" aria-label="فروشگاه فیبسو — صفحه اصلی">
+        <img class="brand__mark" src="{{root}}assets/images/logo-mark.svg" alt="" width="40" height="40">
+        <span>فیبسو</span>
+      </a>
+
+      <!-- Step 1: mobile number -->
+      <form class="auth__step" novalidate data-step="mobile">
+        <h1 class="auth__title">ورود | ثبت‌نام</h1>
+        <p class="auth__lead">سلام! لطفاً شماره موبایل خود را وارد کنید.</p>
+        <div class="field">
+          <label class="field__label" for="login-mobile">شماره موبایل</label>
+          <input class="input" id="login-mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="09121234567" data-rules="required mobile" data-label="شماره موبایل" aria-describedby="login-mobile-error">
+          <p class="field__error" id="login-mobile-error"></p>
+        </div>
+        <button class="btn btn--primary btn--block" type="submit">دریافت کد تأیید</button>
+        <p class="auth__terms">ورود شما به معنای پذیرش <a href="{{root}}pages/warranty.html">شرایط فیبسو</a> است.</p>
+      </form>
+
+      <!-- Step 2: one-time code -->
+      <form class="auth__step" novalidate data-step="code" hidden>
+        <h1 class="auth__title" tabindex="-1">کد تأیید را وارد کنید</h1>
+        <p class="auth__lead">کد تأیید برای شماره <strong class="ltr" data-show-mobile></strong> ارسال شد.
+          <button class="link-btn" type="button" data-edit-mobile>ویرایش شماره</button></p>
+        <div class="alert alert--warning">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          <span>نسخه نمایشی: پیامکی ارسال نمی‌شود. کد <strong class="ltr">12345</strong> را وارد کنید.</span>
+        </div>
+        <div class="field">
+          <label class="field__label" for="login-code">کد ۵ رقمی</label>
+          <input class="input otp" id="login-code" name="code" inputmode="numeric" autocomplete="one-time-code" dir="ltr" maxlength="5" aria-describedby="login-code-error">
+          <p class="field__error" id="login-code-error"></p>
+        </div>
+        <div class="field" data-name-field hidden>
+          <label class="field__label" for="login-name">نام و نام خانوادگی</label>
+          <input class="input" id="login-name" name="name" autocomplete="name" aria-describedby="login-name-error">
+          <p class="field__error" id="login-name-error"></p>
+        </div>
+        <button class="btn btn--primary btn--block" type="submit">تأیید و ورود</button>
+        <p class="auth__resend" aria-live="polite"><span data-timer></span> <button class="link-btn" type="button" data-resend hidden>ارسال دوباره کد</button></p>
+      </form>
+    </div>
+  </main>

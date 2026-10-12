@@ -1,0 +1,21 @@
+<!-- {"out": "pages/blog.html", "title": "بلاگ فیبسو | راهنمای خرید و آموزش شبکه", "description": "راهنمای خرید لپ‌تاپ نو و استوک، آموزش شبکه و ارتقای قطعات در بلاگ فیبسو.", "css": ["pages/content.css"], "js": ["data/posts.js", "pages/blog.js"]} -->
+  <main id="main">
+    <section class="page-hero">
+      <div class="container">
+        <h1 class="page-hero__title">بلاگ فیبسو</h1>
+        <p class="page-hero__lead">راهنمای خرید، آموزش شبکه و نکته‌های ارتقای لپ‌تاپ.</p>
+      </div>
+    </section>
+    <div class="container">
+      <nav class="breadcrumb" aria-label="مسیر صفحه"><ol><li><a href="{{root}}index.html">خانه</a></li><li aria-current="page">بلاگ</li></ol></nav>
+      <div class="content">
+        <div class="blog-filters" role="group" aria-label="دسته‌بندی مطالب" data-blog-filters>
+          <button type="button" aria-pressed="true" data-cat="">همه</button>
+          <button type="button" aria-pressed="false" data-cat="guide">راهنمای خرید</button>
+          <button type="button" aria-pressed="false" data-cat="network">شبکه</button>
+          <button type="button" aria-pressed="false" data-cat="parts">قطعات</button>
+        </div>
+        <ul class="post-grid" data-post-list></ul>
+      </div>
+    </div>
+  </main>

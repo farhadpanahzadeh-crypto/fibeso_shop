@@ -81,11 +81,42 @@
     items.forEach(function (el) { observer.observe(el); });
   }
 
+  /* Horizontal rails: [data-scroller=id] with [data-scroll-prev=id] / [data-scroll-next=id] */
+  function initScrollers(root) {
+  root.querySelectorAll('[data-scroller]').forEach(function (scroller) {
+    var track = scroller.querySelector('.scroller__track');
+    var id = scroller.getAttribute('data-scroller');
+    var prev = document.querySelector('[data-scroll-prev="' + id + '"]');
+    var next = document.querySelector('[data-scroll-next="' + id + '"]');
+    if (!track || !prev || !next) return;
+
+    // In RTL, scrollLeft runs from 0 towards negative values
+    function update() {
+      var max = track.scrollWidth - track.clientWidth;
+      var pos = Math.abs(track.scrollLeft);
+      prev.disabled = pos <= 2;
+      next.disabled = pos >= max - 2;
+    }
+
+    function step(dir) {
+      track.scrollBy({ left: -track.clientWidth * 0.9 * dir, behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+    }
+
+    prev.addEventListener('click', function () { step(-1); });
+    next.addEventListener('click', function () { step(1); });
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+
+  }
+
   window.UI = {
     toPersianDigits: toPersianDigits,
     toLatinDigits: toLatinDigits,
     initAccordions: initAccordions,
     initReveal: initReveal,
-    initCounters: initCounters
+    initCounters: initCounters,
+    initScrollers: initScrollers
   };
 })();

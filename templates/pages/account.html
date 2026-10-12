@@ -1,0 +1,88 @@
+<!-- {"out": "pages/account.html", "title": "پنل کاربری | فیبسو", "description": "پنل کاربری فیبسو: سفارش‌ها، علاقه‌مندی‌ها، آدرس‌ها و اطلاعات حساب.", "noindex": true, "css": ["pages/account.css"], "js": ["pages/account.js"]} -->
+  <main id="main" class="page-section">
+    <div class="container account">
+      <aside class="account__side" aria-label="منوی پنل کاربری">
+        <div class="account__user">
+          <span class="account__avatar" aria-hidden="true" data-user-initial></span>
+          <div>
+            <p class="account__name" data-user-name></p>
+            <p class="account__mobile ltr" data-user-mobile></p>
+          </div>
+        </div>
+        <nav class="account__nav" aria-label="بخش‌های پنل">
+          <a class="account__link" href="#dashboard" data-section-link="dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z"/></svg>
+            پیشخوان
+          </a>
+          <a class="account__link" href="#orders" data-section-link="orders">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/></svg>
+            سفارش‌ها
+          </a>
+          <a class="account__link" href="#wishlist" data-section-link="wishlist">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+            علاقه‌مندی‌ها
+          </a>
+          <a class="account__link" href="#addresses" data-section-link="addresses">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            آدرس‌ها
+          </a>
+          <a class="account__link" href="#profile" data-section-link="profile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+            اطلاعات حساب
+          </a>
+          <button class="account__link account__logout" type="button" data-logout>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+            خروج از حساب
+          </button>
+        </nav>
+      </aside>
+
+      <div class="account__main">
+        <section class="account__section" id="dashboard" aria-labelledby="dashboard-title" data-section>
+          <h1 class="account__title" id="dashboard-title" tabindex="-1">پیشخوان</h1>
+          <div data-dashboard></div>
+        </section>
+        <section class="account__section" id="orders" aria-labelledby="orders-title" data-section hidden>
+          <h1 class="account__title" id="orders-title" tabindex="-1">سفارش‌های من</h1>
+          <div class="tabs-line" role="tablist" aria-label="وضعیت سفارش" data-order-tabs>
+            <button class="tabs-line__tab" role="tab" type="button" aria-selected="true" data-status="">همه</button>
+            <button class="tabs-line__tab" role="tab" type="button" aria-selected="false" tabindex="-1" data-status="processing">در حال پردازش</button>
+            <button class="tabs-line__tab" role="tab" type="button" aria-selected="false" tabindex="-1" data-status="shipped">ارسال‌شده</button>
+            <button class="tabs-line__tab" role="tab" type="button" aria-selected="false" tabindex="-1" data-status="delivered">تحویل‌شده</button>
+          </div>
+          <div class="order-list" role="tabpanel" aria-label="فهرست سفارش‌ها" data-orders></div>
+        </section>
+        <section class="account__section" id="wishlist" aria-labelledby="wishlist-title" data-section hidden>
+          <h1 class="account__title" id="wishlist-title" tabindex="-1">علاقه‌مندی‌ها</h1>
+          <ul class="product-grid account__grid" data-wishlist></ul>
+        </section>
+        <section class="account__section" id="addresses" aria-labelledby="addresses-title" data-section hidden>
+          <div class="panel__head">
+            <h1 class="account__title" id="addresses-title" tabindex="-1">آدرس‌ها</h1>
+            <button class="btn btn--primary btn--sm" type="button" data-address-add>افزودن آدرس جدید</button>
+          </div>
+          <ul class="address-list" data-addresses></ul>
+        </section>
+        <section class="account__section" id="profile" aria-labelledby="profile-title" data-section hidden>
+          <h1 class="account__title" id="profile-title" tabindex="-1">اطلاعات حساب</h1>
+          <form class="panel" novalidate data-profile-form></form>
+        </section>
+      </div>
+    </div>
+
+    <dialog class="dialog" aria-labelledby="address-dialog-title" data-address-dialog>
+      <form novalidate data-address-form>
+        <div class="dialog__head">
+          <h2 class="dialog__title" id="address-dialog-title">آدرس جدید</h2>
+          <button class="icon-btn" type="button" aria-label="بستن" data-dialog-close>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="dialog__body" data-address-fields></div>
+        <div class="dialog__foot">
+          <button class="btn btn--primary" type="submit">ذخیره آدرس</button>
+          <button class="btn btn--outline" type="button" data-dialog-close>انصراف</button>
+        </div>
+      </form>
+    </dialog>
+  </main>

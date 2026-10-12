@@ -1,0 +1,65 @@
+/* Login / sign-up */
+
+.auth {
+  display: grid;
+  place-items: center;
+  min-height: 70vh;
+  padding: var(--space-10) var(--gutter);
+}
+
+.auth__card {
+  display: grid;
+  gap: var(--space-5);
+  width: min(100%, 26rem);
+  padding: clamp(1.5rem, 1rem + 3vw, 2.5rem);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.auth__brand {
+  justify-self: center;
+}
+
+.auth__step {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.auth__step[hidden] {
+  display: none;
+}
+
+.auth__title {
+  font-size: var(--fs-xl);
+}
+
+.auth__lead,
+.auth__terms,
+.auth__resend {
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.auth__terms,
+.auth__resend {
+  text-align: center;
+}
+
+.otp {
+  font-size: var(--fs-xl);
+  letter-spacing: 0.5em;
+  text-align: center;
+}
+
+.link-btn {
+  min-height: 2.75rem;
+  padding: 0 var(--space-1);
+  border: 0;
+  background: transparent;
+  color: var(--color-primary-hover);
+  font-weight: var(--fw-bold);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}

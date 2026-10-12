@@ -1,0 +1,20 @@
+<!-- {"out": "pages/checkout.html", "title": "تکمیل سفارش | فیبسو", "description": "ثبت آدرس، انتخاب روش ارسال و پرداخت سفارش در فروشگاه فیبسو.", "noindex": true, "css": ["pages/cart.css"], "js": ["pages/checkout.js"]} -->
+  <main id="main" class="page-section">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="مسیر صفحه">
+        <ol>
+          <li><a href="{{root}}index.html">خانه</a></li>
+          <li><a href="{{root}}pages/cart.html">سبد خرید</a></li>
+          <li aria-current="page">تکمیل سفارش</li>
+        </ol>
+      </nav>
+      <ol class="steps" aria-label="مراحل خرید" data-steps>
+        <li class="is-done"><span>سبد خرید</span></li>
+        <li aria-current="step"><span>اطلاعات ارسال</span></li>
+        <li><span>پرداخت</span></li>
+      </ol>
+      <div data-checkout>
+        <noscript><p class="empty-state">برای تکمیل سفارش، جاوااسکریپت مرورگر را فعال کنید.</p></noscript>
+      </div>
+    </div>
+  </main>
