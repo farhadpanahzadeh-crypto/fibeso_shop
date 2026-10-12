@@ -28,6 +28,8 @@ export default function App() {
   const [events, setEvents] = useState([]);
   const [running, setRunning] = useState(false);
   const [error, setError] = useState('');
+  const [serverDown, setServerDown] = useState(false);
+  const [starting, setStarting] = useState(false);
   const [outRoot, setOutRoot] = useState('');
   const logEnd = useRef(null);
   const [saved, setSaved] = useState(null); // manifest.json of earlier runs for this site
@@ -35,18 +37,41 @@ export default function App() {
   const [deleted, setDeleted] = useState(() => new Set()); // indexes removed in this session
   const [confirming, setConfirming] = useState(null);      // index awaiting a second click
 
-  // Live progress from the local server (Server-Sent Events)
+  // Live progress: poll the local server (works behind any proxy, no SSE buffering)
   useEffect(() => {
-    fetch('/api/status').then((r) => r.json()).then((s) => { setRunning(s.running); setOutRoot(s.outRoot); }).catch(() => setError('سرور ابزار در حال اجرا نیست. دستور npm run dev را اجرا کنید.'));
-    const es = new EventSource('/api/events');
-    es.onmessage = (m) => {
-      const e = JSON.parse(m.data);
-      if (e.type === 'start') setEvents([e]);
-      else setEvents((list) => [...list, e]);
-      if (e.type === 'start') setRunning(true);
-      if (e.type === 'done' || e.type === 'fatal') setRunning(false);
+    let after = 0;
+    let job = null;
+    let alive = true;
+    let failures = 0;
+    fetch('/api/status').then((r) => r.json()).then((s) => setOutRoot(s.outRoot)).catch(() => {});
+    const tick = async () => {
+      try {
+        const r = await fetch(`/api/history?after=${after}`, { cache: 'no-store' });
+        if (!r.ok) throw new Error(String(r.status));
+        const h = await r.json();
+        if (!alive) return;
+        failures = 0;
+        setServerDown(false);
+        if (h.job !== job) {
+          // A new job started (or first load): fetch its whole history next tick
+          const reset = job !== null || after > 0;
+          job = h.job;
+          if (reset) { after = 0; setEvents([]); return; }
+        }
+        if (h.events.length) {
+          after += h.events.length;
+          setEvents((list) => [...list, ...h.events]);
+        }
+        setRunning(h.running);
+      } catch {
+        failures += 1;
+        if (failures >= 2) setServerDown(true);
+      } finally {
+        if (alive) setTimeout(tick, 1000);
+      }
     };
-    return () => es.close();
+    tick();
+    return () => { alive = false; };
   }, []);
 
   useEffect(() => {
@@ -127,13 +152,17 @@ export default function App() {
     try {
       new URL(form.url);
     } catch { setError('آدرس کامل سایت را وارد کنید، مثلاً https://www.example.com'); return; }
+    setStarting(true);
     try {
       await post('/api/capture', {
         ...form,
+        useAuth: false,
         viewports: [form.desktop && 'desktop', form.mobile && 'mobile'].filter(Boolean)
       });
       setRunning(true);
-    } catch (err) { setError(err.message); }
+    } catch (err) {
+      setError(/Failed to fetch|NetworkError/i.test(err.message) ? 'سرور ابزار در دسترس نیست. پنجره ترمینال npm run dev را ببینید.' : err.message);
+    } finally { setStarting(false); }
   }
 
   return (
@@ -193,19 +222,6 @@ export default function App() {
               <small>صفحه‌هایی که لینکشان در سایت پیدا نمی‌شود</small></label>
           </details>
 
-          <fieldset className="panel-box">
-            <legend>پنل کاربری</legend>
-            <p className="muted">ابزار سایت را باز می‌کند؛ شما وارد حساب شوید. به محض ورود، جلسه را خودش می‌گیرد، پنجره را می‌بندد و با همان حساب عکس‌برداری را شروع می‌کند (صفحه‌های پنل اول).</p>
-            <label className="field"><span>آدرس صفحه ورود (اختیاری)</span>
-              <input dir="ltr" type="url" placeholder="https://www.example.com/login" value={form.loginUrl} onChange={set('loginUrl')} /></label>
-            <button type="button" className="btn ghost" disabled={!formHost || running || loginBusy}
-              onClick={() => post('/api/login', { ...form, viewports: [form.desktop && 'desktop', form.mobile && 'mobile'].filter(Boolean) })
-                .then(() => setRunning(true)).catch((err) => setError(err.message))}>
-              {loginBusy ? 'منتظر ورود شما…' : 'ورود به حساب و ادامه خودکار'}
-            </button>
-            {visited.length > 0 && <p className="muted">{fa(visited.length)} صفحه پنل ثبت شد.</p>}
-            <label className="check"><input type="checkbox" checked={form.useAuth} onChange={set('useAuth')} /> از جلسه ذخیره‌شده قبلی استفاده کن</label>
-          </fieldset>
 
           {saved && saved.pages && saved.pages.length > 0 && (
             <div className="memory">
@@ -216,10 +232,11 @@ export default function App() {
             </div>
           )}
 
+          {serverDown && <p className="error" role="alert">سرور ابزار جواب نمی‌دهد. پنجره ترمینال را ببینید؛ اگر بسته شده دوباره npm run dev را بزنید.</p>}
           {error && <p className="error" role="alert">{error}</p>}
 
           <div className="actions">
-            <button className="btn" type="submit" disabled={running}>{running ? 'در حال عکس‌برداری…' : 'شروع'}</button>
+            <button className="btn" type="submit" disabled={running || starting}>{starting ? 'در حال ارسال…' : running ? 'در حال عکس‌برداری…' : 'شروع'}</button>
             {running && <button className="btn ghost" type="button" onClick={() => post('/api/stop')}>توقف</button>}
           </div>
           {outRoot && <p className="muted">پوشه خروجی: <code dir="ltr">{outRoot}</code></p>}

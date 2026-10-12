@@ -16,6 +16,7 @@ app.use('/captures', express.static(OUT_ROOT));
 let job = null;            // only one capture runs at a time
 const clients = new Set(); // open SSE connections
 const history = [];        // events of the current job, replayed to late subscribers
+let jobId = 0;             // bumped whenever history is reset
 
 function broadcast(event) {
   history.push(event);
@@ -25,6 +26,13 @@ function broadcast(event) {
 
 app.get('/api/status', (req, res) => {
   res.json({ running: !!job, outRoot: OUT_ROOT });
+});
+
+/* Polling fallback: events after a given position (SSE can be buffered by proxies) */
+app.get('/api/history', (req, res) => {
+  const after = Math.max(0, Number(req.query.after) || 0);
+  res.set('Cache-Control', 'no-store');
+  res.json({ job: jobId, running: !!job, events: history.slice(after) });
 });
 
 app.get('/api/events', (req, res) => {
@@ -65,11 +73,15 @@ function startCapture(options) {
 }
 
 app.post('/api/capture', (req, res) => {
-  if (job) return res.status(409).json({ error: 'یک کار در حال اجراست.' });
+  // A login window left open must never block a capture: drop it
+  if (job && job.login) { job.controller.abort(); job = null; }
+  if (job) return res.status(409).json({ error: 'یک عکس‌برداری در حال اجراست. اول «توقف» را بزنید.' });
   let options;
   try { options = captureOptions(req.body || {}); } catch { return res.status(400).json({ error: 'آدرس سایت معتبر نیست.' }); }
   history.length = 0;
-  startCapture(options);
+  jobId += 1;
+  broadcast({ type: 'log', message: 'در حال راه‌اندازی مرورگر…' });
+  startCapture({ ...options, useAuth: false });
   res.json({ ok: true });
 });
 
@@ -80,16 +92,19 @@ app.post('/api/login', (req, res) => {
   let options;
   try { options = captureOptions({ ...(req.body || {}), useAuth: true }); } catch { return res.status(400).json({ error: 'آدرس معتبر نیست.' }); }
   history.length = 0;
+  jobId += 1;
   const loginUrl = req.body.loginUrl && /^https?:\/\//.test(req.body.loginUrl) ? req.body.loginUrl : options.url;
-  job = { controller: new AbortController(), login: true };
-  recordLogin(loginUrl, OUT_ROOT, broadcast)
+  const controller = new AbortController();
+  job = { controller, login: true };
+  recordLogin(loginUrl, OUT_ROOT, broadcast, null, { signal: controller.signal })
     .then((r) => {
+      if (controller.signal.aborted) return;
       job = null;
       if (req.body.autoCapture === false) return;
       if (!r.saved) { broadcast({ type: 'fatal', message: 'جلسه ورود ذخیره نشد.' }); return; }
       return startCapture(options);
     })
-    .catch((err) => { job = null; broadcast({ type: 'fatal', message: String(err.message || err) }); });
+    .catch((err) => { if (controller.signal.aborted) return; job = null; broadcast({ type: 'fatal', message: String(err.message || err) }); });
   res.json({ ok: true });
 });
 
@@ -106,6 +121,7 @@ app.post('/api/delete', async (req, res) => {
 
 app.post('/api/stop', (req, res) => {
   if (job) job.controller.abort();
+  if (job && job.login) job = null;
   res.json({ ok: true });
 });
 

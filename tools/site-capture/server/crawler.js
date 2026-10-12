@@ -474,7 +474,7 @@ function sessionSignal(state) {
   return [...cookies, ...storage].sort().join('|');
 }
 
-export async function recordLogin(url, outRoot, emit = () => {}, drive = null, { autoReturn = true } = {}) {
+export async function recordLogin(url, outRoot, emit = () => {}, drive = null, { autoReturn = true, signal = null } = {}) {
   const u = new URL(url);
   const outDir = path.resolve(outRoot, u.hostname);
   await fs.mkdir(outDir, { recursive: true });
@@ -494,6 +494,7 @@ export async function recordLogin(url, outRoot, emit = () => {}, drive = null, {
     }
   });
   context.on('page', track);
+  if (signal) signal.addEventListener('abort', () => browser.close().catch(() => {}), { once: true });
 
   const page = await context.newPage();
   await page.goto(u.href, { waitUntil: 'domcontentloaded' }).catch(() => {});
@@ -516,8 +517,8 @@ export async function recordLogin(url, outRoot, emit = () => {}, drive = null, {
       try { state = await context.storageState({ path: authFile }); } catch { break; }
       const pages = context.pages();
       const current = pages.length ? pages[pages.length - 1].url() : '';
-      const signal = sessionSignal(state);
-      if (!loggedIn && signal && signal !== baseline && !LOGIN_URL.test(current)) {
+      const sig = sessionSignal(state);
+      if (!loggedIn && sig && sig !== baseline && !LOGIN_URL.test(current)) {
         loggedIn = true;
         emit({ type: 'login-detected', message: 'ورود شناسایی شد.' });
         if (autoReturn) {
@@ -536,6 +537,7 @@ export async function recordLogin(url, outRoot, emit = () => {}, drive = null, {
   await watcher;
   await context.storageState({ path: authFile }).catch(() => {});
   await browser.close().catch(() => {});
+  if (signal?.aborted) return { visited: [], loggedIn: false, saved: false };
 
   const list = [...visited].filter((v) => v !== normalise(u.href, u.origin, true).href);
   await fs.writeFile(visitedFile, JSON.stringify(list, null, 2), 'utf8');
