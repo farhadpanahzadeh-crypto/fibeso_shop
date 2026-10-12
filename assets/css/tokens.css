@@ -30,55 +30,61 @@
 }
 
 :root {
-  /* ---- Brand palette (PROVISIONAL — replace with supplied HEX values) ----
-     Structure follows the reference store: deep navy for chrome and banners,
-     sky blue for rail headers, discount pills and category rings. */
-  --brand-primary: #1b2d63;        /* navy: header CTAs, banners, footer */
-  --brand-primary-strong: #12204a; /* hover / pressed */
-  --brand-primary-soft: #eaf3fb;   /* tinted surfaces */
-  --brand-secondary: #0b78b8;      /* sky: rail headers, discount pills, rings */
-  --brand-secondary-soft: #d8eefa; /* brand tiles, price chips */
+  /* ---- Brand palette — sampled from the Fibeso website screenshots ----
+     Night black for dark chrome (hero, footer, mobile menu), Fibeso blue for
+     actions and highlights, sky blue as the accent on dark, grey page canvas.
+     Change values here only; components read the semantic tokens below. */
+  --brand-night: #020411;          /* dark backgrounds */
+  --brand-night-raised: #0b1022;   /* panels on dark backgrounds */
+  --brand-navy: #101f5c;           /* glow / secondary dark tone */
+  --brand-primary: #0077b6;        /* Fibeso blue: buttons, links, highlights */
+  --brand-primary-strong: #005e8f; /* hover / pressed */
+  --brand-primary-soft: #e6f3fa;   /* tinted surfaces, brand tiles */
+  --brand-sky: #80d1ff;            /* accent on dark backgrounds */
   --brand-accent: #b45309;         /* "used / stock" condition badge */
-  --brand-ink: #111827;            /* headings / body text */
+  --brand-ink: #16171b;            /* headings / body text */
 
-  /* ---- Neutrals ---- */
+  /* ---- Neutrals (grey canvas from the Fibeso site) ---- */
   --neutral-0: #ffffff;
-  --neutral-50: #f8fafc;
-  --neutral-100: #f1f5f9;
-  --neutral-200: #e2e8f0;
-  --neutral-300: #cbd5e1;
-  --neutral-500: #64748b;
-  --neutral-600: #475569;
-  --neutral-800: #1e293b;
+  --neutral-50: #f8f8f8;
+  --neutral-100: #f1f1f2;
+  --neutral-200: #e7e7ea;
+  --neutral-300: #d2d3d8;
+  --neutral-400: #9a9ba0;
+  --neutral-500: #6b6d75;
+  --neutral-600: #4b4d55;
 
   /* ---- Semantic colors (components use these, never raw hex) ---- */
-  --color-bg: var(--neutral-0);
+  --color-bg: var(--neutral-50);
   --color-surface: var(--neutral-0);
   --color-surface-muted: var(--neutral-100);
-  --color-surface-inverse: var(--brand-primary-strong);
+  --color-surface-inverse: var(--brand-night);
+  --color-surface-inverse-raised: var(--brand-night-raised);
   --color-text: var(--brand-ink);
   --color-text-muted: var(--neutral-600);
   --color-text-inverse: var(--neutral-0);
-  --color-text-inverse-muted: #c9d5ef;
+  --color-text-inverse-muted: #b9bcc6;
   --color-border: var(--neutral-200);
   --color-border-strong: var(--neutral-300);
+  --color-border-inverse: rgb(255 255 255 / 0.12);
   --color-primary: var(--brand-primary);
   --color-primary-hover: var(--brand-primary-strong);
   --color-on-primary: var(--neutral-0);
   --color-primary-soft: var(--brand-primary-soft);
-  --color-secondary: var(--brand-secondary);
-  --color-secondary-soft: var(--brand-secondary-soft);
+  --color-secondary: var(--brand-primary);
+  --color-secondary-soft: var(--brand-primary-soft);
   --color-on-secondary: var(--neutral-0);
+  --color-sky: var(--brand-sky);
   --color-accent: var(--brand-accent);
   --color-on-accent: var(--neutral-0);
+  --color-accent-soft: #fef3c7;
   --color-success: #15803d;
-  --color-success-soft: #f0fdf4;
+  --color-success-soft: #ecfdf3;
   --color-danger: #b91c1c;
   --color-danger-soft: #fef2f2;
   --color-focus: var(--brand-primary);
   --color-glass: rgb(255 255 255 / 0.72);
   --color-star: #f59e0b;
-  --color-accent-soft: #fef3c7;
 
   /* ---- Typography ---- */
   --font-sans: "Vazirmatn", Tahoma, "Segoe UI", system-ui, sans-serif;
@@ -130,7 +136,7 @@
   --border-width-strong: 1.5px;
   --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
   --shadow-md: 0 8px 24px -12px rgb(15 23 42 / 0.18);
-  --shadow-lg: 0 18px 40px -20px rgb(30 64 175 / 0.35);
+  --shadow-lg: 0 18px 40px -20px rgb(2 4 17 / 0.35);
   --focus-ring: 0 0 0 3px var(--color-surface), 0 0 0 6px var(--color-focus);
 
   /* ---- Motion ---- */

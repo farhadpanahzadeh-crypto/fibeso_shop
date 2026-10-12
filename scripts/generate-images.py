@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generates the flat SVG product, category and banner illustrations in assets/images/.
 
-Colors mirror the PROVISIONAL brand palette in assets/css/tokens.css. When the
+Colors mirror the Fibeso brand palette in assets/css/tokens.css. When the
 final palette is supplied, update P below and re-run:
     python3 scripts/generate-images.py
 These drawings stand in for real product photos until the shop supplies them.
@@ -9,10 +9,12 @@ These drawings stand in for real product photos until the shop supplies them.
 from pathlib import Path
 
 P = {
-    "navy": "#1b2d63",
-    "navy_mid": "#2c4489",
-    "sky": "#0b78b8",
-    "sky_soft": "#d8eefa",
+    "night": "#020411",
+    "navy": "#101f5c",
+    "navy_mid": "#1b3a8a",
+    "sky": "#0077b6",
+    "sky_soft": "#e6f3fa",
+    "glow": "#80d1ff",
     "ink": "#111827",
     "graphite": "#374151",
     "steel": "#9ca3af",
@@ -167,9 +169,13 @@ write("groups/parts.svg", svg(400, 400, g(ram(), 40, 0, .8) + g(ssd(), 30, 140, 
 
 # ---------- Banners (navy panels with art; text is HTML) ----------
 def banner(w, h, art):
-    return svg(w, h, f'<rect width="{w}" height="{h}" fill="{P["navy"]}"/>'
-                     f'<path d="M{w * .45} {h}L{w} 0V{h}z" fill="{P["navy_mid"]}" opacity=".55"/>'
-                     f'<path d="M{w * .62} {h}L{w} {h * .35}V{h}z" fill="{P["sky"]}" opacity=".18"/>' + art)
+    """Night-sky panel with a flat 'planet horizon' arc, echoing the Fibeso site hero."""
+    r = w * 0.75
+    stars = "".join(f'<circle cx="{(i * 97) % w}" cy="{(i * 53) % (h * 0.6):.0f}" r="1.2" fill="{P["glow"]}" opacity=".5"/>' for i in range(1, 40))
+    return svg(w, h, f'<rect width="{w}" height="{h}" fill="{P["night"]}"/>' + stars
+               + f'<circle cx="{w * 0.5}" cy="{h + r * 0.55}" r="{r}" fill="{P["navy"]}" opacity=".55"/>'
+               f'<circle cx="{w * 0.5}" cy="{h + r * 0.55}" r="{r}" fill="none" stroke="{P["glow"]}" stroke-width="2" opacity=".55"/>'
+               + art)
 
 
 write("banners/hero-1.svg", banner(1600, 520, g(PRODUCTS["laptop-gaming"], 120, 20, 1.15) + g(PRODUCTS["laptop-ultrabook"], 420, 90, .95)))
@@ -187,6 +193,6 @@ def logo(bg, fg):
                        f'<circle cx="27.5" cy="27" r="2.5" fill="{fg}"/>')
 
 
-write("logo-mark.svg", logo(P["navy"], P["white"]))
-write("logo-mark-inverse.svg", logo(P["white"], P["navy"]))
+write("logo-mark.svg", logo(P["sky"], P["white"]))
+write("logo-mark-inverse.svg", logo(P["white"], P["night"]))
 print("ok")

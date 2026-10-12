@@ -136,10 +136,24 @@
     });
   }
 
-  /* ---------- Category mega menu (disclosure) ---------- */
+  /* ---------- Category mega menu ----------
+     Desktop: disclosure panel; hovering or focusing a main category shows its
+     subcategories (exactly one is always shown). Mobile: main categories are an
+     accordion inside the navigation drawer. */
+  var desktop = window.matchMedia('(min-width: 64rem)');
   var catMenu = document.querySelector('[data-cat-menu]');
   var catTrigger = document.querySelector('[data-cat-menu-trigger]');
   var catPanel = catTrigger && document.getElementById(catTrigger.getAttribute('aria-controls'));
+  var mains = Array.prototype.slice.call(document.querySelectorAll('[data-cat-main]'));
+
+  function setMain(main, open) {
+    main.setAttribute('aria-expanded', String(open));
+    document.getElementById(main.getAttribute('aria-controls')).hidden = !open;
+  }
+
+  function selectMain(main) {
+    mains.forEach(function (m) { setMain(m, m === main); });
+  }
 
   function closeCatMenu() {
     if (!catTrigger || catTrigger.getAttribute('aria-expanded') !== 'true') return;
@@ -153,6 +167,31 @@
       catTrigger.setAttribute('aria-expanded', String(!open));
       catPanel.hidden = open;
     });
+
+    mains.forEach(function (main) {
+      main.addEventListener('click', function () {
+        if (desktop.matches) selectMain(main);
+        else setMain(main, main.getAttribute('aria-expanded') !== 'true');
+      });
+      main.addEventListener('mouseenter', function () {
+        if (desktop.matches) selectMain(main);
+      });
+      main.addEventListener('focus', function () {
+        if (desktop.matches) selectMain(main);
+      });
+    });
+
+    // Desktop always shows one submenu; mobile starts fully collapsed
+    var resetMains = function () {
+      if (desktop.matches) selectMain(mains[0]);
+      else mains.forEach(function (m) { setMain(m, false); });
+    };
+    resetMains();
+    desktop.addEventListener('change', function () {
+      closeCatMenu();
+      resetMains();
+    });
+
     document.addEventListener('keydown', function (event) {
       if (event.key === 'Escape' && catTrigger.getAttribute('aria-expanded') === 'true') {
         closeCatMenu();
@@ -160,10 +199,10 @@
       }
     });
     document.addEventListener('click', function (event) {
-      if (!catMenu.contains(event.target)) closeCatMenu();
+      if (desktop.matches && !catMenu.contains(event.target)) closeCatMenu();
     });
     catMenu.addEventListener('focusout', function (event) {
-      if (event.relatedTarget && !catMenu.contains(event.relatedTarget)) closeCatMenu();
+      if (desktop.matches && event.relatedTarget && !catMenu.contains(event.relatedTarget)) closeCatMenu();
     });
   }
 

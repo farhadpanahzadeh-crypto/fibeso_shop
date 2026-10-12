@@ -19,7 +19,7 @@
 /* ---------- Hero: full-width slider ---------- */
 .slider {
   position: relative;
-  background: var(--color-primary);
+  background: var(--color-surface-inverse);
   overflow: hidden;
 }
 
@@ -92,9 +92,15 @@
   transition: background-color var(--duration-fast);
 }
 
+.slide__btn {
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
 .slide__btn:hover {
-  background: var(--color-secondary-soft);
-  color: var(--color-primary);
+  background: var(--color-primary-hover);
+  color: var(--color-on-primary);
 }
 
 .slide__btn svg,
@@ -368,7 +374,7 @@
   display: flex;
   align-items: center;
   border-radius: var(--radius-lg);
-  background: var(--color-primary);
+  background: var(--color-surface-inverse);
   color: var(--color-text-inverse);
   text-decoration: none;
   overflow: hidden;
@@ -629,7 +635,7 @@
 /* ---------- Stats band ---------- */
 .stats {
   padding-block: var(--space-10);
-  background: var(--color-primary);
+  background: var(--color-surface-inverse);
   color: var(--color-text-inverse);
 }
 
@@ -651,6 +657,10 @@
 
 .stats .stat__value {
   font-size: clamp(1.5rem, 1.1rem + 2vw, 2.5rem);
+}
+
+.stats .stat__value {
+  color: var(--color-sky);
 }
 
 .stats .stat__label {
