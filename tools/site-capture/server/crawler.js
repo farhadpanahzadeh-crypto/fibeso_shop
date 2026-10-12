@@ -4,8 +4,13 @@ import { chromium, devices } from 'playwright';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
+/* Paths sent to the UI / stored in the manifest always use '/', also on Windows */
+const rel = (slug, file) => path.posix.join('pages', slug, file);
+
 const VIEWPORTS = {
-  desktop: { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 },
+  // A normal desktop Chrome user agent: the headless default says "HeadlessChrome"
+  // and some sites (bot protection) refuse or challenge it.
+  desktop: { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, userAgent: devices['Desktop Chrome'].userAgent },
   mobile: {
     viewport: { width: 390, height: 844 },
     deviceScaleFactor: 1,
@@ -19,6 +24,39 @@ const SKIP_EXT = /\.(pdf|zip|rar|jpe?g|png|gif|webp|svg|mp4|mp3|xml|json|txt|doc
 const SKIP_WORDS = /(logout|log-out|logoff|signout|sign-out|exit|add-to-cart|addtocart|remove|delete|wp-admin|wp-login|\/cdn-cgi\/)/i;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Bot-protection screens: generic words only count in the title, strong markers anywhere
+const CHALLENGE_TITLE = /(just a moment|checking your browser|attention required|verify you are human|captcha|arvancloud|ddos|در حال بررسی|لطفا صبر کنید|لطفاً صبر کنید)/i;
+const CHALLENGE_BODY = /(checking your browser|verify you are human|arvancloud|ddos-guard|cf-challenge|captcha)/i;
+
+/* Open a URL robustly: two attempts, wait for the network to settle and for
+   bot-protection / "checking your browser" screens to pass (up to 30s). */
+async function openPage(page, url, emit) {
+  let res = null;
+  let lastErr = null;
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      res = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      lastErr = null;
+      break;
+    } catch (err) {
+      lastErr = err;
+      emit({ type: 'log', message: `بارگذاری ${url} ناموفق بود (تلاش ${attempt} از ۲)` });
+    }
+  }
+  if (lastErr) throw lastErr;
+  await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
+  for (let i = 0; i < 30; i++) {
+    const blocked = await page.evaluate(([t, b]) => new RegExp(t, 'i').test(document.title) ||
+      new RegExp(b, 'i').test(document.body ? document.body.innerText.slice(0, 600) : ''), [CHALLENGE_TITLE.source, CHALLENGE_BODY.source]).catch(() => false);
+    if (!blocked) break;
+    if (i === 0) emit({ type: 'log', message: 'سایت در حال بررسی مرورگر است؛ صبر می‌کنم…' });
+    if (i === 29) { emit({ type: 'log', message: 'صفحه بررسی امنیتی رد نشد؛ اگر عکس‌ها صفحه بررسی را نشان می‌دهند، «نمایش مرورگر» را روشن کنید.' }); break; }
+    await sleep(1000);
+  }
+  await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
+  return res;
+}
 
 /* Pages that only differ by an ID share a "pattern" (e.g. every product page).
    From the first segment that looks like an ID (3+ digits, a hash/UUID, or a very
@@ -227,7 +265,10 @@ export async function capture(options, emit = () => {}) {
   manifest.pages = manifest.pages || [];
   manifest.skipped = manifest.skipped || [];
   manifest.runs = manifest.runs || [];
-  const run = { startedAt: new Date().toISOString(), options: { ...opts, url: undefined, signal: undefined, seeds: seeds.length }, captured: 0, skipped: 0, filled: 0 };
+  const run = { startedAt: new Date().toISOString(), options: { ...opts, url: undefined, signal: undefined, seeds: seeds.length }, captured: 0, skipped: 0, filled: 0, failed: 0 };
+  // Pages that failed to load last time are retried first
+  const retry = manifest.failed || [];
+  manifest.failed = [];
   manifest.runs.push(run);
 
   const templates = manifest.pages.filter((p) => p.fingerprint).map((p) => ({ ...p.fingerprint, index: p.index, slug: p.slug }));
@@ -249,22 +290,22 @@ export async function capture(options, emit = () => {}) {
   // Seeds keep their query string: panel pages often need it
   for (const s of [...seeds].reverse()) enqueue(normalise(s, origin, true), 0, true);
   enqueue(normalise(start.href, origin, true), 0, true);
+  for (const f of retry) { try { enqueue(new URL(f.url), f.depth || 0, !!f.forced); } catch { /* skip */ } }
   // Continue where the last run stopped...
   for (const q of manifest.pending || []) {
     let u = null;
     try { u = new URL(q.url); } catch { /* skip */ }
     enqueue(u, q.depth, !!q.forced);
   }
-  // ...or, if it finished, follow links found on earlier pages that were never opened
-  if (!(manifest.pending || []).length) {
-    for (const p of [...manifest.pages, ...manifest.skipped]) {
-      for (const href of p.links || []) enqueue(normalise(href, origin, opts.keepQuery), (p.depth || 0) + 1, false);
-    }
+  // ...and follow links found on earlier pages that were never opened (this also
+  // brings back pages whose capture was deleted from the list)
+  for (const p of [...manifest.pages, ...manifest.skipped]) {
+    for (const href of p.links || []) enqueue(normalise(href, origin, opts.keepQuery), (p.depth || 0) + 1, false);
   }
 
   emit({
     type: 'start', outDir, auth: hasAuth, seeds: seeds.length,
-    resumed: !!prev, previous: manifest.pages.map((p) => ({ index: p.index, url: p.url, pattern: p.pattern, slug: p.slug, shots: Object.fromEntries(Object.entries(p.shots || {}).map(([vp, sh]) => [vp, { files: sh.files.map((f) => path.join('pages', p.slug, f)), height: sh.height }])) })),
+    resumed: !!prev, previous: manifest.pages.map((p) => ({ index: p.index, url: p.url, pattern: p.pattern, slug: p.slug, shots: Object.fromEntries(Object.entries(p.shots || {}).map(([vp, sh]) => [vp, { files: sh.files.map((f) => rel(p.slug, f)), height: sh.height }])) })),
     previousSkipped: manifest.skipped.length, queued: queue.length
   });
 
@@ -273,7 +314,15 @@ export async function capture(options, emit = () => {}) {
     await fs.writeFile(manifestFile, JSON.stringify(manifest, null, 2), 'utf8');
   };
 
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
+  let browser;
+  try {
+    browser = await chromium.launch({ headless: !opts.headed, executablePath: process.env.CHROMIUM_PATH || undefined });
+  } catch (err) {
+    const msg = String(err.message || err);
+    throw new Error(/Executable doesn't exist|browserType.launch/i.test(msg)
+      ? 'مرورگر Chromium نصب نیست. یک بار دستور npx playwright install chromium را اجرا کنید.'
+      : msg.split('\n')[0]);
+  }
   const contexts = {};
   for (const vp of opts.viewports) {
     contexts[vp] = await browser.newContext({
@@ -299,12 +348,11 @@ export async function capture(options, emit = () => {}) {
   const shootViewport = async (vp, entry, dir) => {
     const p2 = await contexts[vp].newPage();
     try {
-      await p2.goto(entry.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
-      await p2.waitForLoadState('networkidle', { timeout: 12000 }).catch(() => {});
+      await openPage(p2, entry.url, emit);
       await autoScroll(p2);
       await p2.waitForTimeout(600);
       entry.shots[vp] = await shoot(p2, dir, vp, opts);
-      emit({ type: 'shot', index: entry.index, viewport: vp, files: entry.shots[vp].files.map((f) => path.join('pages', entry.slug, f)), height: entry.shots[vp].height });
+      emit({ type: 'shot', index: entry.index, viewport: vp, files: entry.shots[vp].files.map((f) => rel(entry.slug, f)), height: entry.shots[vp].height });
       return true;
     } catch (err) {
       emit({ type: 'error', index: entry.index, url: entry.url, viewport: vp, message: String(err.message || err).split('\n')[0] });
@@ -343,8 +391,8 @@ export async function capture(options, emit = () => {}) {
       const page = await contexts[first].newPage();
       let entry = null;
       try {
-        const res = await page.goto(url.href, { waitUntil: 'domcontentloaded', timeout: 45000 });
-        await page.waitForLoadState('networkidle', { timeout: 12000 }).catch(() => {});
+        emit({ type: 'visit', url: url.href, queued: queue.length });
+        const res = await openPage(page, url.href, emit);
         const finalUrl = new URL(page.url());
         if (finalUrl.origin !== origin) throw new Error('redirected off-site to ' + finalUrl.origin);
 
@@ -371,7 +419,7 @@ export async function capture(options, emit = () => {}) {
         await autoScroll(page);
         await page.waitForTimeout(600);
         entry.shots[first] = await shoot(page, dir, first, opts);
-        emit({ type: 'shot', index, viewport: first, files: entry.shots[first].files.map((f) => path.join('pages', slug, f)), height: entry.shots[first].height });
+        emit({ type: 'shot', index, viewport: first, files: entry.shots[first].files.map((f) => rel(slug, f)), height: entry.shots[first].height });
         entry.notes = await pageNotes(page);
         if (opts.saveHtml) await fs.writeFile(path.join(dir, 'page.html'), await page.content(), 'utf8');
         entry.links = await harvestLinks(page, depth);
@@ -380,6 +428,7 @@ export async function capture(options, emit = () => {}) {
       } catch (err) {
         const message = String(err.message || err).split('\n')[0];
         if (entry) entry.error = message;
+        else { manifest.failed.push({ url: url.href, depth, forced: forced || undefined, error: message }); run.failed += 1; }
         emit({ type: 'error', index: entry ? entry.index : null, url: url.href, viewport: opts.viewports[0], message });
       } finally {
         await page.close();
@@ -395,9 +444,16 @@ export async function capture(options, emit = () => {}) {
   run.finishedAt = new Date().toISOString();
   run.visits = visits;
   await save();
+  if (!run.captured && !run.filled) {
+    emit({ type: 'log', message: run.failed
+      ? `${run.failed} صفحه باز نشد (خطاها بالا آمده‌اند). اتصال اینترنت و باز شدن سایت در مرورگر را بررسی کنید، یا «نمایش مرورگر» را روشن کنید؛ این صفحه‌ها دفعه بعد دوباره امتحان می‌شوند.`
+      : manifest.pages.length
+        ? 'صفحه جدیدی پیدا نشد؛ همه نوع صفحه‌ها قبلاً گرفته شده‌اند. برای گرفتن دوباره، تیک «از اول» را بزنید یا صفحه‌ای را حذف کنید.'
+        : 'هیچ صفحه‌ای گرفته نشد.' });
+  }
   emit({
     type: 'done', outDir,
-    pages: run.captured, skipped: run.skipped, filled: run.filled,
+    pages: run.captured, skipped: run.skipped, filled: run.filled, failed: run.failed,
     total: manifest.pages.length, pending: queue.length
   });
   return manifest;
@@ -488,4 +544,24 @@ export async function recordLogin(url, outRoot, emit = () => {}, drive = null, {
     ? `جلسه ورود ذخیره شد${list.length ? ` و ${list.length} صفحه پنل ثبت شد` : ''}.`
     : 'پنجره بسته شد ولی ورود شناسایی نشد؛ اگر وارد شده بودید، جلسه باز هم ذخیره شده است.' });
   return { visited: list, loggedIn, saved };
+}
+
+/* Removes one captured page: its folder (ignored if already gone) and its entry in
+   manifest.json, plus the duplicates that were skipped because of it, so a later
+   run may capture that page type again. */
+export async function deletePage(outRoot, host, index) {
+  if (!/^[a-z0-9.-]+$/i.test(host)) throw new Error('invalid host');
+  const outDir = path.resolve(outRoot, host);
+  const manifestFile = path.join(outDir, 'manifest.json');
+  const manifest = await readJSON(manifestFile, null);
+  if (!manifest) return { removed: false };
+  const entry = (manifest.pages || []).find((p) => p.index === Number(index));
+  if (!entry) return { removed: false };
+  if (/^[a-z0-9-]+$/i.test(entry.slug)) {
+    await fs.rm(path.join(outDir, 'pages', entry.slug), { recursive: true, force: true });
+  }
+  manifest.pages = manifest.pages.filter((p) => p !== entry);
+  manifest.skipped = (manifest.skipped || []).filter((s) => s.sameAs !== entry.index);
+  await fs.writeFile(manifestFile, JSON.stringify(manifest, null, 2), 'utf8');
+  return { removed: true, slug: entry.slug };
 }

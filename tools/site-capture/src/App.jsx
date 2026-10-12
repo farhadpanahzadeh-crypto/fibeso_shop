@@ -6,6 +6,7 @@ const DEFAULTS = {
   perPattern: 3,
   dedupe: true,
   fresh: false,
+  headed: false,
   seeds: '',
   loginUrl: '',
   maxDepth: 4,
@@ -30,6 +31,9 @@ export default function App() {
   const [outRoot, setOutRoot] = useState('');
   const logEnd = useRef(null);
   const [saved, setSaved] = useState(null); // manifest.json of earlier runs for this site
+  const [reload, setReload] = useState(0);   // bump to re-read manifest.json
+  const [deleted, setDeleted] = useState(() => new Set()); // indexes removed in this session
+  const [confirming, setConfirming] = useState(null);      // index awaiting a second click
 
   // Live progress from the local server (Server-Sent Events)
   useEffect(() => {
@@ -60,7 +64,7 @@ export default function App() {
       .then((m) => { if (!cancelled) setSaved(m); })
       .catch(() => { if (!cancelled) setSaved(null); });
     return () => { cancelled = true; };
-  }, [formHostEarly, running]);
+  }, [formHostEarly, running, reload]);
 
   const pages = useMemo(() => {
     const map = new Map();
@@ -77,13 +81,26 @@ export default function App() {
       if (e.type === 'shot' && map.has(e.index)) map.get(e.index).shots[e.viewport] = e;
       if (e.type === 'error' && map.has(e.index)) map.get(e.index).errors.push(e);
     }
+    for (const i of deleted) map.delete(i);
     return [...map.values()];
-  }, [events, saved]);
+  }, [events, saved, deleted]);
 
   const start = [...events].reverse().find((e) => e.type === 'start');
   const skipped = events.filter((e) => e.type === 'skip');
   const visited = events.filter((e) => e.type === 'visited');
   const logs = events.filter((e) => ['log', 'login-open', 'login-detected', 'login-saved'].includes(e.type));
+  const generalErrors = events.filter((e) => e.type === 'error' && (e.index == null || !pages.some((p) => p.index === e.index)));
+  const visiting = running ? [...events].reverse().find((e) => e.type === 'visit') : null;
+
+  async function removePage(index) {
+    if (confirming !== index) { setConfirming(index); return; }
+    setConfirming(null);
+    try {
+      await post('/api/delete', { host, index });
+      setDeleted((d) => new Set(d).add(index));
+      setReload((n) => n + 1);
+    } catch (err) { setError(err.message); }
+  }
   const loginBusy = events.some((e) => e.type === 'login-open') && !events.some((e) => e.type === 'login-saved');
   const done = events.find((e) => e.type === 'done');
   const fatal = events.find((e) => e.type === 'fatal');
@@ -170,6 +187,7 @@ export default function App() {
                 </select></label>
             </div>
             <label className="check"><input type="checkbox" checked={form.keepQuery} onChange={set('keepQuery')} /> آدرس‌های با پارامتر (?page=2) جدا حساب شوند</label>
+            <label className="check"><input type="checkbox" checked={form.headed} onChange={set('headed')} /> نمایش مرورگر هنگام عکس‌برداری (برای سایت‌هایی که مرورگر پنهان را مسدود می‌کنند)</label>
             <label className="field"><span>آدرس‌های اضافه (هر خط یک آدرس)</span>
               <textarea dir="ltr" rows="3" value={form.seeds} onChange={set('seeds')} placeholder="https://www.example.com/profile/orders" />
               <small>صفحه‌هایی که لینکشان در سایت پیدا نمی‌شود</small></label>
@@ -213,8 +231,14 @@ export default function App() {
             <span className="muted">{fa(pages.length)} صفحه</span>
           </div>
           {fatal && <p className="error">{fatal.message}</p>}
-          {done && <p className="ok">تمام شد: {fa(done.pages)} صفحه جدید، {fa(done.filled)} نمای جاافتاده تکمیل شد، {fa(done.skipped)} صفحه تکراری رد شد. در مجموع {fa(done.total)} صفحه در <code dir="ltr">{done.outDir}</code> است. این پوشه را کامیت و پوش کنید.</p>}
+          {done && <p className="ok">تمام شد: {fa(done.pages)} صفحه جدید، {fa(done.filled)} نمای جاافتاده تکمیل شد، {fa(done.skipped)} صفحه تکراری رد شد{done.failed ? `، ${fa(done.failed)} صفحه باز نشد` : ''}. در مجموع {fa(done.total)} صفحه در <code dir="ltr">{done.outDir}</code> است. این پوشه را کامیت و پوش کنید.</p>}
+          {visiting && <p className="muted" dir="auto">در حال باز کردن: <span dir="ltr">{visiting.url}</span></p>}
           {logs.length > 0 && <p className="muted">{logs[logs.length - 1].message}</p>}
+          {generalErrors.length > 0 && (
+            <ul className="errors" role="alert">
+              {generalErrors.slice(-5).map((e, i) => <li key={i}><span dir="ltr">{e.url}</span>: {e.message}</li>)}
+            </ul>
+          )}
           {skipped.length > 0 && (
             <details className="skipped">
               <summary>{fa(skipped.length)} صفحه با قالب تکراری رد شد</summary>
@@ -230,6 +254,13 @@ export default function App() {
                   <span className="num">{fa(p.index)}</span>
                   {p.old && <span className="tag">قبلی</span>}
                   {p.filling && <span className="tag">تکمیل {p.filling.join('، ')}</span>}
+                  {(p.old || done) && !running && (
+                    <button type="button" className={'del' + (confirming === p.index ? ' del--confirm' : '')}
+                      onClick={() => removePage(p.index)} onBlur={() => setConfirming(null)}
+                      aria-label={`حذف صفحه ${p.index} و فولدر عکس‌هایش`}>
+                      {confirming === p.index ? 'مطمئنید؟ دوباره بزنید' : 'حذف'}
+                    </button>
+                  )}
                   <a dir="ltr" href={p.url} target="_blank" rel="noreferrer">{p.url}</a>
                   <span className="tag" dir="ltr">{p.pattern}</span>
                 </div>

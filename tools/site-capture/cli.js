@@ -22,7 +22,7 @@ const value = (name, fallback) => {
 if (!url) {
   console.log('Usage: node cli.js <https://site> [--max 40] [--visits 150] [--per-pattern 3] [--depth 4] [--slice 2000]\n' +
     '                    [--desktop-only | --mobile-only] [--png] [--keep-query] [--no-dedupe]\n' +
-    '                    [--seed <url> ...] [--login [--login-url <url>]] [--login-only] [--auth] [--fresh]');
+    '                    [--seed <url> ...] [--login [--login-url <url>]] [--login-only] [--auth] [--fresh] [--headed]');
   process.exit(1);
 }
 
@@ -54,7 +54,8 @@ await capture({
   keepQuery: flag('--keep-query'),
   format: flag('--png') ? 'png' : 'jpeg',
   useAuth: flag('--auth') || flag('--login'),
-  fresh: flag('--fresh')
+  fresh: flag('--fresh'),
+  headed: flag('--headed')
 }, (e) => {
   if (e.type === 'start') console.log(`saving to ${e.outDir}${e.auth ? ' (signed in, ' + e.seeds + ' panel pages)' : ''}` +
     (e.resumed ? `\nresuming: ${e.previous.length} pages already captured, ${e.queued} links queued` : ''));
@@ -64,7 +65,8 @@ await capture({
   if (e.type === 'skip') console.log(`    - skipped ${e.url} (same layout as #${e.sameAs})`);
   if (e.type === 'visited') console.log(`    + ${e.url}`);
   if (e.type === 'log') console.log(e.message);
+  if (e.type === 'error' && e.index == null) console.log(`  ! ${e.url}: ${e.message}`);
   if (e.type === 'error') console.log(`    ! ${e.viewport}: ${e.message}`);
-  if (e.type === 'done') console.log(`done: ${e.pages} new pages, ${e.skipped} duplicates skipped, ${e.filled} missing views added; ` +
+  if (e.type === 'done') console.log(`done: ${e.pages} new pages, ${e.skipped} duplicates skipped, ${e.filled} missing views added, ${e.failed} failed; ` +
     `${e.total} pages in total, ${e.pending} links left for next run -> ${e.outDir}`);
 });

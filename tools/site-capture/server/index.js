@@ -3,7 +3,7 @@
 import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { capture, recordLogin } from './crawler.js';
+import { capture, recordLogin, deletePage } from './crawler.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const OUT_ROOT = path.resolve(process.env.CAPTURE_DIR || path.join(here, '..', 'captures'));
@@ -51,7 +51,8 @@ function captureOptions(b) {
     sliceHeight: clamp(b.sliceHeight, 600, 6000, 2000),
     delay: clamp(b.delay, 0, 10000, 800),
     format: b.format === 'png' ? 'png' : 'jpeg',
-    useAuth: !!b.useAuth
+    useAuth: !!b.useAuth,
+    headed: !!b.headed
   };
 }
 
@@ -90,6 +91,17 @@ app.post('/api/login', (req, res) => {
     })
     .catch((err) => { job = null; broadcast({ type: 'fatal', message: String(err.message || err) }); });
   res.json({ ok: true });
+});
+
+/* Delete one captured page (folder + manifest entry). A missing folder is ignored. */
+app.post('/api/delete', async (req, res) => {
+  const { host, index } = req.body || {};
+  if (job) return res.status(409).json({ error: 'تا پایان کار در حال اجرا صبر کنید.' });
+  try {
+    res.json(await deletePage(OUT_ROOT, String(host || ''), index));
+  } catch (err) {
+    res.status(400).json({ error: String(err.message || err) });
+  }
 });
 
 app.post('/api/stop', (req, res) => {
