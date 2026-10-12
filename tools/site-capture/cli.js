@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 /* Command-line capture, no UI needed:
      node cli.js https://example.com --max 60 --mobile-only --png
-     node cli.js https://example.com --login      (sign in, open your panel pages, close the window)
-     node cli.js https://example.com --auth       (captures those panel pages signed in, then the rest)
+     node cli.js https://example.com --login      (sign in by hand; the session is detected, saved and the capture runs signed in)
+     node cli.js https://example.com --auth       (re-use the saved session)
+     node cli.js https://example.com --fresh      (forget earlier captures of this site and start over)
      node cli.js https://example.com --seed https://example.com/profile/orders --seed ... */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -21,15 +22,20 @@ const value = (name, fallback) => {
 if (!url) {
   console.log('Usage: node cli.js <https://site> [--max 40] [--visits 150] [--per-pattern 3] [--depth 4] [--slice 2000]\n' +
     '                    [--desktop-only | --mobile-only] [--png] [--keep-query] [--no-dedupe]\n' +
-    '                    [--seed <url> ...] [--login] [--auth]');
+    '                    [--seed <url> ...] [--login [--login-url <url>]] [--login-only] [--auth] [--fresh]');
   process.exit(1);
 }
 
 const outDir = path.resolve(process.env.CAPTURE_DIR || path.join(here, 'captures'));
 
-if (flag('--login')) {
-  await recordLogin(url, outDir, (e) => console.log(e.message));
-  process.exit(0);
+const loginUrlIndex = args.indexOf('--login-url');
+const loginUrl = loginUrlIndex !== -1 ? args[loginUrlIndex + 1] : url;
+
+// --login: open the site, sign in by hand; the session is detected and saved
+// automatically, then the capture continues signed in (--login-only stops there).
+if (flag('--login') || flag('--login-only')) {
+  const r = await recordLogin(loginUrl, outDir, (e) => e.message && console.log(e.message));
+  if (flag('--login-only') || !r.saved) process.exit(r.saved ? 0 : 1);
 }
 
 const viewports = flag('--desktop-only') ? ['desktop'] : flag('--mobile-only') ? ['mobile'] : ['desktop', 'mobile'];
@@ -47,14 +53,18 @@ await capture({
   viewports,
   keepQuery: flag('--keep-query'),
   format: flag('--png') ? 'png' : 'jpeg',
-  useAuth: flag('--auth')
+  useAuth: flag('--auth') || flag('--login'),
+  fresh: flag('--fresh')
 }, (e) => {
-  if (e.type === 'start') console.log(`saving to ${e.outDir}${e.auth ? ' (signed in, ' + e.seeds + ' panel pages)' : ''}`);
+  if (e.type === 'start') console.log(`saving to ${e.outDir}${e.auth ? ' (signed in, ' + e.seeds + ' panel pages)' : ''}` +
+    (e.resumed ? `\nresuming: ${e.previous.length} pages already captured, ${e.queued} links queued` : ''));
+  if (e.type === 'fill') console.log(`[${e.index}] adding missing ${e.viewports.join(', ')}: ${e.url}`);
   if (e.type === 'page') console.log(`[${e.index}] ${e.url}  (${e.pattern})`);
   if (e.type === 'shot') console.log(`    ${e.viewport}: ${e.files.length} file(s), ${e.height}px tall`);
   if (e.type === 'skip') console.log(`    - skipped ${e.url} (same layout as #${e.sameAs})`);
   if (e.type === 'visited') console.log(`    + ${e.url}`);
   if (e.type === 'log') console.log(e.message);
   if (e.type === 'error') console.log(`    ! ${e.viewport}: ${e.message}`);
-  if (e.type === 'done') console.log(`done: ${e.pages} pages captured, ${e.skipped} duplicates skipped -> ${e.outDir}`);
+  if (e.type === 'done') console.log(`done: ${e.pages} new pages, ${e.skipped} duplicates skipped, ${e.filled} missing views added; ` +
+    `${e.total} pages in total, ${e.pending} links left for next run -> ${e.outDir}`);
 });

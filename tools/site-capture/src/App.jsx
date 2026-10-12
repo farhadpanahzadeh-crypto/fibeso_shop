@@ -5,7 +5,9 @@ const DEFAULTS = {
   maxPages: 40,
   perPattern: 3,
   dedupe: true,
+  fresh: false,
   seeds: '',
+  loginUrl: '',
   maxDepth: 4,
   desktop: true,
   mobile: true,
@@ -27,6 +29,7 @@ export default function App() {
   const [error, setError] = useState('');
   const [outRoot, setOutRoot] = useState('');
   const logEnd = useRef(null);
+  const [saved, setSaved] = useState(null); // manifest.json of earlier runs for this site
 
   // Live progress from the local server (Server-Sent Events)
   useEffect(() => {
@@ -48,23 +51,43 @@ export default function App() {
 
   useEffect(() => { logEnd.current?.scrollIntoView({ block: 'nearest' }); }, [events]);
 
+  const formHostEarly = (() => { try { return new URL(form.url).hostname; } catch { return ''; } })();
+  useEffect(() => {
+    if (!formHostEarly) { setSaved(null); return; }
+    let cancelled = false;
+    fetch(`/captures/${formHostEarly}/manifest.json`, { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((m) => { if (!cancelled) setSaved(m); })
+      .catch(() => { if (!cancelled) setSaved(null); });
+    return () => { cancelled = true; };
+  }, [formHostEarly, running]);
+
   const pages = useMemo(() => {
     const map = new Map();
+    // Earlier runs first (from disk, or from the start event of a resumed run)
+    const startEv = [...events].reverse().find((e) => e.type === 'start');
+    const previous = startEv ? startEv.previous || [] : (saved ? saved.pages.map((p) => ({
+      index: p.index, url: p.url, pattern: p.pattern,
+      shots: Object.fromEntries(Object.entries(p.shots || {}).map(([vp, sh]) => [vp, { files: sh.files.map((f) => `pages/${p.slug}/${f}`) }]))
+    })) : []);
+    for (const p of previous) map.set(p.index, { ...p, old: true, shots: { ...p.shots }, errors: [] });
     for (const e of events) {
       if (e.type === 'page') map.set(e.index, { ...e, shots: {}, errors: [] });
+      if (e.type === 'fill' && map.has(e.index)) map.get(e.index).filling = e.viewports;
       if (e.type === 'shot' && map.has(e.index)) map.get(e.index).shots[e.viewport] = e;
       if (e.type === 'error' && map.has(e.index)) map.get(e.index).errors.push(e);
     }
     return [...map.values()];
-  }, [events]);
+  }, [events, saved]);
 
   const start = [...events].reverse().find((e) => e.type === 'start');
   const skipped = events.filter((e) => e.type === 'skip');
   const visited = events.filter((e) => e.type === 'visited');
-  const logs = events.filter((e) => e.type === 'log');
+  const logs = events.filter((e) => ['log', 'login-open', 'login-detected', 'login-saved'].includes(e.type));
+  const loginBusy = events.some((e) => e.type === 'login-open') && !events.some((e) => e.type === 'login-saved');
   const done = events.find((e) => e.type === 'done');
   const fatal = events.find((e) => e.type === 'fatal');
-  const formHost = (() => { try { return new URL(form.url).hostname; } catch { return ''; } })();
+  const formHost = formHostEarly;
   // Image paths come from the folder the server actually wrote to, not the form field
   const host = start ? start.outDir.split(/[\\/]/).pop() : formHost;
 
@@ -154,18 +177,26 @@ export default function App() {
 
           <fieldset className="panel-box">
             <legend>پنل کاربری</legend>
-            <ol className="steps">
-              <li>دکمه زیر را بزنید؛ یک مرورگر باز می‌شود.</li>
-              <li>وارد حساب شوید و صفحه‌های پنل (سفارش‌ها، آدرس‌ها، پروفایل، علاقه‌مندی‌ها…) را یکی‌یکی باز کنید.</li>
-              <li>پنجره را ببندید، تیک زیر را بزنید و «شروع» را بزنید.</li>
-            </ol>
-            <button type="button" className="btn ghost" disabled={!formHost || running}
-              onClick={() => post('/api/login', { url: form.url }).catch((err) => setError(err.message))}>
-              ورود دستی و ثبت صفحه‌های پنل
+            <p className="muted">ابزار سایت را باز می‌کند؛ شما وارد حساب شوید. به محض ورود، جلسه را خودش می‌گیرد، پنجره را می‌بندد و با همان حساب عکس‌برداری را شروع می‌کند (صفحه‌های پنل اول).</p>
+            <label className="field"><span>آدرس صفحه ورود (اختیاری)</span>
+              <input dir="ltr" type="url" placeholder="https://www.example.com/login" value={form.loginUrl} onChange={set('loginUrl')} /></label>
+            <button type="button" className="btn ghost" disabled={!formHost || running || loginBusy}
+              onClick={() => post('/api/login', { ...form, viewports: [form.desktop && 'desktop', form.mobile && 'mobile'].filter(Boolean) })
+                .then(() => setRunning(true)).catch((err) => setError(err.message))}>
+              {loginBusy ? 'منتظر ورود شما…' : 'ورود به حساب و ادامه خودکار'}
             </button>
-            {visited.length > 0 && <p className="muted">{fa(visited.length)} صفحه ثبت شد.</p>}
-            <label className="check"><input type="checkbox" checked={form.useAuth} onChange={set('useAuth')} /> با حساب واردشده عکس بگیر</label>
+            {visited.length > 0 && <p className="muted">{fa(visited.length)} صفحه پنل ثبت شد.</p>}
+            <label className="check"><input type="checkbox" checked={form.useAuth} onChange={set('useAuth')} /> از جلسه ذخیره‌شده قبلی استفاده کن</label>
           </fieldset>
+
+          {saved && saved.pages && saved.pages.length > 0 && (
+            <div className="memory">
+              <p>از این سایت قبلاً <strong>{fa(saved.pages.length)}</strong> صفحه گرفته شده
+                {saved.pending && saved.pending.length ? <> و <strong>{fa(saved.pending.length)}</strong> لینک برای ادامه مانده</> : null}.
+                با «شروع» فقط صفحه‌های جدید گرفته می‌شود.</p>
+              <label className="check"><input type="checkbox" checked={form.fresh} onChange={set('fresh')} /> از اول (عکس‌های قبلی این سایت پاک شود)</label>
+            </div>
+          )}
 
           {error && <p className="error" role="alert">{error}</p>}
 
@@ -182,7 +213,7 @@ export default function App() {
             <span className="muted">{fa(pages.length)} صفحه</span>
           </div>
           {fatal && <p className="error">{fatal.message}</p>}
-          {done && <p className="ok">تمام شد. فایل‌ها در <code dir="ltr">{done.outDir}</code> ذخیره شد. این پوشه را کامیت و پوش کنید.</p>}
+          {done && <p className="ok">تمام شد: {fa(done.pages)} صفحه جدید، {fa(done.filled)} نمای جاافتاده تکمیل شد، {fa(done.skipped)} صفحه تکراری رد شد. در مجموع {fa(done.total)} صفحه در <code dir="ltr">{done.outDir}</code> است. این پوشه را کامیت و پوش کنید.</p>}
           {logs.length > 0 && <p className="muted">{logs[logs.length - 1].message}</p>}
           {skipped.length > 0 && (
             <details className="skipped">
@@ -197,6 +228,8 @@ export default function App() {
               <li key={p.index} className="page">
                 <div className="page__meta">
                   <span className="num">{fa(p.index)}</span>
+                  {p.old && <span className="tag">قبلی</span>}
+                  {p.filling && <span className="tag">تکمیل {p.filling.join('، ')}</span>}
                   <a dir="ltr" href={p.url} target="_blank" rel="noreferrer">{p.url}</a>
                   <span className="tag" dir="ltr">{p.pattern}</span>
                 </div>

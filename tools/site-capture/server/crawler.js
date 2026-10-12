@@ -175,10 +175,18 @@ function sameTemplate(fp, templates, threshold) {
   return null;
 }
 
+const readJSON = (file, fallback) => fs.readFile(file, 'utf8').then(JSON.parse, () => fallback);
+const MAX_LINKS_KEPT = 400;
+
+/* Capture memory: every run reads captures/<host>/manifest.json from the previous
+   run and continues from it. Pages and page templates already photographed are
+   not photographed again, the crawl resumes from the saved queue (or from the
+   links recorded on earlier pages), and only views that are still missing (for
+   example mobile after a desktop-only run) are added. opts.fresh starts over. */
 export async function capture(options, emit = () => {}) {
   const opts = {
-    maxPages: 40,          // pages actually photographed
-    maxVisits: 150,        // pages opened in total (including skipped duplicates)
+    maxPages: 40,          // NEW pages photographed in this run
+    maxVisits: 150,        // pages opened in this run (including skipped duplicates)
     perPattern: 3,         // URL-level cap per pattern, before opening a page
     maxDepth: 4,
     viewports: ['desktop', 'mobile'],
@@ -191,22 +199,79 @@ export async function capture(options, emit = () => {}) {
     dedupe: true,          // skip pages whose layout matches one already captured
     threshold: 0.7,
     seeds: [],             // extra start URLs (e.g. user-panel pages)
+    fresh: false,          // ignore (and delete) the previous captures of this site
     ...options
   };
   const start = new URL(opts.url);
   const origin = start.origin;
   const outDir = path.resolve(opts.outDir, start.hostname);
+  const manifestFile = path.join(outDir, 'manifest.json');
   await fs.mkdir(outDir, { recursive: true });
+
+  if (opts.fresh) {
+    await fs.rm(path.join(outDir, 'pages'), { recursive: true, force: true });
+    await fs.rm(manifestFile, { force: true });
+  }
+  const prev = await readJSON(manifestFile, null);
 
   const authFile = path.join(outDir, 'auth.json');
   const hasAuth = opts.useAuth && await fs.access(authFile).then(() => true, () => false);
 
   // Panel pages the user opened while recording the login are crawled first
   let seeds = [...opts.seeds];
-  if (hasAuth) {
-    const visited = await fs.readFile(path.join(outDir, 'visited.json'), 'utf8').then(JSON.parse, () => []);
-    seeds = [...seeds, ...visited];
+  if (hasAuth) seeds = [...seeds, ...await readJSON(path.join(outDir, 'visited.json'), [])];
+
+  /* ---------- Restore memory ---------- */
+  const manifest = prev || { site: origin, pages: [], skipped: [] };
+  manifest.site = origin;
+  manifest.pages = manifest.pages || [];
+  manifest.skipped = manifest.skipped || [];
+  manifest.runs = manifest.runs || [];
+  const run = { startedAt: new Date().toISOString(), options: { ...opts, url: undefined, signal: undefined, seeds: seeds.length }, captured: 0, skipped: 0, filled: 0 };
+  manifest.runs.push(run);
+
+  const templates = manifest.pages.filter((p) => p.fingerprint).map((p) => ({ ...p.fingerprint, index: p.index, slug: p.slug }));
+  const captured = new Set(manifest.pages.map((p) => p.url));
+  const seen = new Set([...captured, ...manifest.skipped.map((s) => s.url)]);
+  const patternCount = {};
+  for (const u of seen) { try { const k = patternOf(new URL(u)); patternCount[k] = (patternCount[k] || 0) + 1; } catch { /* ignore */ } }
+  let index = manifest.pages.reduce((m, p) => Math.max(m, p.index), 0);
+
+  const queue = [];
+  // Signed in: user-panel links jump the queue (still subject to template dedupe)
+  const PANEL = /(profile|account|panel|dashboard|my-|\/my\b|orders?|address|wishlist|favou?rites?|wallet|tickets?|notifications?|user)/i;
+  const enqueue = (u, depth, forced) => {
+    if (!u || seen.has(u.href)) return;
+    seen.add(u.href);
+    const item = { url: u, depth, forced };
+    if (forced || (hasAuth && PANEL.test(u.pathname))) queue.unshift(item); else queue.push(item);
+  };
+  // Seeds keep their query string: panel pages often need it
+  for (const s of [...seeds].reverse()) enqueue(normalise(s, origin, true), 0, true);
+  enqueue(normalise(start.href, origin, true), 0, true);
+  // Continue where the last run stopped...
+  for (const q of manifest.pending || []) {
+    let u = null;
+    try { u = new URL(q.url); } catch { /* skip */ }
+    enqueue(u, q.depth, !!q.forced);
   }
+  // ...or, if it finished, follow links found on earlier pages that were never opened
+  if (!(manifest.pending || []).length) {
+    for (const p of [...manifest.pages, ...manifest.skipped]) {
+      for (const href of p.links || []) enqueue(normalise(href, origin, opts.keepQuery), (p.depth || 0) + 1, false);
+    }
+  }
+
+  emit({
+    type: 'start', outDir, auth: hasAuth, seeds: seeds.length,
+    resumed: !!prev, previous: manifest.pages.map((p) => ({ index: p.index, url: p.url, pattern: p.pattern, slug: p.slug, shots: Object.fromEntries(Object.entries(p.shots || {}).map(([vp, sh]) => [vp, { files: sh.files.map((f) => path.join('pages', p.slug, f)), height: sh.height }])) })),
+    previousSkipped: manifest.skipped.length, queued: queue.length
+  });
+
+  const save = async () => {
+    manifest.pending = queue.map((q) => ({ url: q.url.href, depth: q.depth, forced: q.forced || undefined }));
+    await fs.writeFile(manifestFile, JSON.stringify(manifest, null, 2), 'utf8');
+  };
 
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined });
   const contexts = {};
@@ -219,34 +284,55 @@ export async function capture(options, emit = () => {}) {
     });
   }
 
-  const queue = [];
-  const seen = new Set();
-  const enqueue = (u, depth, forced) => {
-    if (!u || seen.has(u.href)) return;
-    seen.add(u.href);
-    const item = { url: u, depth, forced };
-    if (forced) queue.unshift(item); else queue.push(item);
-  };
-  // Seeds keep their query string: panel pages often need it
-  for (const s of seeds.reverse()) enqueue(normalise(s, origin, true), 0, true);
-  enqueue(normalise(start.href, origin, true), 0, true);
-
-  const patternCount = {};
-  const templates = [];
-  const manifest = { site: origin, startedAt: new Date().toISOString(), options: { ...opts, url: undefined, signal: undefined }, pages: [], skipped: [] };
-  let index = 0;
-  let visits = 0;
-  emit({ type: 'start', outDir, auth: hasAuth, seeds: seeds.length });
-
   const harvestLinks = async (page, depth) => {
-    if (depth >= opts.maxDepth) return;
-    const links = await page.$$eval('a[href]', (as) => as.map((a) => a.getAttribute('href')));
-    for (const href of links) enqueue(normalise(href, origin, opts.keepQuery), depth + 1, false);
+    const raw = await page.$$eval('a[href]', (as) => as.map((a) => a.getAttribute('href')));
+    const kept = [];
+    for (const href of raw) {
+      const u = normalise(href, origin, opts.keepQuery);
+      if (!u) continue;
+      if (kept.length < MAX_LINKS_KEPT && !kept.includes(u.href)) kept.push(u.href);
+      if (depth < opts.maxDepth) enqueue(u, depth + 1, false);
+    }
+    return kept;
   };
 
+  const shootViewport = async (vp, entry, dir) => {
+    const p2 = await contexts[vp].newPage();
+    try {
+      await p2.goto(entry.url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+      await p2.waitForLoadState('networkidle', { timeout: 12000 }).catch(() => {});
+      await autoScroll(p2);
+      await p2.waitForTimeout(600);
+      entry.shots[vp] = await shoot(p2, dir, vp, opts);
+      emit({ type: 'shot', index: entry.index, viewport: vp, files: entry.shots[vp].files.map((f) => path.join('pages', entry.slug, f)), height: entry.shots[vp].height });
+      return true;
+    } catch (err) {
+      emit({ type: 'error', index: entry.index, url: entry.url, viewport: vp, message: String(err.message || err).split('\n')[0] });
+      return false;
+    } finally {
+      await p2.close();
+    }
+  };
+
+  let visits = 0;
+  let fresh = 0;
   try {
-    while (queue.length && index < opts.maxPages && visits < opts.maxVisits) {
-      if (opts.signal?.aborted) { emit({ type: 'log', message: 'متوقف شد' }); break; }
+    /* ---------- 1. Complete earlier pages that miss a requested view ---------- */
+    for (const entry of manifest.pages) {
+      if (opts.signal?.aborted) break;
+      entry.shots = entry.shots || {};
+      const missing = opts.viewports.filter((vp) => !entry.shots[vp]);
+      if (!missing.length) continue;
+      emit({ type: 'fill', index: entry.index, url: entry.url, viewports: missing });
+      const dir = path.join(outDir, 'pages', entry.slug);
+      await fs.mkdir(dir, { recursive: true });
+      for (const vp of missing) if (await shootViewport(vp, entry, dir)) run.filled += 1;
+      await save();
+    }
+
+    /* ---------- 2. Discover and capture new page types ---------- */
+    while (queue.length && fresh < opts.maxPages && visits < opts.maxVisits) {
+      if (opts.signal?.aborted) { emit({ type: 'log', message: 'متوقف شد؛ دفعه بعد از همین‌جا ادامه می‌دهد.' }); break; }
       const { url, depth, forced } = queue.shift();
       const pattern = patternOf(url);
       patternCount[pattern] = (patternCount[pattern] || 0) + 1;
@@ -259,25 +345,27 @@ export async function capture(options, emit = () => {}) {
       try {
         const res = await page.goto(url.href, { waitUntil: 'domcontentloaded', timeout: 45000 });
         await page.waitForLoadState('networkidle', { timeout: 12000 }).catch(() => {});
-        // A panel page that bounced to the login screen is not worth a photo
         const finalUrl = new URL(page.url());
         if (finalUrl.origin !== origin) throw new Error('redirected off-site to ' + finalUrl.origin);
 
         const fp = await fingerprint(page);
         const match = opts.dedupe ? sameTemplate(fp, templates, opts.threshold) : null;
         if (match && !(forced && hasAuth)) {
-          manifest.skipped.push({ url: url.href, sameAs: match.index });
+          const links = await harvestLinks(page, depth);
+          manifest.skipped.push({ url: url.href, sameAs: match.index, depth, links });
+          run.skipped += 1;
           emit({ type: 'skip', url: url.href, sameAs: match.index, slug: match.slug });
-          await harvestLinks(page, depth);
           continue;
         }
 
         index += 1;
+        fresh += 1;
         const slug = slugFor(index, url);
         const dir = path.join(outDir, 'pages', slug);
         await fs.mkdir(dir, { recursive: true });
         templates.push({ ...fp, index, slug });
-        entry = { index, url: url.href, finalUrl: page.url(), status: res ? res.status() : null, pattern, slug, shots: {}, error: null };
+        entry = { index, url: url.href, finalUrl: page.url(), status: res ? res.status() : null, pattern, slug, depth, capturedAt: new Date().toISOString(), shots: {}, error: null, fingerprint: fp };
+        captured.add(url.href);
         emit({ type: 'page', index, url: url.href, pattern, queued: queue.length });
 
         await autoScroll(page);
@@ -286,53 +374,51 @@ export async function capture(options, emit = () => {}) {
         emit({ type: 'shot', index, viewport: first, files: entry.shots[first].files.map((f) => path.join('pages', slug, f)), height: entry.shots[first].height });
         entry.notes = await pageNotes(page);
         if (opts.saveHtml) await fs.writeFile(path.join(dir, 'page.html'), await page.content(), 'utf8');
-        await harvestLinks(page, depth);
+        entry.links = await harvestLinks(page, depth);
 
-        for (const vp of opts.viewports.slice(1)) {
-          const p2 = await contexts[vp].newPage();
-          try {
-            await p2.goto(url.href, { waitUntil: 'domcontentloaded', timeout: 45000 });
-            await p2.waitForLoadState('networkidle', { timeout: 12000 }).catch(() => {});
-            await autoScroll(p2);
-            await p2.waitForTimeout(600);
-            entry.shots[vp] = await shoot(p2, dir, vp, opts);
-            emit({ type: 'shot', index, viewport: vp, files: entry.shots[vp].files.map((f) => path.join('pages', slug, f)), height: entry.shots[vp].height });
-          } catch (err) {
-            emit({ type: 'error', index, url: url.href, viewport: vp, message: String(err.message || err).split('\n')[0] });
-          } finally {
-            await p2.close();
-          }
-        }
+        for (const vp of opts.viewports.slice(1)) await shootViewport(vp, entry, dir);
       } catch (err) {
         const message = String(err.message || err).split('\n')[0];
         if (entry) entry.error = message;
-        emit({ type: 'error', index: entry ? entry.index : null, url: url.href, viewport: first, message });
+        emit({ type: 'error', index: entry ? entry.index : null, url: url.href, viewport: opts.viewports[0], message });
       } finally {
         await page.close();
       }
-      if (entry) {
-        manifest.pages.push(entry);
-        await fs.writeFile(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
-      }
+      if (entry) { manifest.pages.push(entry); run.captured += 1; }
+      await save();
       await sleep(opts.delay);
     }
   } finally {
     await browser.close();
   }
 
-  manifest.finishedAt = new Date().toISOString();
-  manifest.visits = visits;
-  manifest.patterns = patternCount;
-  manifest.unvisited = queue.length;
-  await fs.writeFile(path.join(outDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
-  emit({ type: 'done', outDir, pages: manifest.pages.length, skipped: manifest.skipped.length });
+  run.finishedAt = new Date().toISOString();
+  run.visits = visits;
+  await save();
+  emit({
+    type: 'done', outDir,
+    pages: run.captured, skipped: run.skipped, filled: run.filled,
+    total: manifest.pages.length, pending: queue.length
+  });
   return manifest;
 }
 
-/* Opens a visible browser so the user can sign in by hand and then open the
-   user-panel pages they want photographed. The session (auth.json) and every
-   same-site page they visited (visited.json) are saved for the next capture. */
-export async function recordLogin(url, outRoot, emit = () => {}, drive = null) {
+/* Opens a visible browser on the site so the user can sign in by hand.
+   The tool watches for the session: as soon as a session-like cookie or
+   storage entry appears AND the browser has left the login screen, it saves
+   the session (auth.json), closes the window and returns, so the capture can
+   start signed in. Closing the window by hand also works. Every same-site page
+   visited meanwhile is saved to visited.json and captured first. */
+const SESSION_KEY = /(sess|token|auth|jwt|sid|login|user|account|customer)/i;
+const LOGIN_URL = /(login|log-in|signin|sign-in|signup|register|auth|otp|verify|password)/i;
+
+function sessionSignal(state) {
+  const cookies = (state.cookies || []).filter((c) => SESSION_KEY.test(c.name)).map((c) => c.name + '=' + c.value);
+  const storage = (state.origins || []).flatMap((o) => (o.localStorage || []).filter((e) => SESSION_KEY.test(e.name)).map((e) => e.name + '=' + e.value));
+  return [...cookies, ...storage].sort().join('|');
+}
+
+export async function recordLogin(url, outRoot, emit = () => {}, drive = null, { autoReturn = true } = {}) {
   const u = new URL(url);
   const outDir = path.resolve(outRoot, u.hostname);
   await fs.mkdir(outDir, { recursive: true });
@@ -345,7 +431,7 @@ export async function recordLogin(url, outRoot, emit = () => {}, drive = null) {
   const track = (p) => p.on('framenavigated', (frame) => {
     if (frame !== p.mainFrame()) return;
     const v = normalise(frame.url(), u.origin, true);
-    if (v && !visited.has(v.href)) {
+    if (v && !visited.has(v.href) && !LOGIN_URL.test(v.pathname)) {
       visited.add(v.href);
       emit({ type: 'visited', url: v.href });
       fs.writeFile(visitedFile, JSON.stringify([...visited], null, 2), 'utf8').catch(() => {});
@@ -354,20 +440,52 @@ export async function recordLogin(url, outRoot, emit = () => {}, drive = null) {
   context.on('page', track);
 
   const page = await context.newPage();
-  await page.goto(u.href);
-  emit({ type: 'log', message: 'وارد حساب شوید، صفحه‌های پنل کاربری (سفارش‌ها، آدرس‌ها، پروفایل…) را یکی‌یکی باز کنید و بعد پنجره را ببندید.' });
+  await page.goto(u.href, { waitUntil: 'domcontentloaded' }).catch(() => {});
+  await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
+  const baseline = sessionSignal(await context.storageState());
+  emit({ type: 'login-open', message: autoReturn
+    ? 'در پنجره باز شده وارد حساب شوید. بعد از ورود، ابزار خودش جلسه را ذخیره می‌کند و برمی‌گردد.'
+    : 'وارد حساب شوید، صفحه‌های پنل را باز کنید و بعد پنجره را ببندید.' });
 
-  // Save the session every 2s, so closing the window any way keeps the login
-  const timer = setInterval(() => { context.storageState({ path: authFile }).catch(() => {}); }, 2000);
+  let loggedIn = false;
+  let finished = false;
   const closed = new Promise((resolve) => { browser.on('disconnected', resolve); context.on('close', resolve); page.on('close', resolve); });
-  if (drive) { await drive(page); await context.storageState({ path: authFile }); await page.close(); }
+
+  // Watch for a new session every 1.5s; also keeps auth.json fresh
+  const watcher = (async () => {
+    while (!finished) {
+      await sleep(1500);
+      if (finished) break;
+      let state;
+      try { state = await context.storageState({ path: authFile }); } catch { break; }
+      const pages = context.pages();
+      const current = pages.length ? pages[pages.length - 1].url() : '';
+      const signal = sessionSignal(state);
+      if (!loggedIn && signal && signal !== baseline && !LOGIN_URL.test(current)) {
+        loggedIn = true;
+        emit({ type: 'login-detected', message: 'ورود شناسایی شد.' });
+        if (autoReturn) {
+          await sleep(2500); // let the site finish its post-login redirect
+          await context.storageState({ path: authFile }).catch(() => {});
+          await browser.close().catch(() => {});
+          break;
+        }
+      }
+    }
+  })();
+
+  if (drive) await drive(page);
   await closed;
-  clearInterval(timer);
+  finished = true;
+  await watcher;
   await context.storageState({ path: authFile }).catch(() => {});
   await browser.close().catch(() => {});
-  // The landing page itself is captured anyway; keep only pages beyond it
+
   const list = [...visited].filter((v) => v !== normalise(u.href, u.origin, true).href);
   await fs.writeFile(visitedFile, JSON.stringify(list, null, 2), 'utf8');
-  emit({ type: 'log', message: `ورود ذخیره شد و ${list.length} صفحه برای عکس‌برداری با حساب کاربری ثبت شد.` });
-  return list;
+  const saved = await fs.access(authFile).then(() => true, () => false);
+  emit({ type: 'login-saved', loggedIn, pages: list.length, message: loggedIn
+    ? `جلسه ورود ذخیره شد${list.length ? ` و ${list.length} صفحه پنل ثبت شد` : ''}.`
+    : 'پنجره بسته شد ولی ورود شناسایی نشد؛ اگر وارد شده بودید، جلسه باز هم ذخیره شده است.' });
+  return { visited: list, loggedIn, saved };
 }

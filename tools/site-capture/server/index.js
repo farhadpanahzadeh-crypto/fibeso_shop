@@ -35,21 +35,15 @@ app.get('/api/events', (req, res) => {
   req.on('close', () => clients.delete(res));
 });
 
-app.post('/api/capture', (req, res) => {
-  if (job) return res.status(409).json({ error: 'یک کار در حال اجراست.' });
-  const b = req.body || {};
-  let url;
-  try { url = new URL(b.url).href; } catch { return res.status(400).json({ error: 'آدرس سایت معتبر نیست.' }); }
-  const controller = new AbortController();
-  history.length = 0;
-  job = { controller };
-  capture({
-    url,
+function captureOptions(b) {
+  return {
+    url: new URL(b.url).href,
     outDir: OUT_ROOT,
     maxPages: clamp(b.maxPages, 1, 500, 40),
     maxVisits: clamp(b.maxVisits, 1, 2000, 150),
     perPattern: clamp(b.perPattern, 1, 50, 3),
     dedupe: b.dedupe !== false,
+    fresh: !!b.fresh,
     seeds: String(b.seeds || '').split(/\s+/).filter((x) => /^https?:\/\//.test(x)).slice(0, 100),
     maxDepth: clamp(b.maxDepth, 0, 10, 4),
     viewports: (b.viewports || ['desktop', 'mobile']).filter((v) => v === 'desktop' || v === 'mobile'),
@@ -57,23 +51,49 @@ app.post('/api/capture', (req, res) => {
     sliceHeight: clamp(b.sliceHeight, 600, 6000, 2000),
     delay: clamp(b.delay, 0, 10000, 800),
     format: b.format === 'png' ? 'png' : 'jpeg',
-    useAuth: !!b.useAuth,
-    signal: controller.signal
-  }, broadcast)
+    useAuth: !!b.useAuth
+  };
+}
+
+function startCapture(options) {
+  const controller = new AbortController();
+  job = { controller };
+  return capture({ ...options, signal: controller.signal }, broadcast)
     .catch((err) => broadcast({ type: 'fatal', message: String(err.message || err) }))
     .finally(() => { job = null; });
+}
+
+app.post('/api/capture', (req, res) => {
+  if (job) return res.status(409).json({ error: 'یک کار در حال اجراست.' });
+  let options;
+  try { options = captureOptions(req.body || {}); } catch { return res.status(400).json({ error: 'آدرس سایت معتبر نیست.' }); }
+  history.length = 0;
+  startCapture(options);
+  res.json({ ok: true });
+});
+
+/* Opens the site for a manual sign-in; when the session is detected (or the window
+   is closed) the capture starts automatically, signed in, with the given options. */
+app.post('/api/login', (req, res) => {
+  if (job) return res.status(409).json({ error: 'یک کار در حال اجراست.' });
+  let options;
+  try { options = captureOptions({ ...(req.body || {}), useAuth: true }); } catch { return res.status(400).json({ error: 'آدرس معتبر نیست.' }); }
+  history.length = 0;
+  const loginUrl = req.body.loginUrl && /^https?:\/\//.test(req.body.loginUrl) ? req.body.loginUrl : options.url;
+  job = { controller: new AbortController(), login: true };
+  recordLogin(loginUrl, OUT_ROOT, broadcast)
+    .then((r) => {
+      job = null;
+      if (req.body.autoCapture === false) return;
+      if (!r.saved) { broadcast({ type: 'fatal', message: 'جلسه ورود ذخیره نشد.' }); return; }
+      return startCapture(options);
+    })
+    .catch((err) => { job = null; broadcast({ type: 'fatal', message: String(err.message || err) }); });
   res.json({ ok: true });
 });
 
 app.post('/api/stop', (req, res) => {
   if (job) job.controller.abort();
-  res.json({ ok: true });
-});
-
-app.post('/api/login', (req, res) => {
-  let url;
-  try { url = new URL(req.body.url).href; } catch { return res.status(400).json({ error: 'آدرس معتبر نیست.' }); }
-  recordLogin(url, OUT_ROOT, broadcast).catch((err) => broadcast({ type: 'fatal', message: String(err.message || err) }));
   res.json({ ok: true });
 });
 
