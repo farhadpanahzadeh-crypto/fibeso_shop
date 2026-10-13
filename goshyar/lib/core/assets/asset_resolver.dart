@@ -53,6 +53,13 @@ class AssetResolver extends ChangeNotifier {
     }
   }
 
+  /// برای تست: پوشه‌ی دانلودها را مستقیم تعیین می‌کند (بدون path_provider).
+  @visibleForTesting
+  Future<void> useCacheDir(Directory dir) async {
+    _cacheDir = dir;
+    await rescan();
+  }
+
   /// فهرست فایل‌های دانلودشده را از دیسک دوباره می‌خواند (بعد از دانلود یا حذف بسته).
   Future<void> rescan() async {
     _downloaded.clear();

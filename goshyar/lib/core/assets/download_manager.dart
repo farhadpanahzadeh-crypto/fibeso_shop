@@ -148,8 +148,13 @@ class DownloadManager extends ChangeNotifier {
     if (f.sha256.isNotEmpty && sha256.convert(res.bodyBytes).toString() != f.sha256) {
       throw const FormatException('sha256 فایل دانلودشده با فهرست نمی‌خواند');
     }
-    await part.writeAsBytes(res.bodyBytes, flush: true);
-    await part.rename(target.path);
+    try {
+      await part.writeAsBytes(res.bodyBytes, flush: true);
+      await part.rename(target.path);
+    } catch (_) {
+      if (await part.exists()) await part.delete();
+      rethrow;
+    }
   }
 
   Future<void> remove(AssetPack pack) async {

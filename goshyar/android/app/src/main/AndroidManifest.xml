@@ -1,12 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- تنها مجوز لازم: دانلود بسته‌های اختیاری دارایی از CDN.
+         مجوزهای ACCESS_NETWORK_STATE و VIBRATE نسخه‌ی قدیمی دیگر لازم نیستند
+         (لرزش لمسی Flutter مجوز نمی‌خواهد و نبود اینترنت از خطای درخواست تشخیص داده می‌شود). -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
-        android:label="goshyar"
+        android:label="گوش‌یار"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
+            android:screenOrientation="portrait"
             android:taskAffinity=""
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
