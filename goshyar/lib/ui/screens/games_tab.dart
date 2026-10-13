@@ -102,7 +102,7 @@ class _ModeCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: GSpace.xs),
-          const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white),
         ],
       ),
     );

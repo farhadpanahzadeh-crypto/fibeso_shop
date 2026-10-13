@@ -186,12 +186,20 @@ class _ResultScreenState extends State<ResultScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: ClayButton(
-                            label: 'دوباره',
-                            icon: Icons.replay_rounded,
-                            color: GColors.orange,
-                            onTap: _again,
-                          ),
+                          // وقتی دکمه‌ی اصلی خودش «بازی دوباره» است، این دکمه به صفحه‌ی قبل برمی‌گردد.
+                          child: (hasNext || !a.game.isCategory)
+                              ? ClayButton(
+                                  label: 'دوباره',
+                                  icon: Icons.replay_rounded,
+                                  color: GColors.orange,
+                                  onTap: _again,
+                                )
+                              : ClayButton(
+                                  label: 'برگشت',
+                                  icon: Icons.arrow_back_rounded,
+                                  color: GColors.orange,
+                                  onTap: () => Navigator.of(context).pop(),
+                                ),
                         ),
                         const SizedBox(width: GSpace.sm),
                         Expanded(

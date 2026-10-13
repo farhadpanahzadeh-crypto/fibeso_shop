@@ -83,7 +83,12 @@ class _ParentGateScreenState extends State<ParentGateScreen> {
                     const SizedBox(height: GSpace.xs),
                     Text('حاصل ضرب را وارد کنید:', style: GText.body),
                     const SizedBox(height: GSpace.sm),
-                    Text('${faDigits(_a)} × ${faDigits(_b)} = ?', style: GText.display.copyWith(fontSize: 36)),
+                    // معادله و صفحه‌کلید عددی حتی در رابط فارسی چپ‌به‌راست خوانده می‌شوند.
+                    Text(
+                      '${faDigits(_a)} × ${faDigits(_b)} = ?',
+                      textDirection: TextDirection.ltr,
+                      style: GText.display.copyWith(fontSize: 36),
+                    ),
                     const SizedBox(height: GSpace.sm),
                     Container(
                       width: 160,
@@ -122,33 +127,36 @@ class _Keypad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '<'];
-    return ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 320),
-      child: GridView.count(
-        crossAxisCount: 3,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        mainAxisSpacing: GSpace.sm,
-        crossAxisSpacing: GSpace.sm,
-        childAspectRatio: 1.5,
-        children: [
-          for (final k in keys)
-            if (k.isEmpty)
-              const SizedBox.shrink()
-            else
-              Pressable(
-                onTap: () => onPress(k),
-                color: k == '<' ? GColors.orange : GColors.blue,
-                radius: GRadius.md,
-                depth: 5,
-                semanticLabel: k == '<' ? 'پاک کردن' : faDigits(k),
-                child: Center(
-                  child: k == '<'
-                      ? const Icon(Icons.backspace_rounded, color: Colors.white)
-                      : Text(faDigits(k), style: GText.title.copyWith(color: Colors.white)),
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 320),
+        child: GridView.count(
+          crossAxisCount: 3,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: GSpace.sm,
+          crossAxisSpacing: GSpace.sm,
+          childAspectRatio: 1.5,
+          children: [
+            for (final k in keys)
+              if (k.isEmpty)
+                const SizedBox.shrink()
+              else
+                Pressable(
+                  onTap: () => onPress(k),
+                  color: k == '<' ? GColors.orange : GColors.blue,
+                  radius: GRadius.md,
+                  depth: 5,
+                  semanticLabel: k == '<' ? 'پاک کردن' : faDigits(k),
+                  child: Center(
+                    child: k == '<'
+                        ? const Icon(Icons.backspace_rounded, color: Colors.white)
+                        : Text(faDigits(k), style: GText.title.copyWith(color: Colors.white)),
+                  ),
                 ),
-              ),
-        ],
+          ],
+        ),
       ),
     );
   }

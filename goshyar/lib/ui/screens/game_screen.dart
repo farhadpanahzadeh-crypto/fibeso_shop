@@ -35,6 +35,9 @@ class GameArgs {
 
 enum _Phase { listening, answering, wrong, correct, finishing }
 
+/// جای خالی پایین صفحه تا نوار بازخورد روی گزینه‌ها نیفتد.
+const _bannerReserve = 150.0;
+
 /// صفحه‌ی اجرای بازی شنیداری.
 ///
 /// جریان هر پرسش: دعوت به گوش دادن ← پخش صدا ← پرسش ← انتخاب کودک ←
@@ -421,11 +424,9 @@ class _GameScreenState extends State<GameScreen> {
                   ],
                 ),
                 _Banner(
-                  phase: _phase,
-                  text: _bannerText,
+                  show: _phase == _Phase.correct,
                   points: _lastPoints,
                   last: _session.finished,
-                  onReplay: _replay,
                   onContinue: _continue,
                 ),
               ],
@@ -438,14 +439,55 @@ class _GameScreenState extends State<GameScreen> {
 
   Widget _header({double mascot = 92}) {
     final q = _content.voice(_round.questionVoiceId ?? '')?.text ?? 'این صدا مال کیه؟';
+    final wrong = _phase == _Phase.wrong;
+    // پس از اشتباه، دلگرمی و راهنمایی بالای صفحه می‌آید، نه در نواری که روی گزینه‌ها بیفتد.
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: GSpace.gutter),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
         children: [
-          Mascot(pose: _pose, size: mascot),
-          const SizedBox(width: GSpace.xs),
-          Expanded(child: SpeechBubble(fallback: q)),
+          AnimatedSize(
+            duration: GMotion.quick,
+            child: wrong
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: GSpace.xs),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: GSpace.md, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: GColors.orange,
+                        borderRadius: BorderRadius.circular(GRadius.pill),
+                        boxShadow: GShadow.soft(GColors.orangeDark),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.favorite_rounded, color: Colors.white, size: 22),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              'اشکالی ندارد، دوباره امتحان کن!',
+                              style: GText.label.copyWith(fontSize: 16),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : const SizedBox(width: double.infinity),
+          ),
+          Row(
+            children: [
+              Mascot(pose: _pose, size: mascot),
+              const SizedBox(width: GSpace.xs),
+              Expanded(
+                child: SpeechBubble(
+                  fallback: wrong && _bannerText != null ? _bannerText : q,
+                  borderColor: wrong ? GColors.orange : GColors.purpleSoft,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -471,9 +513,9 @@ class _GameScreenState extends State<GameScreen> {
           CountRound() => _countBody(r, c, compact),
         };
         return SingleChildScrollView(
-          padding: const EdgeInsets.only(bottom: 150),
+          padding: const EdgeInsets.only(bottom: _bannerReserve),
           child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: c.maxHeight - 150),
+            constraints: BoxConstraints(minHeight: c.maxHeight - _bannerReserve),
             child: child,
           ),
         );
@@ -483,17 +525,27 @@ class _GameScreenState extends State<GameScreen> {
 
   Widget _choiceBody(ChoiceRound r, BoxConstraints c, bool compact) {
     final n = r.options.length;
-    final cols = n == 4 ? 2 : n;
-    final rows = (n / cols).ceil();
-    final gap = GSpace.md;
-    final w = (c.maxWidth - GSpace.gutter * 2 - gap * (cols - 1)) / cols;
-    final maxCardH = (c.maxHeight * (compact ? .5 : .46) - gap * (rows - 1)) / rows;
-    final side = w.clamp(90.0, maxCardH.clamp(110.0, 260.0) * .88);
+    const gap = GSpace.md;
+    final mascot = compact ? 76.0 : 96.0;
+    final play = compact ? 80.0 : 100.0;
+    // ارتفاع باقی‌مانده برای کارت‌ها، پس از سربرگ، دکمه‌ی پخش و جای نوار بازخورد.
+    final cardsH = c.maxHeight - _bannerReserve - mascot - play * 1.5 - (compact ? 16 : 40);
+    final innerW = c.maxWidth - GSpace.gutter * 2;
+    // تعداد ستونی را برمی‌گزیند که بزرگ‌ترین کارت را می‌دهد (مثلاً سه گزینه: یک ردیف سه‌تایی یا ۲+۱).
+    var side = 0.0;
+    for (final cols in {n, if (n > 2) 2}) {
+      final rows = (n / cols).ceil();
+      final byW = (innerW - gap * (cols - 1)) / cols;
+      final byH = (cardsH - gap * (rows - 1)) / rows * .82;
+      final s = byW < byH ? byW : byH;
+      if (s > side) side = s;
+    }
+    side = side.clamp(88.0, 210.0);
     return Column(
       children: [
-        _header(mascot: compact ? 76 : 96),
+        _header(mascot: mascot),
         SizedBox(height: compact ? GSpace.xs : GSpace.md),
-        _playButton(size: compact ? 80 : 100),
+        _playButton(size: play),
         SizedBox(height: compact ? GSpace.xs : GSpace.md),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: GSpace.gutter),
@@ -509,7 +561,7 @@ class _GameScreenState extends State<GameScreen> {
                   child: OptionCard(
                     image: o.image,
                     title: o.title,
-                    state: _optionStates[o.id] ?? (_canAnswer ? OptionState.idle : OptionState.idle),
+                    state: _optionStates[o.id] ?? OptionState.idle,
                     onTap: () => _onChoice(o),
                   ),
                 ),
@@ -673,7 +725,7 @@ class _TopBar extends StatelessWidget {
                     borderRadius: BorderRadius.circular(GRadius.pill),
                   ),
                   child: Text(
-                    total > 1 ? '$title • ${faDigits(index + 1)} از ${faDigits(total)}' : title,
+                    total > 1 ? '$title: پرسش ${faDigits(index + 1)} از ${faDigits(total)}' : title,
                     style: GText.bodyStrong.copyWith(color: light ? Colors.white : GColors.purple),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -753,85 +805,57 @@ class _CountButton extends StatelessWidget {
   }
 }
 
-/// نوار بازخورد پایین صفحه: پس از اشتباه دلگرمی و راهنمایی، پس از پاسخ درست تشویق و امتیاز.
+/// نوار پایین صفحه پس از پاسخ درست: تشویق، امتیاز و رفتن به پرسش بعد.
+/// (بازخورد اشتباه بالای صفحه نمایش داده می‌شود تا روی گزینه‌ها نیفتد.)
 class _Banner extends StatelessWidget {
-  const _Banner({
-    required this.phase,
-    required this.text,
-    required this.points,
-    required this.last,
-    required this.onReplay,
-    required this.onContinue,
-  });
+  const _Banner({required this.show, required this.points, required this.last, required this.onContinue});
 
-  final _Phase phase;
-  final String? text;
+  final bool show;
   final int points;
   final bool last;
-  final VoidCallback onReplay;
   final VoidCallback onContinue;
 
   @override
   Widget build(BuildContext context) {
-    final show = phase == _Phase.wrong || phase == _Phase.correct;
-    final correct = phase == _Phase.correct;
     return Positioned(
       left: 0,
       right: 0,
       bottom: 0,
-      child: AnimatedSlide(
-        offset: show ? Offset.zero : const Offset(0, 1.2),
-        duration: GMotion.medium,
-        curve: show ? GMotion.enter : GMotion.exit,
-        child: Padding(
-          padding: const EdgeInsets.all(GSpace.sm),
-          child: ClayCard(
-            color: correct ? const Color(0xFFE8FFF1) : const Color(0xFFFFF4E5),
-            border: correct ? GColors.green : GColors.orange,
-            padding: const EdgeInsets.all(GSpace.md),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      correct ? Icons.celebration_rounded : Icons.favorite_rounded,
-                      color: correct ? GColors.green : GColors.orange,
-                      size: 34,
-                    ),
-                    const SizedBox(width: GSpace.xs),
-                    Expanded(
-                      child: Text(
-                        correct ? 'آفرین! درست بود!' : 'اشکالی ندارد، دوباره امتحان کن!',
-                        style: GText.heading.copyWith(color: correct ? GColors.greenDark : GColors.orangeDark),
+      // تا وقتی پنهان است، برای صفحه‌خوان هم وجود ندارد.
+      child: ExcludeSemantics(
+        excluding: !show,
+        child: AnimatedSlide(
+          offset: show ? Offset.zero : const Offset(0, 1.2),
+          duration: GMotion.medium,
+          curve: show ? GMotion.enter : GMotion.exit,
+          child: Padding(
+            padding: const EdgeInsets.all(GSpace.sm),
+            child: ClayCard(
+              color: const Color(0xFFE8FFF1),
+              border: GColors.green,
+              padding: const EdgeInsets.all(GSpace.md),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.celebration_rounded, color: GColors.green, size: 34),
+                      const SizedBox(width: GSpace.xs),
+                      Expanded(
+                        child: Text('آفرین! درست بود!', style: GText.heading.copyWith(color: GColors.greenDark)),
                       ),
-                    ),
-                    if (correct) ScoreChip(points: points, prefix: '+'),
-                  ],
-                ),
-                if (!correct && text != null) ...[
-                  const SizedBox(height: 4),
-                  Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text(text!, style: GText.body),
+                      ScoreChip(points: points, prefix: '+'),
+                    ],
                   ),
-                ],
-                const SizedBox(height: GSpace.sm),
-                if (correct)
+                  const SizedBox(height: GSpace.sm),
                   ClayButton(
                     label: last ? 'دیدن ستاره‌ها' : 'صدای بعدی',
-                    icon: last ? Icons.star_rounded : Icons.arrow_back_rounded,
+                    icon: last ? Icons.star_rounded : Icons.arrow_forward_rounded,
                     color: GColors.green,
                     onTap: show ? onContinue : null,
-                  )
-                else
-                  ClayButton(
-                    label: 'دوباره گوش کن',
-                    icon: Icons.volume_up_rounded,
-                    color: GColors.blue,
-                    onTap: show ? onReplay : null,
                   ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

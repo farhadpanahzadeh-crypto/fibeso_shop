@@ -264,7 +264,7 @@ class HomeTab extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+                    const Icon(Icons.arrow_forward_ios_rounded, color: Colors.white),
                   ],
                 ),
               ),

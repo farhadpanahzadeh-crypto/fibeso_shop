@@ -78,12 +78,12 @@ class _NaturePainter extends CustomPainter {
       canvas.drawCircle(moonC, r, Paint()..color = const Color(0xFFFFE27A));
       canvas.drawCircle(moonC + Offset(r * .45, -r * .2), r * .85, Paint()..color = const Color(0xFF26318A));
     } else {
-      final sunC = Offset(s.width * .18, s.height * .1);
+      final sunC = Offset(s.width * .13, s.height * .25);
       final r = s.shortestSide * .08;
       canvas.drawCircle(sunC, r * 1.9, Paint()..color = const Color(0x40FFE27A));
       canvas.drawCircle(sunC, r, Paint()..color = const Color(0xFFFFD54A));
-      _cloud(canvas, Offset(s.width * .62, s.height * .09), s.width * .13);
-      _cloud(canvas, Offset(s.width * .9, s.height * .2), s.width * .09);
+      _cloud(canvas, Offset(s.width * .42, s.height * .08), s.width * .13);
+      _cloud(canvas, Offset(s.width * .88, s.height * .16), s.width * .09);
       _cloud(canvas, Offset(s.width * .35, s.height * .24), s.width * .07);
     }
 

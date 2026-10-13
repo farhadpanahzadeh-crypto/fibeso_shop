@@ -232,7 +232,7 @@ class _OptionCardState extends State<OptionCard> with SingleTickerProviderStateM
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                Positioned.fill(child: card),
+                Positioned.fill(child: ExcludeSemantics(child: card)),
                 if (widget.state == OptionState.correct)
                   const PositionedDirectional(
                     top: -10,

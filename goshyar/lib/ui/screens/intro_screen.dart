@@ -130,7 +130,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 padding: const EdgeInsets.fromLTRB(GSpace.gutter, GSpace.md, GSpace.gutter, GSpace.lg),
                 child: ClayButton(
                   label: last ? 'بزن بریم!' : 'بعدی',
-                  icon: last ? Icons.rocket_launch_rounded : Icons.arrow_back_rounded,
+                  icon: last ? Icons.rocket_launch_rounded : Icons.arrow_forward_rounded,
                   color: last ? GColors.orange : GColors.purple,
                   big: true,
                   onTap: _next,

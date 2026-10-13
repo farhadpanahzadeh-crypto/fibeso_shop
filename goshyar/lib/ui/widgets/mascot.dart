@@ -89,11 +89,14 @@ class _MascotState extends State<Mascot> with SingleTickerProviderStateMixin {
 /// حباب گفت‌وگوی گوش‌یار: همان جمله‌ای که گوینده می‌گوید را نشان می‌دهد.
 /// تا وقتی صدای ضبط‌شده نیامده، تنها راه رساندن پیام است؛ برای والدین هم مفید است.
 class SpeechBubble extends StatelessWidget {
-  const SpeechBubble({super.key, this.fallback, this.maxWidth = 340});
+  const SpeechBubble({super.key, this.fallback, this.maxWidth = 340, this.borderColor = GColors.purpleSoft});
 
   /// متنی که وقتی گوش‌یار ساکت است نشان داده شود (مثلاً پرسش مرحله).
   final String? fallback;
   final double maxWidth;
+
+  /// رنگ قاب؛ پس از پاسخ اشتباه نارنجی می‌شود.
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +121,7 @@ class SpeechBubble extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(GRadius.md),
-                    border: Border.all(color: GColors.purpleSoft, width: 2),
+                    border: Border.all(color: borderColor, width: 2.5),
                     boxShadow: GShadow.soft(),
                   ),
                   child: Semantics(
