@@ -302,3 +302,21 @@
   height: 1.25rem;
   color: var(--color-sky);
 }
+
+/* Demo sign-in (prototype only) */
+.auth__demo {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  border: var(--border-width) dashed var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-muted);
+  color: var(--color-text-muted);
+  font-size: var(--fs-sm);
+}
+
+.auth__demo .btn svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}

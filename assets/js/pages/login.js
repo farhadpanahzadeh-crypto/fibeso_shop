@@ -118,4 +118,14 @@
     Store.login(profile);
     window.location.href = next;
   });
+
+  // Demo shortcut: sign in as a sample customer to preview the panel
+  var demo = document.querySelector('[data-demo-login]');
+  if (demo) demo.addEventListener('click', function () {
+    var profile = Store.read('fibeso-known-09120000000', null) ||
+      { mobile: '09120000000', name: 'کاربر نمایشی', email: '', joined: new Date().toISOString() };
+    Store.write('fibeso-known-09120000000', profile);
+    Store.login(profile);
+    window.location.href = next;
+  });
 })();

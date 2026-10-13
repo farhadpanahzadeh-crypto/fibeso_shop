@@ -1279,3 +1279,9 @@
     display: none;
   }
 }
+
+/* Section titles get focus on navigation; no ring for that programmatic focus */
+.account-page [tabindex="-1"]:focus {
+  outline: none;
+  box-shadow: none;
+}
