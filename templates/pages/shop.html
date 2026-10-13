@@ -1,112 +1,216 @@
 <!-- {"out": "pages/shop.html", "title": "فروشگاه | فیبسو", "description": "خرید لپ‌تاپ نو و استوک، تجهیزات شبکه و قطعات لپ‌تاپ با فیلتر بر اساس وضعیت، برند و قیمت در فروشگاه فیبسو.", "nav": "", "css": ["pages/shop.css"], "js": ["pages/shop.js"]} -->
-  <main id="main">
+  <main id="main" class="shop-page">
     <div class="container">
-      <nav class="breadcrumb" aria-label="مسیر صفحه">
-        <ol>
+      <nav class="breadcrumb shop-crumb" aria-label="مسیر صفحه">
+        <ol data-crumbs>
           <li><a href="{{root}}index.html">خانه</a></li>
-          <li><a href="{{root}}pages/shop.html">فروشگاه</a></li>
-          <li aria-current="page" data-crumb>همه محصولات</li>
+          <li aria-current="page">همه محصولات</li>
         </ol>
       </nav>
 
-      <div class="shop">
-        <!-- Filters: sidebar on desktop, bottom sheet on mobile -->
+      <h1 class="shop-title" id="shop-title" tabindex="-1" data-shop-title>همه محصولات</h1>
+
+      <!-- Sub-category band: grey panel with scrolling tiles (filled per category) -->
+      <nav class="subcats" aria-label="زیردسته‌ها" data-subcats hidden>
+        <ul class="subcats__track" data-subcats-list></ul>
+      </nav>
+
+      <div class="shop" data-shop>
+        <!-- Filters: bordered sidebar on desktop, full-screen sheet on phones and tablets -->
         <aside class="filters" id="filters" aria-labelledby="filters-title" data-filters>
           <div class="filters__head">
+            <span class="filters__icon" aria-hidden="true">{{icon:sliders}}</span>
             <h2 class="filters__title" id="filters-title">فیلترها</h2>
-            <button class="btn btn--sm btn--danger-text" type="button" data-clear-filters>حذف همه</button>
-            <button class="icon-btn filters__close" type="button" aria-label="بستن فیلترها" data-filters-close>
+            <span class="filters__badge" data-filter-badge hidden></span>
+            <button class="filters__collapse" type="button" aria-expanded="true" aria-controls="filters-body" data-filters-collapse>
+              <span class="visually-hidden">جمع کردن فیلترها</span>
+              {{icon:caret-up}}
+            </button>
+            <button class="filters__close" type="button" aria-label="بستن فیلترها" data-sheet-close>
               {{icon:x}}
             </button>
           </div>
-          <form class="filters__form" data-filter-form>
-            <fieldset class="filter-group">
-              <legend class="filter-group__title">وضعیت کالا</legend>
-              <label class="check"><input type="radio" name="condition" value=""> همه</label>
-              <label class="check"><input type="radio" name="condition" value="new"> نو <span class="check__count" data-count-for="condition:new"></span></label>
-              <label class="check"><input type="radio" name="condition" value="used"> استوک (کارکرده) <span class="check__count" data-count-for="condition:used"></span></label>
-            </fieldset>
-            <fieldset class="filter-group">
-              <legend class="filter-group__title">دسته‌بندی</legend>
-              <label class="check"><input type="radio" name="cat" value=""> همه دسته‌ها</label>
-              <label class="check"><input type="radio" name="cat" value="laptop"> لپ‌تاپ <span class="check__count" data-count-for="cat:laptop"></span></label>
-              <label class="check"><input type="radio" name="cat" value="network"> تجهیزات شبکه <span class="check__count" data-count-for="cat:network"></span></label>
-              <label class="check"><input type="radio" name="cat" value="parts"> قطعات و لوازم جانبی <span class="check__count" data-count-for="cat:parts"></span></label>
-            </fieldset>
-            <fieldset class="filter-group">
-              <legend class="filter-group__title">برند</legend>
-              <div class="filter-group__scroll" data-brand-list></div>
-            </fieldset>
-            <fieldset class="filter-group">
-              <legend class="filter-group__title">محدوده قیمت (تومان)</legend>
-              <div class="price-range">
-                <div class="field">
-                  <label class="field__label" for="f-min">از</label>
-                  <select class="input" id="f-min" name="min">
-                    <option value="">بدون حداقل</option>
-                    <option value="1000000">۱ میلیون</option>
-                    <option value="5000000">۵ میلیون</option>
-                    <option value="15000000">۱۵ میلیون</option>
-                    <option value="35000000">۳۵ میلیون</option>
-                    <option value="80000000">۸۰ میلیون</option>
-                  </select>
-                </div>
-                <div class="field">
-                  <label class="field__label" for="f-max">تا</label>
-                  <select class="input" id="f-max" name="max">
-                    <option value="">بدون حداکثر</option>
-                    <option value="5000000">۵ میلیون</option>
-                    <option value="15000000">۱۵ میلیون</option>
-                    <option value="20000000">۲۰ میلیون</option>
-                    <option value="35000000">۳۵ میلیون</option>
-                    <option value="50000000">۵۰ میلیون</option>
-                    <option value="80000000">۸۰ میلیون</option>
-                  </select>
-                </div>
+
+          <form class="filters__body" id="filters-body" data-filter-form>
+            <div class="filters__toggles">
+              <label class="switch">
+                <span class="switch__text">فقط کالاهای موجود</span>
+                <input class="switch__input" type="checkbox" role="switch" name="stock" value="1">
+              </label>
+              <label class="switch">
+                <span class="switch__text">ارسال فوری <small>تحویل همان روز در تهران</small></span>
+                <input class="switch__input" type="checkbox" role="switch" name="fast" value="1">
+              </label>
+            </div>
+
+            <div class="facets" data-accordion>
+              <div class="facet" data-facet="condition">
+                <h3 class="facet__heading">
+                  <button class="facet__trigger accordion__trigger" type="button" aria-expanded="true" aria-controls="facet-condition">
+                    وضعیت کالا {{icon:caret-down accordion__icon}}
+                  </button>
+                </h3>
+                <fieldset class="facet__panel" id="facet-condition">
+                  <legend class="visually-hidden">وضعیت کالا</legend>
+                  <label class="check"><input type="radio" name="condition" value=""> همه</label>
+                  <label class="check"><input type="radio" name="condition" value="new"> نو و آکبند <span class="check__count" data-count-for="condition:new"></span></label>
+                  <label class="check"><input type="radio" name="condition" value="used"> استوک (کارکرده) <span class="check__count" data-count-for="condition:used"></span></label>
+                </fieldset>
               </div>
-            </fieldset>
-            <fieldset class="filter-group">
-              <legend class="visually-hidden">گزینه‌های دیگر</legend>
-              <label class="check"><input type="checkbox" name="stock" value="1"> فقط کالاهای موجود</label>
-              <label class="check"><input type="checkbox" name="tag" value="offer"> فقط کالاهای تخفیف‌دار</label>
-            </fieldset>
+
+              <div class="facet" data-facet="grade">
+                <h3 class="facet__heading">
+                  <button class="facet__trigger accordion__trigger" type="button" aria-expanded="false" aria-controls="facet-grade">
+                    درجه کالای استوک {{icon:caret-down accordion__icon}}
+                  </button>
+                </h3>
+                <fieldset class="facet__panel" id="facet-grade" hidden>
+                  <legend class="visually-hidden">درجه کالای استوک</legend>
+                  <label class="check"><input type="radio" name="grade" value=""> همه درجه‌ها</label>
+                  <label class="check"><input type="radio" name="grade" value="A"> درجه A: بدون خط و خش محسوس <span class="check__count" data-count-for="grade:A"></span></label>
+                  <label class="check"><input type="radio" name="grade" value="B"> درجه B: آثار جزئی استفاده <span class="check__count" data-count-for="grade:B"></span></label>
+                </fieldset>
+              </div>
+
+              <div class="facet" data-facet="brand">
+                <h3 class="facet__heading">
+                  <button class="facet__trigger accordion__trigger" type="button" aria-expanded="true" aria-controls="facet-brand">
+                    برند {{icon:caret-down accordion__icon}}
+                  </button>
+                </h3>
+                <fieldset class="facet__panel facet__panel--scroll" id="facet-brand" data-brand-list>
+                  <legend class="visually-hidden">برند</legend>
+                </fieldset>
+              </div>
+
+              <div class="facet" data-facet="cpu">
+                <h3 class="facet__heading">
+                  <button class="facet__trigger accordion__trigger" type="button" aria-expanded="false" aria-controls="facet-cpu">
+                    پردازنده {{icon:caret-down accordion__icon}}
+                  </button>
+                </h3>
+                <fieldset class="facet__panel" id="facet-cpu" data-cpu-list hidden>
+                  <legend class="visually-hidden">پردازنده</legend>
+                </fieldset>
+              </div>
+
+              <div class="facet" data-facet="ram">
+                <h3 class="facet__heading">
+                  <button class="facet__trigger accordion__trigger" type="button" aria-expanded="false" aria-controls="facet-ram">
+                    حافظه رم {{icon:caret-down accordion__icon}}
+                  </button>
+                </h3>
+                <fieldset class="facet__panel" id="facet-ram" data-ram-list hidden>
+                  <legend class="visually-hidden">حافظه رم</legend>
+                </fieldset>
+              </div>
+
+              <div class="facet" data-facet="cat">
+                <h3 class="facet__heading">
+                  <button class="facet__trigger accordion__trigger" type="button" aria-expanded="false" aria-controls="facet-cat">
+                    دسته‌بندی {{icon:caret-down accordion__icon}}
+                  </button>
+                </h3>
+                <fieldset class="facet__panel" id="facet-cat" hidden>
+                  <legend class="visually-hidden">دسته‌بندی</legend>
+                  <label class="check"><input type="radio" name="cat" value=""> همه دسته‌ها</label>
+                  <label class="check"><input type="radio" name="cat" value="laptop"> لپ‌تاپ <span class="check__count" data-count-for="cat:laptop"></span></label>
+                  <label class="check"><input type="radio" name="cat" value="network"> تجهیزات شبکه <span class="check__count" data-count-for="cat:network"></span></label>
+                  <label class="check"><input type="radio" name="cat" value="parts"> قطعات و لوازم جانبی <span class="check__count" data-count-for="cat:parts"></span></label>
+                </fieldset>
+              </div>
+
+              <div class="facet" data-facet="price">
+                <h3 class="facet__heading">
+                  <button class="facet__trigger accordion__trigger" type="button" aria-expanded="false" aria-controls="facet-price">
+                    محدوده قیمت {{icon:caret-down accordion__icon}}
+                  </button>
+                </h3>
+                <fieldset class="facet__panel" id="facet-price" hidden>
+                  <legend class="visually-hidden">محدوده قیمت به میلیون تومان</legend>
+                  <div class="price-range">
+                    <div class="field">
+                      <label class="field__label" for="f-min">از (میلیون تومان)</label>
+                      <input class="input" id="f-min" name="min" type="text" inputmode="numeric" autocomplete="off" placeholder="۰">
+                    </div>
+                    <div class="field">
+                      <label class="field__label" for="f-max">تا (میلیون تومان)</label>
+                      <input class="input" id="f-max" name="max" type="text" inputmode="numeric" autocomplete="off" placeholder="بدون سقف">
+                    </div>
+                  </div>
+                  <div class="price-presets" role="group" aria-label="بازه‌های پیشنهادی">
+                    <button type="button" data-price="0-15">زیر ۱۵ میلیون</button>
+                    <button type="button" data-price="15-40">۱۵ تا ۴۰ میلیون</button>
+                    <button type="button" data-price="40-">بالای ۴۰ میلیون</button>
+                  </div>
+                </fieldset>
+              </div>
+
+              <div class="facet" data-facet="offer">
+                <h3 class="facet__heading">
+                  <button class="facet__trigger accordion__trigger" type="button" aria-expanded="false" aria-controls="facet-offer">
+                    پیشنهادها {{icon:caret-down accordion__icon}}
+                  </button>
+                </h3>
+                <fieldset class="facet__panel" id="facet-offer" hidden>
+                  <legend class="visually-hidden">پیشنهادها</legend>
+                  <label class="check"><input type="checkbox" name="tag" value="offer"> فقط کالاهای تخفیف‌دار <span class="check__count" data-count-for="tag:offer"></span></label>
+                </fieldset>
+              </div>
+            </div>
           </form>
+
           <div class="filters__foot">
-            <button class="btn btn--primary btn--block" type="button" data-filters-close>نمایش <span data-result-count>۰</span> کالا</button>
+            <button class="btn btn--outline" type="button" data-clear-filters>حذف همه</button>
+            <button class="btn btn--primary" type="button" data-sheet-close>نمایش <span data-result-count>۰</span> کالا</button>
           </div>
         </aside>
 
         <section class="shop__main" aria-labelledby="shop-title">
-          <header class="shop__head">
-            <div>
-              <h1 class="shop__title" id="shop-title" data-shop-title>همه محصولات</h1>
-              <p class="shop__count" role="status" data-shop-status></p>
-            </div>
-            <div class="shop__tools">
-              <button class="btn btn--outline btn--sm shop__filter-btn" type="button" aria-controls="filters" aria-expanded="false" data-filters-open>
-                {{icon:funnel}}
-                فیلترها <span class="filter-badge" data-filter-badge hidden></span>
-              </button>
-              <div class="sort">
-                <label class="sort__label" for="sort">مرتب‌سازی:</label>
-                <select class="input sort__select" id="sort" data-sort>
-                  <option value="">پیشنهاد فیبسو</option>
-                  <option value="cheap">ارزان‌ترین</option>
-                  <option value="expensive">گران‌ترین</option>
-                  <option value="discount">بیشترین تخفیف</option>
-                  <option value="popular">محبوب‌ترین</option>
-                </select>
-              </div>
-            </div>
-          </header>
+          <!-- Phones and tablets: filter + sort buttons that open sheets -->
+          <div class="shop-bar">
+            <button class="shop-bar__btn" type="button" aria-haspopup="dialog" aria-controls="filters" aria-expanded="false" data-filters-open>
+              {{icon:sliders}}
+              <span>فیلترها</span>
+              <span class="filters__badge" data-filter-badge hidden></span>
+            </button>
+            <span class="shop-bar__sep" aria-hidden="true"></span>
+            <button class="shop-bar__btn" type="button" aria-haspopup="dialog" aria-controls="sort-sheet" aria-expanded="false" data-sort-open>
+              {{icon:stack}}
+              <span>ترتیب: <span data-sort-current>پرفروش‌ترین</span></span>
+            </button>
+          </div>
 
-          <ul class="chips" aria-label="فیلترهای فعال" data-active-filters></ul>
+          <!-- Desktop sort bar -->
+          <div class="sortbar">
+            <span class="sortbar__label">{{icon:stack}} ترتیب:</span>
+            <div class="sortbar__options" role="group" aria-label="ترتیب نمایش کالاها" data-sort-options></div>
+            <span class="sortbar__count" data-count-text></span>
+          </div>
 
-          <ul class="product-grid shop__grid" data-shop-grid>
+          <div class="active-filters" data-active-wrap hidden>
+            <ul class="active-filters__list" aria-label="فیلترهای فعال" data-active-filters></ul>
+            <button class="active-filters__clear" type="button" data-clear-filters>{{icon:trash}} حذف همه</button>
+          </div>
+
+          <p class="shop-count">تعداد محصولات: <strong data-count-text></strong></p>
+          <p class="visually-hidden" role="status" data-shop-status></p>
+
+          <ul class="product-grid product-list shop__grid" data-shop-grid>
             <li><noscript><p class="empty-state">برای مشاهده محصولات، جاوااسکریپت مرورگر را فعال کنید.</p></noscript></li>{{skeleton:8}}
           </ul>
-          <nav class="pagination" aria-label="صفحه‌بندی محصولات" data-pagination></nav>
+          <nav class="pagination shop-pager" aria-label="صفحه‌بندی محصولات" data-pagination hidden></nav>
         </section>
       </div>
     </div>
+
+    <!-- Sort sheet (phones and tablets) -->
+    <div class="sheet" id="sort-sheet" role="dialog" aria-modal="true" aria-labelledby="sort-sheet-title" data-sort-sheet hidden>
+      <div class="sheet__head">
+        <h2 class="sheet__title" id="sort-sheet-title">ترتیب نمایش</h2>
+        <button class="filters__close" type="button" aria-label="بستن" data-sheet-close>{{icon:x}}</button>
+      </div>
+      <div class="sheet__list" role="group" aria-label="ترتیب نمایش کالاها" data-sort-sheet-options></div>
+    </div>
+    <div class="sheet-scrim" data-sheet-scrim hidden></div>
   </main>

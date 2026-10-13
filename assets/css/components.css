@@ -852,6 +852,12 @@
   .product-list .product-card__meta { grid-area: meta; justify-content: flex-start; gap: var(--space-3); }
   .product-list .product-card__specs { grid-area: specs; justify-content: flex-start; }
   .product-list .product-card__foot { grid-area: foot; }
+
+  /* Small image: badge under the picture, heart alone on top */
+  .product-list .product-card__flags {
+    top: auto;
+    bottom: 0;
+  }
 }
 
 /* ---------- Horizontal scroller (carousel) ---------- */
