@@ -1,20 +1,48 @@
-<!-- {"out": "pages/checkout.html", "title": "تکمیل سفارش | فیبسو", "description": "ثبت آدرس، انتخاب روش ارسال و پرداخت سفارش در فروشگاه فیبسو.", "noindex": true, "css": ["pages/cart.css"], "js": ["pages/checkout.js"]} -->
-  <main id="main" class="page-section">
+<!-- {"out": "pages/checkout.html", "title": "تکمیل سفارش | فیبسو", "description": "انتخاب آدرس، زمان و شیوه ارسال و پرداخت سفارش در فروشگاه فیبسو.", "noindex": true, "css": ["pages/cart.css", "pages/checkout.css"], "js": ["pages/checkout.js"], "tab": "cart", "chrome": "checkout"} -->
+  <main id="main" class="co-page">
     <div class="container">
-      <nav class="breadcrumb" aria-label="مسیر صفحه">
-        <ol>
-          <li><a href="{{root}}index.html">خانه</a></li>
-          <li><a href="{{root}}pages/cart.html">سبد خرید</a></li>
-          <li aria-current="page">تکمیل سفارش</li>
-        </ol>
-      </nav>
-      <ol class="steps" aria-label="مراحل خرید" data-steps>
-        <li class="is-done"><span>سبد خرید</span></li>
-        <li aria-current="step"><span>اطلاعات ارسال</span></li>
-        <li><span>پرداخت</span></li>
-      </ol>
       <div data-checkout>
         <noscript><p class="empty-state">برای تکمیل سفارش، جاوااسکریپت مرورگر را فعال کنید.</p></noscript>
       </div>
     </div>
+
+    <dialog class="dialog co-dialog" aria-labelledby="addr-add-title" data-dialog="add">
+      <form class="co-dialog__form" novalidate data-address-form>
+        <div class="dialog__head co-dialog__head">
+          <h2 class="dialog__title" id="addr-add-title">افزودن آدرس</h2>
+          <button class="co-dialog__close" type="button" data-dialog-close aria-label="بستن">{{icon:x}}</button>
+        </div>
+        <div class="dialog__body co-dialog__body">
+          <p class="co-dialog__lead">موقعیت تقریبی و نشانی کامل گیرنده را وارد کنید.</p>
+          <div class="co-map" role="img" aria-label="پیش‌نمایش نقشه (غیرفعال)">
+            <span class="co-map__pin">{{icon:map-pin}}</span>
+            <span class="co-map__text">انتخاب موقعیت روی نقشه به‌زودی فعال می‌شود. فعلاً نشانی را دقیق بنویسید.</span>
+          </div>
+          <div data-address-fields></div>
+          <label class="check co-dialog__default"><input type="checkbox" name="isDefault" checked> <span>این آدرس، آدرس پیش‌فرض من باشد</span></label>
+        </div>
+        <div class="dialog__foot co-dialog__foot">
+          <button class="btn btn--primary btn--block" type="submit">تایید و ثبت آدرس</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog co-dialog" aria-labelledby="addr-pick-title" data-dialog="pick">
+      <form class="co-dialog__form" novalidate data-pick-form>
+        <div class="dialog__head co-dialog__head">
+          <h2 class="dialog__title" id="addr-pick-title">انتخاب آدرس</h2>
+          <button class="co-dialog__close" type="button" data-dialog-close aria-label="بستن">{{icon:x}}</button>
+        </div>
+        <div class="dialog__body co-dialog__body">
+          <fieldset class="co-fieldset">
+            <legend class="visually-hidden">آدرس‌های ذخیره‌شده</legend>
+            <div class="choice-list" data-pick-list></div>
+          </fieldset>
+          <button class="co-add-link" type="button" data-open-add>{{icon:plus}} افزودن آدرس جدید</button>
+        </div>
+        <div class="dialog__foot co-dialog__foot">
+          <button class="btn btn--primary btn--block" type="submit">ارسال به این آدرس</button>
+        </div>
+      </form>
+    </dialog>
   </main>
