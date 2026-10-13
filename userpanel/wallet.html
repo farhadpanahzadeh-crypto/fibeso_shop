@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-root="../" data-panel-preview="wallet">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>کیف پول | نمونه پنل کاربری فیبسو</title>
+  <meta name="description" content="پیش‌نمایش طراحی پنل کاربری فیبسو با داده نمونه.">
+  <meta name="theme-color" content="#020411">
+  <meta name="robots" content="noindex">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="فیبسو">
+  <meta property="og:locale" content="fa_IR">
+  <meta property="og:title" content="کیف پول | نمونه پنل کاربری فیبسو">
+  <meta property="og:description" content="پیش‌نمایش طراحی پنل کاربری فیبسو با داده نمونه.">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="../assets/images/logo-mark.svg" type="image/svg+xml">
+  <link rel="preload" href="../assets/fonts/vazirmatn/vazirmatn-arabic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/pages/account.css">
+  <script>document.documentElement.classList.add('js');</script>
+  <script src="../assets/js/data/icons.js" defer></script>
+  <script src="../assets/js/data/products.js" defer></script>
+  <script src="../assets/js/data/photos.js" defer></script>
+  <script src="../assets/js/components.js" defer></script>
+  <script src="../assets/js/navigation.js" defer></script>
+  <script src="../assets/js/store.js" defer></script>
+  <script src="../assets/js/shop.js" defer></script>
+  <script src="../assets/js/pages/account.js" defer></script>
+  <script src="../assets/js/main.js" defer></script>
+</head>
+<body class="page-account chrome-full">
+  <a class="skip-link" href="#main">پرش به محتوای اصلی</a>
+
+  <div class="promo-strip">
+    <div class="container promo-strip__inner">
+      <p class="promo-strip__text">لپ‌تاپ استوک تست‌شده با <strong>۶ ماه ضمانت سلامت فیبسو</strong></p>
+      <a class="promo-strip__cta" href="../pages/shop.html?cat=laptop&amp;condition=used">مشاهده لپ‌تاپ‌های استوک <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></a>
+    </div>
+  </div>
+
+  <header class="site-header" data-header>
+    <div class="container site-header__main">
+      <button class="icon-btn nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" data-nav-toggle>
+        <span class="visually-hidden" data-nav-label>باز کردن منو</span>
+        <svg class="icon icon-menu" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"/></svg>
+        <svg class="icon icon-close" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+      </button>
+
+      <a class="brand" href="../index.html" aria-label="فروشگاه فیبسو، صفحه اصلی">
+        <img class="brand__mark" src="../assets/images/logo-mark.svg" alt="" width="40" height="40">
+        <span>فیبسو</span>
+      </a>
+
+      <form class="search" role="search" action="../pages/shop.html" method="get" data-search>
+        <button class="search__btn" type="submit" aria-label="جستجو">
+          <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>
+        </button>
+        <label class="visually-hidden" for="search-q">جستجوی محصولات</label>
+        <input class="search__input" id="search-q" name="q" type="search" placeholder="جستجوی محصولات" autocomplete="off">
+      </form>
+
+      <div class="header-actions">
+        <a class="auth-btn" href="../pages/login.html" data-account-link>
+          <svg class="icon auth-btn__icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M141.66,133.66l-40,40a8,8,0,0,1-11.32-11.32L116.69,136H24a8,8,0,0,1,0-16h92.69L90.34,93.66a8,8,0,0,1,11.32-11.32l40,40A8,8,0,0,1,141.66,133.66ZM200,32H136a8,8,0,0,0,0,16h56V208H136a8,8,0,0,0,0,16h64a8,8,0,0,0,8-8V40A8,8,0,0,0,200,32Z"/></svg>
+          <span class="auth-btn__label" data-account-label>ورود <span class="auth-btn__sep" aria-hidden="true"></span> ثبت‌نام</span>
+        </a>
+        <button class="icon-btn icon-btn--square" type="button" aria-label="سبد خرید" aria-controls="cart-drawer" data-cart-trigger>
+          <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M104,216a16,16,0,1,1-16-16A16,16,0,0,1,104,216Zm88-16a16,16,0,1,0,16,16A16,16,0,0,0,192,200ZM239.71,74.14l-25.64,92.28A24.06,24.06,0,0,1,191,184H92.16A24.06,24.06,0,0,1,69,166.42L33.92,40H16a8,8,0,0,1,0-16H40a8,8,0,0,1,7.71,5.86L57.19,64H232a8,8,0,0,1,7.71,10.14ZM221.47,80H61.64l22.81,82.14A8,8,0,0,0,92.16,168H191a8,8,0,0,0,7.71-5.86Z"/></svg>
+          <span class="icon-btn__count" data-cart-count hidden>۰</span>
+        </button>
+      </div>
+    </div>
+
+    <nav class="site-nav" id="site-nav" aria-label="منوی اصلی" data-nav>
+      <div class="container site-nav__inner">
+        <div class="site-nav__drawer-head">
+          <p class="site-nav__title">منوی فروشگاه</p>
+          <button class="icon-btn" type="button" aria-label="بستن منو" data-nav-close>
+            <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+          </button>
+        </div>
+
+        <div class="cat-menu" data-cat-menu>
+          <button class="cat-menu__trigger" type="button" aria-expanded="false" aria-controls="cat-menu-panel" data-cat-menu-trigger>
+            <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></svg>
+            دسته‌بندی محصولات
+            <svg class="icon cat-menu__caret" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></svg>
+          </button>
+          <div class="cat-menu__panel" id="cat-menu-panel" hidden>
+            <ul class="cat-menu__mains">
+              <li class="cat-menu__item">
+                <button class="cat-menu__main" type="button" aria-expanded="true" aria-controls="cat-sub-laptop" data-cat-main>
+                  <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M232,168h-8V72a24,24,0,0,0-24-24H56A24,24,0,0,0,32,72v96H24a8,8,0,0,0-8,8v16a24,24,0,0,0,24,24H216a24,24,0,0,0,24-24V176A8,8,0,0,0,232,168ZM48,72a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8v96H48ZM224,192a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8v-8H224ZM152,88a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,88Z"/></svg>
+                  <span>لپ‌تاپ</span>
+                  <svg class="icon cat-menu__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg>
+                </button>
+                <div class="cat-menu__sub" id="cat-sub-laptop">
+                  <a class="cat-menu__all" href="../pages/shop.html?cat=laptop">مشاهده همه لپ‌تاپ</a>
+                  <div class="cat-menu__groups">
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">بر اساس وضعیت</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?cat=laptop&amp;condition=new">لپ‌تاپ نو</a></li><li><a href="../pages/shop.html?cat=laptop&amp;condition=used">لپ‌تاپ استوک (کارکرده)</a></li><li><a href="../pages/shop.html?cat=laptop&amp;condition=used&amp;grade=A">استوک درجه A</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">بر اساس کاربرد</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?q=%DA%AF%DB%8C%D9%85%DB%8C%D9%86%DA%AF">لپ‌تاپ گیمینگ</a></li><li><a href="../pages/shop.html?q=%D9%85%D9%87%D9%86%D8%AF%D8%B3%DB%8C|Precision|ZBook">مهندسی و طراحی</a></li><li><a href="../pages/shop.html?q=ThinkPad|EliteBook|Latitude">اداری و تجاری</a></li><li><a href="../pages/shop.html?cat=laptop&amp;max=35000000">دانشجویی و اقتصادی</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">برندها</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?cat=laptop&amp;q=%D9%84%D9%86%D9%88%D9%88">لنوو</a></li><li><a href="../pages/shop.html?cat=laptop&amp;q=%D8%AF%D9%84">دل</a></li><li><a href="../pages/shop.html?cat=laptop&amp;q=%D8%A7%DA%86%E2%80%8C%D9%BE%DB%8C">اچ‌پی</a></li><li><a href="../pages/shop.html?cat=laptop&amp;q=%D8%A7%DB%8C%D8%B3%D9%88%D8%B3">ایسوس</a></li><li><a href="../pages/shop.html?cat=laptop&amp;q=%D8%A7%DB%8C%D8%B3%D8%B1">ایسر</a></li></ul>
+                  </div>
+                  </div>
+                </div>
+              </li>
+              <li class="cat-menu__item">
+                <button class="cat-menu__main" type="button" aria-expanded="false" aria-controls="cat-sub-network" data-cat-main>
+                  <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M160,112h48a16,16,0,0,0,16-16V48a16,16,0,0,0-16-16H160a16,16,0,0,0-16,16V64H128a24,24,0,0,0-24,24v32H72v-8A16,16,0,0,0,56,96H24A16,16,0,0,0,8,112v32a16,16,0,0,0,16,16H56a16,16,0,0,0,16-16v-8h32v32a24,24,0,0,0,24,24h16v16a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V160a16,16,0,0,0-16-16H160a16,16,0,0,0-16,16v16H128a8,8,0,0,1-8-8V88a8,8,0,0,1,8-8h16V96A16,16,0,0,0,160,112ZM56,144H24V112H56v32Zm104,16h48v48H160Zm0-112h48V96H160Z"/></svg>
+                  <span>تجهیزات شبکه</span>
+                  <svg class="icon cat-menu__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg>
+                </button>
+                <div class="cat-menu__sub" id="cat-sub-network" hidden>
+                  <a class="cat-menu__all" href="../pages/shop.html?cat=network">مشاهده همه تجهیزات شبکه</a>
+                  <div class="cat-menu__groups">
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">بر اساس نوع</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?sub=router">مودم و روتر</a></li><li><a href="../pages/shop.html?sub=switch">سوییچ شبکه</a></li><li><a href="../pages/shop.html?sub=ap">اکسس پوینت</a></li><li><a href="../pages/shop.html?sub=nic">کارت شبکه</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">بر اساس وضعیت</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?cat=network&amp;condition=new">تجهیزات شبکه نو</a></li><li><a href="../pages/shop.html?cat=network&amp;condition=used">تجهیزات شبکه استوک</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">برندها</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?q=%D9%85%DB%8C%DA%A9%D8%B1%D9%88%D8%AA%DB%8C%DA%A9">میکروتیک</a></li><li><a href="../pages/shop.html?q=%D8%B3%DB%8C%D8%B3%DA%A9%D9%88">سیسکو</a></li><li><a href="../pages/shop.html?q=%DB%8C%D9%88%D8%A8%DB%8C%DA%A9%DB%8C%D9%88%D8%AA%DB%8C">یوبیکیوتی</a></li><li><a href="../pages/shop.html?q=%D8%AA%DB%8C%E2%80%8C%D9%BE%DB%8C%E2%80%8C%D9%84%DB%8C%D9%86%DA%A9">تی‌پی‌لینک</a></li></ul>
+                  </div>
+                  </div>
+                </div>
+              </li>
+              <li class="cat-menu__item">
+                <button class="cat-menu__main" type="button" aria-expanded="false" aria-controls="cat-sub-infra" data-cat-main>
+                  <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M208,136H48a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V152A16,16,0,0,0,208,136Zm0,64H48V152H208v48Zm0-160H48A16,16,0,0,0,32,56v48a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V56A16,16,0,0,0,208,40Zm0,64H48V56H208v48ZM192,80a12,12,0,1,1-12-12A12,12,0,0,1,192,80Zm0,96a12,12,0,1,1-12-12A12,12,0,0,1,192,176Z"/></svg>
+                  <span>زیرساخت و اتصالات</span>
+                  <svg class="icon cat-menu__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg>
+                </button>
+                <div class="cat-menu__sub" id="cat-sub-infra" hidden>
+                  <a class="cat-menu__all" href="../pages/shop.html?sub=rack|cable">مشاهده همه زیرساخت و اتصالات</a>
+                  <div class="cat-menu__groups">
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">رک</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?sub=rack">رک دیواری و ایستاده</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">کابل و اتصالات</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?sub=cable">کابل و پچ‌کورد</a></li><li><a href="../pages/shop.html?q=Cat6">پچ‌کورد Cat6</a></li></ul>
+                  </div>
+                  </div>
+                </div>
+              </li>
+              <li class="cat-menu__item">
+                <button class="cat-menu__main" type="button" aria-expanded="false" aria-controls="cat-sub-parts" data-cat-main>
+                  <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M152,96H104a8,8,0,0,0-8,8v48a8,8,0,0,0,8,8h48a8,8,0,0,0,8-8V104A8,8,0,0,0,152,96Zm-8,48H112V112h32Zm88,0H216V112h16a8,8,0,0,0,0-16H216V56a16,16,0,0,0-16-16H160V24a8,8,0,0,0-16,0V40H112V24a8,8,0,0,0-16,0V40H56A16,16,0,0,0,40,56V96H24a8,8,0,0,0,0,16H40v32H24a8,8,0,0,0,0,16H40v40a16,16,0,0,0,16,16H96v16a8,8,0,0,0,16,0V216h32v16a8,8,0,0,0,16,0V216h40a16,16,0,0,0,16-16V160h16a8,8,0,0,0,0-16Zm-32,56H56V56H200v95.87s0,.09,0,.13,0,.09,0,.13V200Z"/></svg>
+                  <span>قطعات لپ‌تاپ</span>
+                  <svg class="icon cat-menu__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg>
+                </button>
+                <div class="cat-menu__sub" id="cat-sub-parts" hidden>
+                  <a class="cat-menu__all" href="../pages/shop.html?cat=parts&amp;q=%D8%B1%D9%85|SSD|%D8%B4%D8%A7%D8%B1%DA%98%D8%B1">مشاهده همه قطعات لپ‌تاپ</a>
+                  <div class="cat-menu__groups">
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">حافظه</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?q=%D8%B1%D9%85">رم لپ‌تاپ</a></li><li><a href="../pages/shop.html?q=SSD">هارد SSD</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">تغذیه</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?q=%D8%B4%D8%A7%D8%B1%DA%98%D8%B1">شارژر لپ‌تاپ</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">بر اساس وضعیت</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?cat=parts&amp;condition=new">قطعات نو</a></li><li><a href="../pages/shop.html?cat=parts&amp;condition=used">قطعات دست دوم</a></li></ul>
+                  </div>
+                  </div>
+                </div>
+              </li>
+              <li class="cat-menu__item">
+                <button class="cat-menu__main" type="button" aria-expanded="false" aria-controls="cat-sub-accessory" data-cat-main>
+                  <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M144,16H112A64.07,64.07,0,0,0,48,80v96a64.07,64.07,0,0,0,64,64h32a64.07,64.07,0,0,0,64-64V80A64.07,64.07,0,0,0,144,16Zm48,160a48.05,48.05,0,0,1-48,48H112a48.05,48.05,0,0,1-48-48V80a48.05,48.05,0,0,1,48-48h32a48.05,48.05,0,0,1,48,48ZM136,64v48a8,8,0,0,1-16,0V64a8,8,0,0,1,16,0Z"/></svg>
+                  <span>لوازم جانبی</span>
+                  <svg class="icon cat-menu__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg>
+                </button>
+                <div class="cat-menu__sub" id="cat-sub-accessory" hidden>
+                  <a class="cat-menu__all" href="../pages/shop.html?q=%D9%85%D8%A7%D9%88%D8%B3|%D8%B4%D8%A7%D8%B1%DA%98%D8%B1">مشاهده همه لوازم جانبی</a>
+                  <div class="cat-menu__groups">
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">ورودی</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?q=%D9%85%D8%A7%D9%88%D8%B3">ماوس</a></li></ul>
+                  </div>
+                  <div class="cat-menu__group">
+                    <p class="cat-menu__title">شارژ و برق</p>
+                    <ul class="cat-menu__links"><li><a href="../pages/shop.html?q=%D8%B4%D8%A7%D8%B1%DA%98%D8%B1">شارژر لپ‌تاپ</a></li></ul>
+                  </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <ul class="site-nav__list">
+          <li><a class="site-nav__link" href="../index.html"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"/></svg>خانه</a></li>
+          <li><a class="site-nav__link" href="../pages/shop.html?tag=offer"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51s-18.75-7.85-28.51-8c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C146.28,23.51,138.44,16,128,16s-18.27,7.51-25.18,14.14c-3.94,3.77-8,7.67-11.57,9.14C88,40.64,82.56,40.72,77.31,40.8c-9.76.15-20.82.31-28.51,8S41,67.55,40.8,77.31c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C23.51,109.73,16,117.56,16,128s7.51,18.27,14.14,25.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C109.72,232.49,117.56,240,128,240s18.27-7.51,25.18-14.14c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C232.49,146.27,240,138.44,240,128S232.49,109.73,225.86,102.82Zm-11.55,39.29c-4.79,5-9.75,10.17-12.38,16.52-2.52,6.1-2.63,13.07-2.73,19.82-.1,7-.21,14.33-3.32,17.43s-10.39,3.22-17.43,3.32c-6.75.1-13.72.21-19.82,2.73-6.35,2.63-11.52,7.59-16.52,12.38S132,224,128,224s-9.15-4.92-14.11-9.69-10.17-9.75-16.52-12.38c-6.1-2.52-13.07-2.63-19.82-2.73-7-.1-14.33-.21-17.43-3.32s-3.22-10.39-3.32-17.43c-.1-6.75-.21-13.72-2.73-19.82-2.63-6.35-7.59-11.52-12.38-16.52S32,132,32,128s4.92-9.14,9.69-14.11,9.75-10.17,12.38-16.52c2.52-6.1,2.63-13.07,2.73-19.82.1-7,.21-14.33,3.32-17.43S70.51,56.9,77.55,56.8c6.75-.1,13.72-.21,19.82-2.73,6.35-2.63,11.52-7.59,16.52-12.38S124,32,128,32s9.15,4.92,14.11,9.69,10.17,9.75,16.52,12.38c6.1,2.52,13.07,2.63,19.82,2.73,7,.1,14.33.21,17.43,3.32s3.22,10.39,3.32,17.43c.1,6.75.21,13.72,2.73,19.82,2.63,6.35,7.59,11.52,12.38,16.52S224,124,224,128,219.08,137.14,214.31,142.11ZM120,96a24,24,0,1,0-24,24A24,24,0,0,0,120,96ZM88,96a8,8,0,1,1,8,8A8,8,0,0,1,88,96Zm72,40a24,24,0,1,0,24,24A24,24,0,0,0,160,136Zm0,32a8,8,0,1,1,8-8A8,8,0,0,1,160,168Zm13.66-74.34-80,80a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,11.32Z"/></svg>تخفیف‌ها</a></li>
+          <li><a class="site-nav__link" href="../pages/shop.html?cat=laptop&amp;condition=new"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M232,168h-8V72a24,24,0,0,0-24-24H56A24,24,0,0,0,32,72v96H24a8,8,0,0,0-8,8v16a24,24,0,0,0,24,24H216a24,24,0,0,0,24-24V176A8,8,0,0,0,232,168ZM48,72a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8v96H48ZM224,192a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8v-8H224ZM152,88a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,88Z"/></svg>لپ‌تاپ نو</a></li>
+          <li><a class="site-nav__link" href="../pages/shop.html?cat=laptop&amp;condition=used"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,48V96a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h28.69L182.06,73.37a79.56,79.56,0,0,0-56.13-23.43h-.45A79.52,79.52,0,0,0,69.59,72.71,8,8,0,0,1,58.41,61.27a96,96,0,0,1,135,.79L208,76.69V48a8,8,0,0,1,16,0ZM186.41,183.29a80,80,0,0,1-112.47-.66L59.31,168H88a8,8,0,0,0,0-16H40a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V179.31l14.63,14.63A95.43,95.43,0,0,0,130,222.06h.53a95.36,95.36,0,0,0,67.07-27.33,8,8,0,0,0-11.18-11.44Z"/></svg>لپ‌تاپ استوک</a></li>
+          <li><a class="site-nav__link" href="../pages/shop.html?cat=network"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M160,112h48a16,16,0,0,0,16-16V48a16,16,0,0,0-16-16H160a16,16,0,0,0-16,16V64H128a24,24,0,0,0-24,24v32H72v-8A16,16,0,0,0,56,96H24A16,16,0,0,0,8,112v32a16,16,0,0,0,16,16H56a16,16,0,0,0,16-16v-8h32v32a24,24,0,0,0,24,24h16v16a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V160a16,16,0,0,0-16-16H160a16,16,0,0,0-16,16v16H128a8,8,0,0,1-8-8V88a8,8,0,0,1,8-8h16V96A16,16,0,0,0,160,112ZM56,144H24V112H56v32Zm104,16h48v48H160Zm0-112h48V96H160Z"/></svg>تجهیزات شبکه</a></li>
+          <li><a class="site-nav__link" href="../pages/shop.html?cat=parts"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M152,96H104a8,8,0,0,0-8,8v48a8,8,0,0,0,8,8h48a8,8,0,0,0,8-8V104A8,8,0,0,0,152,96Zm-8,48H112V112h32Zm88,0H216V112h16a8,8,0,0,0,0-16H216V56a16,16,0,0,0-16-16H160V24a8,8,0,0,0-16,0V40H112V24a8,8,0,0,0-16,0V40H56A16,16,0,0,0,40,56V96H24a8,8,0,0,0,0,16H40v32H24a8,8,0,0,0,0,16H40v40a16,16,0,0,0,16,16H96v16a8,8,0,0,0,16,0V216h32v16a8,8,0,0,0,16,0V216h40a16,16,0,0,0,16-16V160h16a8,8,0,0,0,0-16Zm-32,56H56V56H200v95.87s0,.09,0,.13,0,.09,0,.13V200Z"/></svg>قطعات نو و دست دوم</a></li>
+          <li><a class="site-nav__link" href="../pages/b2b.html"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M240,208H224V96a16,16,0,0,0-16-16H144V32a16,16,0,0,0-24.88-13.32L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,32V208H48ZM112,112v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm-32,0v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm0,56v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Zm32,0v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Z"/></svg>خرید سازمانی <span class="nav-badge">جدید</span></a></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" class="page-section account-page">
+    <h1 class="visually-hidden">حساب کاربری فیبسو</h1>
+    <div class="container account" data-account data-view="section">
+      <!-- Wallet balance strip (above the content panel on desktop, first on phones) -->
+      <div class="wallet-strip">
+        <p class="wallet-strip__label">موجودی کیف پول:</p>
+        <p class="wallet-strip__value"><span data-wallet-total>۰</span> تومان</p>
+        <a class="wallet-strip__link" href="wallet.html">افزایش موجودی <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></a>
+      </div>
+
+      <aside class="account__side" aria-label="منوی حساب کاربری">
+        <a class="account__hello" href="index.html" data-section-link="dashboard">
+          <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>
+          <span data-user-name>کاربر فیبسو</span>
+        </a>
+        <p class="account__mobile ltr" data-user-mobile></p>
+        <button class="btn btn--outline btn--sm account__logout-top" type="button" data-logout>
+          <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M120,216a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V40a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H56V208h56A8,8,0,0,1,120,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L204.69,120H112a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,229.66,122.34Z"/></svg>
+          خروج
+        </button>
+
+        <nav class="account__nav" aria-label="بخش‌های حساب کاربری">
+          <ul>
+            <li><a class="account__link" href="orders.html" data-section-link="orders"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44-29.77,16.3-80.35-44ZM128,120,47.66,76l33.9-18.56,80.34,44ZM40,90l80,43.78v85.79L40,175.82Zm176,85.78h0l-80,43.79V133.82l32-17.51V152a8,8,0,0,0,16,0V107.55L216,90v85.77Z"/></svg><span>سفارش‌های من</span><svg class="icon account__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></a></li>
+            <li><a class="account__link" href="wishlist.html" data-section-link="wishlist"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"/></svg><span>کالاهای مورد علاقه</span><svg class="icon account__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></a></li>
+            <li><a class="account__link" href="comments.html" data-section-link="comments"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M140,128a12,12,0,1,1-12-12A12,12,0,0,1,140,128ZM84,116a12,12,0,1,0,12,12A12,12,0,0,0,84,116Zm88,0a12,12,0,1,0,12,12A12,12,0,0,0,172,116Zm60,12A104,104,0,0,1,79.12,219.82L45.07,231.17a16,16,0,0,1-20.24-20.24l11.35-34.05A104,104,0,1,1,232,128Zm-16,0A88,88,0,1,0,51.81,172.06a8,8,0,0,1,.66,6.54L40,216,77.4,203.53a7.85,7.85,0,0,1,2.53-.42,8,8,0,0,1,4,1.08A88,88,0,0,0,216,128Z"/></svg><span>نظرات</span><svg class="icon account__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></a></li>
+            <li><a class="account__link" href="addresses.html" data-section-link="addresses"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/></svg><span>نشانی‌ها</span><svg class="icon account__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></a></li>
+            <li><a class="account__link" href="messages.html" data-section-link="messages"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg><span>پیام‌ها</span><span class="account__count" data-message-count hidden></span><svg class="icon account__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></a></li>
+            <li><a class="account__link" href="recent.html" data-section-link="recent"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,192c-30.78,0-57.67-11.19-79.93-33.25A133.47,133.47,0,0,1,25,128,133.33,133.33,0,0,1,48.07,97.25C70.33,75.19,97.22,64,128,64s57.67,11.19,79.93,33.25A133.46,133.46,0,0,1,231.05,128C223.84,141.46,192.43,192,128,192Zm0-112a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Z"/></svg><span>آخرین کالاهای دیده شده</span><svg class="icon account__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></a></li>
+            <li><a class="account__link" href="profile.html" data-section-link="profile"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M200,112a8,8,0,0,1-8,8H152a8,8,0,0,1,0-16h40A8,8,0,0,1,200,112Zm-8,24H152a8,8,0,0,0,0,16h40a8,8,0,0,0,0-16Zm40-80V200a16,16,0,0,1-16,16H40a16,16,0,0,1-16-16V56A16,16,0,0,1,40,40H216A16,16,0,0,1,232,56ZM216,200V56H40V200H216Zm-80.26-34a8,8,0,1,1-15.5,4c-2.63-10.26-13.06-18-24.25-18s-21.61,7.74-24.25,18a8,8,0,1,1-15.5-4,39.84,39.84,0,0,1,17.19-23.34,32,32,0,1,1,45.12,0A39.76,39.76,0,0,1,135.75,166ZM96,136a16,16,0,1,0-16-16A16,16,0,0,0,96,136Z"/></svg><span>مشخصات فردی</span><svg class="icon account__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></a></li>
+            <li><a class="account__link" href="wallet.html" data-section-link="wallet"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M216,64H56a8,8,0,0,1,0-16H192a8,8,0,0,0,0-16H56A24,24,0,0,0,32,56V184a24,24,0,0,0,24,24H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64Zm0,128H56a8,8,0,0,1-8-8V78.63A23.84,23.84,0,0,0,56,80H216Zm-48-60a12,12,0,1,1,12,12A12,12,0,0,1,168,132Z"/></svg><span>کیف پول</span><svg class="icon account__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></a></li>
+            <li><button class="account__link" type="button" data-logout><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M120,216a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V40a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H56V208h56A8,8,0,0,1,120,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L204.69,120H112a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,229.66,122.34Z"/></svg><span>خروج</span><svg class="icon account__chev" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></button></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="account__panel">
+        <!-- Dashboard -->
+        <section class="acc-section" id="acc-dashboard" aria-labelledby="dashboard-title" data-section hidden>
+          <div class="acc-head acc-head--plain">
+            <a class="acc-back" href="index.html" aria-label="بازگشت به منوی حساب"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg></a>
+            <h2 class="acc-title" id="dashboard-title" tabindex="-1"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></svg> مشخصات فردی</h2>
+          </div>
+          <div data-dashboard-profile></div>
+
+          <div class="acc-subhead">
+            <h3 class="acc-subtitle"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44-29.77,16.3-80.35-44ZM128,120,47.66,76l33.9-18.56,80.34,44ZM40,90l80,43.78v85.79L40,175.82Zm176,85.78h0l-80,43.79V133.82l32-17.51V152a8,8,0,0,0,16,0V107.55L216,90v85.77Z"/></svg> آخرین سفارش‌ها</h3>
+          </div>
+          <div data-dashboard-orders></div>
+          <a class="see-all" href="orders.html"><span class="see-all__dots" aria-hidden="true"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M140,128a12,12,0,1,1-12-12A12,12,0,0,1,140,128Zm56-12a12,12,0,1,0,12,12A12,12,0,0,0,196,116ZM60,116a12,12,0,1,0,12,12A12,12,0,0,0,60,116Z"/></svg></span> دیدن همه سفارش‌های من</a>
+        </section>
+
+        <!-- Orders -->
+        <section class="acc-section" id="acc-orders" aria-labelledby="orders-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="index.html" aria-label="بازگشت به منوی حساب"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg></a>
+            <h2 class="acc-title" id="orders-title" tabindex="-1">سفارش‌های من</h2>
+            <div class="acc-search">
+              <label class="visually-hidden" for="order-search">جستجو در سفارش‌ها</label>
+              <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>
+              <input id="order-search" type="search" placeholder="جستجو کنید" autocomplete="off" data-order-search>
+            </div>
+          </div>
+          <div class="order-tabs" role="tablist" aria-label="وضعیت سفارش" data-order-tabs>
+            <button class="order-tabs__tab" role="tab" type="button" id="otab-current" aria-selected="true" aria-controls="order-panel" data-group="current">جاری <span data-order-count="current">(۰)</span></button>
+            <button class="order-tabs__tab" role="tab" type="button" id="otab-delivered" aria-selected="false" aria-controls="order-panel" tabindex="-1" data-group="delivered">تحویل شده <span data-order-count="delivered">(۰)</span></button>
+            <button class="order-tabs__tab" role="tab" type="button" id="otab-returned" aria-selected="false" aria-controls="order-panel" tabindex="-1" data-group="returned">مرجوعی <span data-order-count="returned">(۰)</span></button>
+            <button class="order-tabs__tab" role="tab" type="button" id="otab-cancelled" aria-selected="false" aria-controls="order-panel" tabindex="-1" data-group="cancelled">لغو شده <span data-order-count="cancelled">(۰)</span></button>
+          </div>
+          <div class="order-list" id="order-panel" role="tabpanel" aria-labelledby="otab-current" data-orders></div>
+        </section>
+
+        <!-- Wishlist -->
+        <section class="acc-section" id="acc-wishlist" aria-labelledby="wishlist-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="index.html" aria-label="بازگشت به منوی حساب"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg></a>
+            <h2 class="acc-title" id="wishlist-title" tabindex="-1">کالاهای مورد علاقه</h2>
+          </div>
+          <ul class="product-grid acc-grid" data-wishlist></ul>
+        </section>
+
+        <!-- Comments -->
+        <section class="acc-section" id="acc-comments" aria-labelledby="comments-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="index.html" aria-label="بازگشت به منوی حساب"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg></a>
+            <h2 class="acc-title" id="comments-title" tabindex="-1">نظرات</h2>
+          </div>
+          <div class="acc-empty">
+            <span class="acc-empty__art" aria-hidden="true"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M140,128a12,12,0,1,1-12-12A12,12,0,0,1,140,128ZM84,116a12,12,0,1,0,12,12A12,12,0,0,0,84,116Zm88,0a12,12,0,1,0,12,12A12,12,0,0,0,172,116Zm60,12A104,104,0,0,1,79.12,219.82L45.07,231.17a16,16,0,0,1-20.24-20.24l11.35-34.05A104,104,0,1,1,232,128Zm-16,0A88,88,0,1,0,51.81,172.06a8,8,0,0,1,.66,6.54L40,216,77.4,203.53a7.85,7.85,0,0,1,2.53-.42,8,8,0,0,1,4,1.08A88,88,0,0,0,216,128Z"/></svg></span>
+            <p class="acc-empty__title">هنوز نظری ثبت نکرده‌اید</p>
+            <p class="acc-empty__text">پس از دریافت سفارش، از صفحه هر کالا تجربه خود را بنویسید تا به خریداران دیگر در انتخاب لپ‌تاپ یا تجهیزات شبکه کمک کند.</p>
+            <a class="btn btn--outline btn--sm" href="../pages/shop.html">رفتن به فروشگاه</a>
+          </div>
+        </section>
+
+        <!-- Addresses -->
+        <section class="acc-section" id="acc-addresses" aria-labelledby="addresses-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="index.html" aria-label="بازگشت به منوی حساب"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg></a>
+            <h2 class="acc-title" id="addresses-title" tabindex="-1">نشانی‌ها</h2>
+            <button class="btn btn--outline btn--sm acc-head__action" type="button" data-address-add><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z"/></svg> افزودن نشانی</button>
+          </div>
+          <ul class="address-list" data-addresses></ul>
+        </section>
+
+        <!-- Messages -->
+        <section class="acc-section" id="acc-messages" aria-labelledby="messages-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="index.html" aria-label="بازگشت به منوی حساب"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg></a>
+            <h2 class="acc-title" id="messages-title" tabindex="-1">پیام‌ها</h2>
+          </div>
+          <ul class="msg-list" data-messages></ul>
+        </section>
+
+        <!-- Recently viewed -->
+        <section class="acc-section" id="acc-recent" aria-labelledby="recent-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="index.html" aria-label="بازگشت به منوی حساب"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg></a>
+            <h2 class="acc-title" id="recent-title" tabindex="-1">آخرین کالاهای دیده شده</h2>
+          </div>
+          <ul class="product-grid acc-grid" data-recent></ul>
+        </section>
+
+        <!-- Personal / legal info -->
+        <section class="acc-section" id="acc-profile" aria-labelledby="profile-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="index.html" aria-label="بازگشت به منوی حساب"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg></a>
+            <h2 class="acc-title" id="profile-title" tabindex="-1">مشخصات</h2>
+          </div>
+          <div class="seg" role="tablist" aria-label="نوع مشخصات" data-profile-tabs>
+            <button class="seg__tab" role="tab" type="button" id="ptab-person" aria-selected="true" aria-controls="profile-panel" data-kind="person">مشخصات فردی</button>
+            <button class="seg__tab" role="tab" type="button" id="ptab-legal" aria-selected="false" aria-controls="profile-panel" tabindex="-1" data-kind="legal">مشخصات حقوقی</button>
+          </div>
+          <div id="profile-panel" role="tabpanel" aria-labelledby="ptab-person">
+            <p class="acc-note" data-profile-note></p>
+            <dl class="info-grid" data-profile-fields></dl>
+          </div>
+        </section>
+
+        <!-- Wallet -->
+        <section class="acc-section" id="acc-wallet" aria-labelledby="wallet-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="index.html" aria-label="بازگشت به منوی حساب"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg></a>
+            <h2 class="acc-title" id="wallet-title" tabindex="-1">کیف پول</h2>
+          </div>
+          <div class="wallet" data-wallet></div>
+        </section>
+      </div>
+
+      <!-- Recently viewed rail: under the dashboard (desktop) or the menu (phones) -->
+      <section class="rail account__rail" aria-labelledby="recent-rail-title" data-recent-rail hidden>
+        <div class="rail__head">
+          <h2 class="rail__title" id="recent-rail-title">آخرین کالاهای دیده شده</h2>
+          <div class="rail__tools">
+            <div class="scroller__controls">
+              <button class="round-btn" type="button" data-scroll-prev="acc-recent" aria-label="کالاهای قبلی"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg></button>
+              <button class="round-btn" type="button" data-scroll-next="acc-recent" aria-label="کالاهای بعدی"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="scroller" data-scroller="acc-recent">
+          <ul class="scroller__track" aria-label="آخرین کالاهای دیده شده" data-recent-track></ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- Address form -->
+    <dialog class="dialog" aria-labelledby="address-dialog-title" data-address-dialog>
+      <form novalidate data-address-form>
+        <div class="dialog__head">
+          <h2 class="dialog__title" id="address-dialog-title">نشانی جدید</h2>
+          <button class="icon-btn" type="button" aria-label="بستن" data-dialog-close>
+            <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+          </button>
+        </div>
+        <div class="dialog__body" data-address-fields></div>
+        <div class="dialog__foot">
+          <button class="btn btn--primary" type="submit">ذخیره نشانی</button>
+          <button class="btn btn--outline" type="button" data-dialog-close>انصراف</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Single field editor for the profile grid -->
+    <dialog class="dialog dialog--sm" aria-labelledby="field-dialog-title" data-field-dialog>
+      <form novalidate data-field-form>
+        <div class="dialog__head">
+          <h2 class="dialog__title" id="field-dialog-title">ویرایش</h2>
+          <button class="icon-btn" type="button" aria-label="بستن" data-dialog-close>
+            <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+          </button>
+        </div>
+        <div class="dialog__body" data-field-body></div>
+        <div class="dialog__foot">
+          <button class="btn btn--primary" type="submit">ذخیره</button>
+          <button class="btn btn--outline" type="button" data-dialog-close>انصراف</button>
+        </div>
+      </form>
+    </dialog>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__panel">
+      <div class="footer-top">
+        <a class="brand brand--inverse" href="../index.html" aria-label="فروشگاه فیبسو، صفحه اصلی">
+          <img class="brand__mark" src="../assets/images/logo-mark-inverse.svg" alt="" width="40" height="40">
+          <span>فیبسو</span>
+        </a>
+        <a class="back-to-top" href="#main">بازگشت به بالا <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M213.66,165.66a8,8,0,0,1-11.32,0L128,91.31,53.66,165.66a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,213.66,165.66Z"/></svg></a>
+      </div>
+
+      <div class="footer-cols">
+        <nav class="footer-col" aria-labelledby="fc-quick">
+          <h2 class="footer-title" id="fc-quick">دسترسی سریع</h2>
+          <ul class="footer-links">
+            <li><a href="../pages/shop.html?cat=laptop&amp;condition=new">لپ‌تاپ نو</a></li>
+            <li><a href="../pages/shop.html?cat=laptop&amp;condition=used">لپ‌تاپ استوک</a></li>
+            <li><a href="../pages/shop.html?cat=network">تجهیزات شبکه</a></li>
+            <li><a href="../pages/shop.html?cat=parts">قطعات لپ‌تاپ</a></li>
+            <li><a href="../pages/shop.html?tag=offer">تخفیف‌ها</a></li>
+            <li><a href="../pages/blog.html">بلاگ</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="fc-best">
+          <h2 class="footer-title" id="fc-best">پرفروش‌ترین‌ها</h2>
+          <ul class="footer-links">
+            <li><a href="../pages/shop.html?q=ThinkPad">ThinkPad استوک</a></li>
+            <li><a href="../pages/shop.html?q=Latitude">Latitude استوک</a></li>
+            <li><a href="../pages/shop.html?sub=router">روتر و مودم</a></li>
+            <li><a href="../pages/shop.html?sub=switch">سوییچ شبکه</a></li>
+            <li><a href="../pages/shop.html?sub=ram">رم لپ‌تاپ</a></li>
+            <li><a href="../pages/shop.html?sub=ssd">حافظه SSD</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="fc-about">
+          <h2 class="footer-title" id="fc-about">درباره فیبسو</h2>
+          <ul class="footer-links">
+            <li><a href="../pages/about.html">درباره ما</a></li>
+            <li><a href="../pages/contact.html">تماس با ما</a></li>
+            <li><a href="../pages/faq.html">سوالات متداول</a></li>
+            <li><a href="../pages/b2b.html">خرید سازمانی</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="fc-before">
+          <h2 class="footer-title" id="fc-before">پیش از خرید</h2>
+          <ul class="footer-links">
+            <li><a href="../pages/warranty.html">درجه‌بندی کالای استوک</a></li>
+            <li><a href="../pages/faq.html#faq-order">راهنمای ثبت سفارش</a></li>
+            <li><a href="../pages/faq.html#faq-shipping">شیوه‌ها و هزینه ارسال</a></li>
+            <li><a href="../pages/b2b.html">استعلام قیمت سازمانی</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="fc-after">
+          <h2 class="footer-title" id="fc-after">پس از خرید</h2>
+          <ul class="footer-links">
+            <li><a href="../pages/account.html#orders">پیگیری سفارش</a></li>
+            <li><a href="../pages/warranty.html">ضمانت سلامت فیبسو</a></li>
+            <li><a href="../pages/faq.html#faq-returns">رویه بازگرداندن کالا</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="fc-terms">
+          <h2 class="footer-title" id="fc-terms">قوانین و مقررات</h2>
+          <ul class="footer-links">
+            <li><a href="../pages/terms.html">قوانین و مقررات</a></li>
+            <li><a href="../pages/terms.html#privacy">حریم خصوصی کاربران</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="footer-contact-row">
+        <h2 class="footer-title">ارتباط با فیبسو</h2>
+        <ul class="footer-contact">
+          <li><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"/></svg><span>تلفن: <a href="tel:+982182801845"><span class="ltr">۰۲۱-۸۲۸۰۱۸۴۵</span></a></span></li>
+          <li><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg><span>ایمیل: <a href="mailto:info@fibeso.com"><span class="ltr">info@fibeso.com</span></a></span></li>
+          <li><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/></svg><span>تهران، شهرک گلستان، خیابان هوانیروز، بام‌لند، برج صدف، طبقه همکف، واحد ۲۰۱۰</span></li>
+        </ul>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© ۱۴۰۵ فروشگاه فیبسو. تمامی حقوق مادی و معنوی این سایت متعلق به فیبسو است.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== Mobile tab bar ===================== -->
+  <nav class="tabbar" aria-label="دسترسی سریع موبایل">
+    <a class="tabbar__item" href="../index.html"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"/></svg><span>خانه</span></a>
+    <button class="tabbar__item" type="button" data-nav-open aria-controls="site-nav"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></svg><span>دسته‌بندی</span></button>
+    <a class="tabbar__item" href="../pages/cart.html"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M104,216a16,16,0,1,1-16-16A16,16,0,0,1,104,216Zm88-16a16,16,0,1,0,16,16A16,16,0,0,0,192,200ZM239.71,74.14l-25.64,92.28A24.06,24.06,0,0,1,191,184H92.16A24.06,24.06,0,0,1,69,166.42L33.92,40H16a8,8,0,0,1,0-16H40a8,8,0,0,1,7.71,5.86L57.19,64H232a8,8,0,0,1,7.71,10.14ZM221.47,80H61.64l22.81,82.14A8,8,0,0,0,92.16,168H191a8,8,0,0,0,7.71-5.86Z"/></svg><span>سبد خرید</span><span class="tabbar__count" data-cart-count hidden>۰</span></a>
+    <a class="tabbar__item" href="../pages/blog.html"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M88,112a8,8,0,0,1,8-8h80a8,8,0,0,1,0,16H96A8,8,0,0,1,88,112Zm8,40h80a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16ZM232,64V184a24,24,0,0,1-24,24H32A24,24,0,0,1,8,184.11V88a8,8,0,0,1,16,0v96a8,8,0,0,0,16,0V64A16,16,0,0,1,56,48H216A16,16,0,0,1,232,64Zm-16,0H56V184a23.84,23.84,0,0,1-1.37,8H208a8,8,0,0,0,8-8Z"/></svg><span>بلاگ</span></a>
+    <a class="tabbar__item" href="../pages/account.html" aria-current="page"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></svg><span>حساب</span></a>
+  </nav>
+
+  <!-- ===================== Mini cart ===================== -->
+  <div class="backdrop" data-backdrop hidden></div>
+  <aside class="drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" data-cart-drawer hidden>
+    <div class="drawer__head">
+      <h2 class="drawer__title" id="cart-title">سبد خرید</h2>
+      <button class="icon-btn" type="button" aria-label="بستن سبد خرید" data-cart-close>
+        <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+      </button>
+    </div>
+    <div class="drawer__body" data-cart-body></div>
+    <div class="drawer__foot" data-cart-foot hidden>
+      <p class="drawer__total"><span>جمع کل</span><span data-cart-total>۰ تومان</span></p>
+      <a class="btn btn--primary btn--block" href="../pages/checkout.html">ادامه فرایند خرید</a>
+      <a class="btn btn--outline btn--block" href="../pages/cart.html">مشاهده سبد خرید</a>
+    </div>
+  </aside>
+</body>
+</html>

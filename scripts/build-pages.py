@@ -26,7 +26,7 @@ CHROME = {
 }
 
 HEAD = """<!doctype html>
-<html lang="fa" dir="rtl" data-root="{root}">
+<html lang="fa" dir="rtl" data-root="{root}"{htmlattr}>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -114,14 +114,50 @@ def build():
         robots = '\n  <meta name="robots" content="noindex">' if meta.get("noindex") else ""
         page = HEAD.format(root=root, title=meta["title"], description=meta["description"],
                            css=css, js=js, robots=robots, slug=tpl.stem,
-                           chrome=meta.get("chrome", "full"))
+                           chrome=meta.get("chrome", "full"), htmlattr="")
         page += render(header, root, nav, tab) + "\n" + render(body, root, nav, tab) + "\n" + render(footer, root, nav, tab)
         page += "</body>\n</html>\n"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(page, encoding="utf-8")
         count += 1
         print(f"built {meta['out']}")
+        if tpl.stem == "account":
+            count += build_userpanel(meta, body, header, footer)
     print(f"{count} pages")
+
+
+# userpanel/: one static page per user-panel section, viewable without signing in
+# (sample data, separate storage; see store.js). Built from the account template.
+PANEL_SECTIONS = [
+    ("index", "dashboard", "پیشخوان"), ("orders", "orders", "سفارش‌های من"),
+    ("wishlist", "wishlist", "کالاهای مورد علاقه"), ("comments", "comments", "نظرات"),
+    ("addresses", "addresses", "نشانی‌ها"), ("messages", "messages", "پیام‌ها"),
+    ("recent", "recent", "آخرین کالاهای دیده شده"), ("profile", "profile", "مشخصات فردی"),
+    ("wallet", "wallet", "کیف پول"),
+]
+
+
+def build_userpanel(meta, body, header, footer):
+    root = "../"
+    def to_file(m):
+        name = m.group(1)
+        return 'href="%s"' % ("index.html" if name in ("dashboard", "menu") else name + ".html")
+    names = "|".join(["menu"] + [s for _, s, _ in PANEL_SECTIONS])
+    panel_body = re.sub(r'href="#(%s)"' % names, to_file, body)
+    css = "\n".join(f'  <link rel="stylesheet" href="{root}assets/css/{c}">' for c in meta.get("css", []))
+    js = "\n".join(f'  <script src="{root}assets/js/{j}" defer></script>' for j in meta.get("js", []))
+    for file, section, title in PANEL_SECTIONS:
+        page = HEAD.format(root=root, title=f"{title} | نمونه پنل کاربری فیبسو",
+                           description="پیش‌نمایش طراحی پنل کاربری فیبسو با داده نمونه.",
+                           css=css, js=js, robots='\n  <meta name="robots" content="noindex">',
+                           slug="account", chrome="full", htmlattr=f' data-panel-preview="{section}"')
+        page += render(header, root, "", "account") + "\n" + render(panel_body, root, "", "account") + "\n" + render(footer, root, "", "account")
+        page += "</body>\n</html>\n"
+        out = ROOT / "userpanel" / f"{file}.html"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(page, encoding="utf-8")
+        print(f"built userpanel/{file}.html")
+    return len(PANEL_SECTIONS)
 
 
 if __name__ == "__main__":

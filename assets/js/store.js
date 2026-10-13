@@ -5,6 +5,12 @@
 
   var KEYS = { user: 'fibeso-user', addresses: 'fibeso-addresses', orders: 'fibeso-orders', wallet: 'fibeso-wallet', seen: 'fibeso-messages-seen' };
 
+  /* userpanel/ preview pages (<html data-panel-preview>) use their own storage keys
+     filled with sample data, so the panel can be viewed without signing in and
+     without touching a real visitor's account. */
+  var PREVIEW = document.documentElement.hasAttribute('data-panel-preview');
+  if (PREVIEW) Object.keys(KEYS).forEach(function (k) { KEYS[k] = KEYS[k].replace('fibeso-', 'fibeso-preview-'); });
+
   function read(key, fallback) {
     try {
       var v = JSON.parse(window.localStorage.getItem(key));
@@ -253,4 +259,28 @@
       write(KEYS.seen, this.messages().map(function (m) { return m.id; }));
     }
   };
+
+  if (PREVIEW && !read(KEYS.user, null)) {
+    var day = 86400000;
+    var addr = { id: 'a-sample', name: 'کاربر نمونه', mobile: '09120000000', province: 'تهران', city: 'تهران',
+      street: 'خیابان نمونه، کوچه یکم', plaque: '۱۲، واحد ۳', postal: '1234567890', isDefault: true };
+    write(KEYS.user, { name: 'کاربر نمونه', mobile: '09120000000', email: 'sample@fibeso.com', joined: new Date(Date.now() - 90 * day).toISOString() });
+    write(KEYS.addresses, [addr]);
+    var item = function (id, qty) {
+      var p = (window.SHOP_PRODUCTS || []).filter(function (x) { return x.id === id; })[0] || { title: id, price: 0, img: 'laptop-business' };
+      return { id: id, title: p.title, price: p.price, qty: qty, img: p.img };
+    };
+    var order = function (n, daysAgo, status, items, method) {
+      var total = items.reduce(function (t, i) { return t + i.price * i.qty; }, 0);
+      return { id: 'FB-10' + n, date: new Date(Date.now() - daysAgo * day).toISOString(), status: status,
+        items: items, total: total, shipping: 0, address: addr, shippingMethod: method, payment: 'پرداخت اینترنتی' };
+    };
+    write(KEYS.orders, [
+      order('482', 1, 'processing', [item('u02', 1), item('c01', 2)], 'پیک تهران'),
+      order('451', 6, 'shipped', [item('n01', 1)], 'پست پیشتاز'),
+      order('397', 24, 'delivered', [item('l01', 1), item('c04', 1)], 'تیپاکس'),
+      order('355', 40, 'returned', [item('c05', 1)], 'پست پیشتاز'),
+      order('310', 62, 'cancelled', [item('n03', 1)], 'پیک تهران')
+    ]);
+  }
 })();

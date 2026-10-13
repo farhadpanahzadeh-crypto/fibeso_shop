@@ -9,8 +9,21 @@
   var UI = window.UI;
   if (!Shop || !Store || !UI) return;
 
-  var user = Store.requireUser();
+  /* userpanel/*.html are static previews of one section each (no sign-in, sample data) */
+  var preview = document.documentElement.getAttribute('data-panel-preview');
+  var user = preview ? Store.user() : Store.requireUser();
   if (!user) return;
+
+  // Section link: a hash in the real panel, a separate file in the preview folder
+  function sectionHref(name) {
+    if (!preview) return '#' + name;
+    return name === 'dashboard' || name === 'menu' ? 'index.html' : name + '.html';
+  }
+  // Previews show sample products when the visitor has none yet
+  function recentList() {
+    var list = Shop.recent();
+    return preview && !list.length ? Shop.query({ limit: 8 }) : list;
+  }
 
   var fmt = Shop.formatPrice;
   var esc = Shop.escapeHtml;
@@ -66,8 +79,9 @@
   var lastSection = null;
 
   function route(focus) {
-    var name = window.location.hash.slice(1);
+    var name = preview || window.location.hash.slice(1);
     var phone = phoneMq.matches;
+    if (preview === 'dashboard' && phone) name = 'menu';
     if (SECTIONS.indexOf(name) === -1) name = phone ? 'menu' : 'dashboard';
     accountEl.setAttribute('data-view', name === 'menu' ? 'menu' : 'section');
 
@@ -79,7 +93,7 @@
       else link.removeAttribute('aria-current');
     });
 
-    railEl.hidden = !((name === 'dashboard' && !phone) || name === 'menu') || !Shop.recent().length;
+    railEl.hidden = !((name === 'dashboard' && !phone) || name === 'menu') || !recentList().length;
 
     if (name === 'menu') {
       document.title = 'حساب کاربری | فیبسو';
@@ -213,7 +227,7 @@
           '<dl class="dash-profile__grid">' + rows.map(function (r) {
             return '<div><dt>' + r[0] + '</dt><dd>' + (r[1] ? esc(r[1]) : '<span class="text-muted">ثبت نشده</span>') + '</dd></div>';
           }).join('') + '</dl>' +
-          '<a class="btn btn--primary btn--sm dash-profile__edit" href="#profile">' + icon('pencil') + ' ویرایش اطلاعات</a>' +
+          '<a class="btn btn--primary btn--sm dash-profile__edit" href="' + sectionHref('profile') + '">' + icon('pencil') + ' ویرایش اطلاعات</a>' +
         '</div>' +
       '</div>';
 
@@ -225,7 +239,7 @@
 
   /* ---------- Recently viewed rail (dashboard / phone menu) ---------- */
   function renderRail() {
-    var list = Shop.recent();
+    var list = recentList();
     Shop.render(document.querySelector('[data-recent-track]'), list.slice(0, 12), 'li');
     UI.initScrollers(railEl);
   }
@@ -240,7 +254,7 @@
   }
 
   function renderRecent() {
-    Shop.render(document.querySelector('[data-recent]'), Shop.recent(), 'li',
+    Shop.render(document.querySelector('[data-recent]'), recentList(), 'li',
       '<li class="acc-grid__empty">' + emptyHTML('eye', 'هنوز کالایی را مشاهده نکرده‌اید',
         'کالاهایی که باز می‌کنید اینجا می‌مانند تا دوباره پیدا کردنشان آسان باشد.', 'رفتن به فروشگاه', shopUrl) + '</li>');
   }
@@ -261,7 +275,7 @@
         '<div class="msg__body">' +
           '<p class="msg__title">' + (m.unread ? '<span class="visually-hidden">خوانده نشده: </span>' : '') + esc(m.title) + '</p>' +
           '<p class="msg__text">' + esc(m.text) + '</p>' +
-          (m.kind === 'order' ? '<a class="msg__link" href="#orders">مشاهده سفارش ' + icon('caret-left') + '</a>' : '') +
+          (m.kind === 'order' ? '<a class="msg__link" href="' + sectionHref('orders') + '">مشاهده سفارش ' + icon('caret-left') + '</a>' : '') +
         '</div>' +
         '<time class="msg__date" datetime="' + esc(m.date) + '">' + formatDate(m.date) + '</time>' +
       '</li>';
@@ -512,7 +526,7 @@
   document.querySelectorAll('[data-logout]').forEach(function (b) {
     b.addEventListener('click', function () {
       Store.logout();
-      window.location.href = Shop.root + 'index.html';
+      window.location.href = preview ? 'index.html' : Shop.root + 'index.html';
     });
   });
 
