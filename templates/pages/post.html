@@ -1,14 +1,112 @@
-<!-- {"out": "pages/post.html", "title": "مطلب | بلاگ فیبسو", "description": "مطلب آموزشی بلاگ فیبسو.", "css": ["pages/content.css"], "js": ["data/posts.js", "pages/blog.js"]} -->
-  <main id="main">
-    <section class="page-hero">
-      <div class="container" data-article-hero></div>
-    </section>
-    <div class="container">
-      <nav class="breadcrumb" aria-label="مسیر صفحه"><ol><li><a href="{{root}}index.html">خانه</a></li><li><a href="{{root}}pages/blog.html">بلاگ</a></li><li aria-current="page" data-crumb-title>مطلب</li></ol></nav>
-      <article class="content content__narrow prose" data-article></article>
-      <section class="section" aria-labelledby="more-title">
-        <h2 class="section-title-start" id="more-title">مطالب دیگر</h2>
-        <ul class="post-grid" data-more-posts></ul>
-      </section>
+<!-- {"out": "pages/post.html", "title": "مطلب | وبلاگ فیبسو", "description": "مطلب آموزشی وبلاگ فیبسو درباره لپ‌تاپ، شبکه و قطعات.", "css": ["pages/content.css"], "js": ["data/posts.js", "pages/blog.js"], "tab": "blog"} -->
+  <main id="main" class="blog blog--post">
+    <div class="blog-bar">
+      <div class="container blog-bar__row">
+        <nav class="blog-cats" aria-label="دسته‌های وبلاگ" data-blog-cats>
+          <ul class="blog-cats__list">
+            <li><a class="blog-cats__link" href="{{root}}pages/blog.html?cat=guide" data-cat="guide">راهنمای خرید</a></li>
+            <li><a class="blog-cats__link" href="{{root}}pages/blog.html?cat=review" data-cat="review">نقد و بررسی</a></li>
+            <li><a class="blog-cats__link" href="{{root}}pages/blog.html?cat=network" data-cat="network">آموزش شبکه</a></li>
+            <li><a class="blog-cats__link" href="{{root}}pages/blog.html?cat=parts" data-cat="parts">ارتقا و قطعات</a></li>
+            <li><a class="blog-cats__link" href="{{root}}pages/blog.html?cat=news" data-cat="news">اخبار</a></li>
+          </ul>
+        </nav>
+        <div class="blog-bar__tools">
+          <form class="search blog-search" role="search" action="{{root}}pages/blog.html" method="get">
+            <button class="search__btn" type="submit" aria-label="جستجو در وبلاگ">{{icon:magnifying-glass}}</button>
+            <label class="visually-hidden" for="blog-q">جستجو در مطالب وبلاگ</label>
+            <input class="search__input" id="blog-q" name="q" type="search" placeholder="دنبال چه مطلبی هستی؟" autocomplete="off" data-blog-q>
+          </form>
+          <a class="blog-shop" href="{{root}}pages/shop.html">{{icon:storefront}}<span>فروشگاه</span></a>
+        </div>
+      </div>
+      <div class="container blog-hot">
+        <p class="blog-hot__label" id="hot-label">{{icon:fire}}داغ‌ترین‌ها:</p>
+        <button class="round-btn blog-hot__btn" type="button" aria-label="برچسب‌های قبلی" data-scroll-prev="hot">{{icon:caret-right}}</button>
+        <div class="scroller blog-hot__scroller" data-scroller="hot">
+          <ul class="scroller__track blog-hot__track" aria-labelledby="hot-label">
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=لپ‌تاپ+استوک">لپ‌تاپ استوک</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=ThinkPad">ThinkPad</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=Latitude">Latitude</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=سلامت+باتری">سلامت باتری</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=Wi-Fi+6">Wi-Fi 6</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=میکروتیک">میکروتیک</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=سوییچ+شبکه">سوییچ شبکه</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=Cat6">کابل Cat6</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=ارتقای+رم">ارتقای رم</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=SSD">SSD</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=شارژر+لپ‌تاپ">شارژر لپ‌تاپ</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=ویندوز+۱۱">ویندوز ۱۱</a></li>
+          </ul>
+        </div>
+        <button class="round-btn blog-hot__btn" type="button" aria-label="برچسب‌های بعدی" data-scroll-next="hot">{{icon:caret-left}}</button>
+      </div>
     </div>
+
+    <div class="container post-layout">
+      <article class="post" data-article aria-labelledby="post-title">
+        <nav class="breadcrumb post-crumb" aria-label="مسیر صفحه"><ol><li><a href="{{root}}index.html">خانه</a></li><li><a href="{{root}}pages/blog.html">وبلاگ</a></li><li data-crumb-cat hidden></li><li aria-current="page" data-crumb-title>مطلب</li></ol></nav>
+
+        <a class="promo-banner promo-banner--post" href="{{root}}pages/shop.html?cat=laptop&amp;condition=used">
+          <img class="promo-banner__img" src="{{root}}assets/images/banners/hero-1.svg" alt="" width="1600" height="520">
+          <span class="promo-banner__text"><strong>لپ‌تاپ استوک تست‌شده</strong><span>با ۶ ماه ضمانت سلامت فیبسو</span></span>
+          <span class="promo-banner__cta">خرید {{icon:caret-left}}</span>
+        </a>
+
+        <div data-article-body>
+          <div class="post-figure post-figure--loading" aria-hidden="true"></div>
+          <h1 class="post__title" id="post-title">در حال بارگذاری مطلب…</h1>
+        </div>
+
+        <section class="comments" id="comments" aria-labelledby="comments-title">
+          <h2 class="comments__title" id="comments-title">نظرات</h2>
+          <ul class="comments__list" data-comments></ul>
+          <form class="comments__form" novalidate data-comment-form>
+            <div class="field">
+              <label class="field__label" for="cm-text">نظر شما <span class="req" aria-hidden="true">*</span></label>
+              <textarea class="input" id="cm-text" name="text" aria-describedby="cm-text-error" data-rules="required min10" data-label="متن نظر" placeholder="تجربه یا سوالت را درباره این مطلب بنویس"></textarea>
+              <p class="field__error" id="cm-text-error"></p>
+            </div>
+            <div class="form-grid form-grid--2">
+              <div class="field">
+                <label class="field__label" for="cm-name">نام <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="cm-name" name="name" aria-describedby="cm-name-error" data-rules="required" data-label="نام" autocomplete="name">
+                <p class="field__error" id="cm-name-error"></p>
+              </div>
+              <div class="field">
+                <label class="field__label" for="cm-email">ایمیل</label>
+                <input class="input" id="cm-email" name="email" type="email" dir="ltr" aria-describedby="cm-email-error" data-rules="email" data-label="ایمیل" autocomplete="email">
+                <p class="field__error" id="cm-email-error"></p>
+              </div>
+            </div>
+            <p class="field__hint">نسخه نمایشی: نظر فقط در مرورگر خودتان ذخیره می‌شود و برای کسی ارسال نمی‌شود. ایمیل نمایش داده نمی‌شود.</p>
+            <button class="btn btn--primary btn--block" type="submit">ثبت نظر</button>
+            <p class="form-status" role="status" data-form-status></p>
+          </form>
+        </section>
+      </article>
+
+      <aside class="post-aside" aria-label="مطالب پیشنهادی">
+        <a class="side-promo" href="{{root}}pages/shop.html?cat=parts">
+          <span class="side-promo__text"><strong>رم و SSD برای ارتقای لپ‌تاپ</strong><span>نو و استوک تست‌شده با ضمانت</span></span>
+          <img src="{{root}}assets/images/products/ssd.svg" alt="" width="400" height="400" loading="lazy">
+          <span class="side-promo__cta">مشاهده قطعات {{icon:caret-left}}</span>
+        </a>
+        <section class="side-block" aria-labelledby="side-picks">
+          <h2 class="side-block__title" id="side-picks">پیشنهادی</h2>
+          <ul class="side-list" data-side-picks></ul>
+        </section>
+        <section class="side-block" aria-labelledby="side-howto">
+          <h2 class="side-block__title" id="side-howto">آموزش و ترفند</h2>
+          <ul class="side-list" data-side-howto></ul>
+        </section>
+      </aside>
+    </div>
+
+    <section class="container blog-box related" aria-labelledby="related-title">
+      <div class="blog-box__head">
+        <h2 class="blog-box__title" id="related-title">مطالب مرتبط</h2>
+      </div>
+      <div class="post-carousel" data-carousel="related"></div>
+    </section>
   </main>

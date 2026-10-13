@@ -1,21 +1,82 @@
-<!-- {"out": "pages/blog.html", "title": "بلاگ فیبسو | راهنمای خرید و آموزش شبکه", "description": "راهنمای خرید لپ‌تاپ نو و استوک، آموزش شبکه و ارتقای قطعات در بلاگ فیبسو.", "css": ["pages/content.css"], "js": ["data/posts.js", "pages/blog.js"]} -->
-  <main id="main">
-    <section class="page-hero">
-      <div class="container">
-        <h1 class="page-hero__title">بلاگ فیبسو</h1>
-        <p class="page-hero__lead">راهنمای خرید، آموزش شبکه و نکته‌های ارتقای لپ‌تاپ.</p>
-      </div>
-    </section>
-    <div class="container">
-      <nav class="breadcrumb" aria-label="مسیر صفحه"><ol><li><a href="{{root}}index.html">خانه</a></li><li aria-current="page">بلاگ</li></ol></nav>
-      <div class="content">
-        <div class="blog-filters" role="group" aria-label="دسته‌بندی مطالب" data-blog-filters>
-          <button type="button" aria-pressed="true" data-cat="">همه</button>
-          <button type="button" aria-pressed="false" data-cat="guide">راهنمای خرید</button>
-          <button type="button" aria-pressed="false" data-cat="network">شبکه</button>
-          <button type="button" aria-pressed="false" data-cat="parts">قطعات</button>
+<!-- {"out": "pages/blog.html", "title": "وبلاگ فیبسو | مجله تکنولوژی و شبکه", "description": "راهنمای خرید لپ‌تاپ نو و استوک، نقد و بررسی، آموزش شبکه و ارتقای قطعات در وبلاگ فیبسو.", "css": ["pages/content.css"], "js": ["data/posts.js", "pages/blog.js"], "tab": "blog"} -->
+  <main id="main" class="blog">
+    <div class="blog-bar">
+      <div class="container blog-bar__row">
+        <nav class="blog-cats" aria-label="دسته‌های وبلاگ" data-blog-cats>
+          <ul class="blog-cats__list">
+            <li><a class="blog-cats__link" href="{{root}}pages/blog.html?cat=guide" data-cat="guide">راهنمای خرید</a></li>
+            <li><a class="blog-cats__link" href="{{root}}pages/blog.html?cat=review" data-cat="review">نقد و بررسی</a></li>
+            <li><a class="blog-cats__link" href="{{root}}pages/blog.html?cat=network" data-cat="network">آموزش شبکه</a></li>
+            <li><a class="blog-cats__link" href="{{root}}pages/blog.html?cat=parts" data-cat="parts">ارتقا و قطعات</a></li>
+            <li><a class="blog-cats__link" href="{{root}}pages/blog.html?cat=news" data-cat="news">اخبار</a></li>
+          </ul>
+        </nav>
+        <div class="blog-bar__tools">
+          <form class="search blog-search" role="search" action="{{root}}pages/blog.html" method="get">
+            <button class="search__btn" type="submit" aria-label="جستجو در وبلاگ">{{icon:magnifying-glass}}</button>
+            <label class="visually-hidden" for="blog-q">جستجو در مطالب وبلاگ</label>
+            <input class="search__input" id="blog-q" name="q" type="search" placeholder="دنبال چه مطلبی هستی؟" autocomplete="off" data-blog-q>
+          </form>
+          <a class="blog-shop" href="{{root}}pages/shop.html">{{icon:storefront}}<span>فروشگاه</span></a>
         </div>
-        <ul class="post-grid" data-post-list></ul>
+      </div>
+      <div class="container blog-hot">
+        <p class="blog-hot__label" id="hot-label">{{icon:fire}}داغ‌ترین‌ها:</p>
+        <button class="round-btn blog-hot__btn" type="button" aria-label="برچسب‌های قبلی" data-scroll-prev="hot">{{icon:caret-right}}</button>
+        <div class="scroller blog-hot__scroller" data-scroller="hot">
+          <ul class="scroller__track blog-hot__track" aria-labelledby="hot-label">
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=لپ‌تاپ+استوک">لپ‌تاپ استوک</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=ThinkPad">ThinkPad</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=Latitude">Latitude</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=سلامت+باتری">سلامت باتری</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=Wi-Fi+6">Wi-Fi 6</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=میکروتیک">میکروتیک</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=سوییچ+شبکه">سوییچ شبکه</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=Cat6">کابل Cat6</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=ارتقای+رم">ارتقای رم</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=SSD">SSD</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=شارژر+لپ‌تاپ">شارژر لپ‌تاپ</a></li>
+            <li><a class="tag-chip" href="{{root}}pages/blog.html?q=ویندوز+۱۱">ویندوز ۱۱</a></li>
+          </ul>
+        </div>
+        <button class="round-btn blog-hot__btn" type="button" aria-label="برچسب‌های بعدی" data-scroll-next="hot">{{icon:caret-left}}</button>
+      </div>
+    </div>
+
+    <div data-blog-home>
+      <section class="container blog-hero" aria-label="مطالب برگزیده">
+        <div class="blog-hero__main">
+          <a class="promo-banner promo-banner--wide" href="{{root}}pages/shop.html?cat=network">
+            <img class="promo-banner__img" src="{{root}}assets/images/banners/wide.svg" alt="" width="1600" height="300">
+            <span class="promo-banner__text"><strong>تجهیزات شبکه دفتر کار</strong><span>روتر، سوییچ، اکسس پوینت و رک با مشاوره رایگان</span></span>
+            <span class="promo-banner__cta">مشاهده {{icon:caret-left}}</span>
+          </a>
+          <div class="blog-hero__big" data-hero-big></div>
+        </div>
+        <div class="blog-hero__side" data-hero-side></div>
+      </section>
+
+      <h1 class="blog-title">وبلاگ فیبسو، مجله تکنولوژی و شبکه</h1>
+
+      <section class="blog-band" aria-labelledby="picks-title">
+        <div class="container">
+          <h2 class="blog-band__title" id="picks-title">پیشنهادی</h2>
+          <div class="post-carousel" data-carousel="picks"></div>
+        </div>
+      </section>
+
+      <div class="container blog-sections" data-blog-sections></div>
+    </div>
+
+    <div class="container blog-results" data-blog-results hidden>
+      <nav class="breadcrumb" aria-label="مسیر صفحه"><ol><li><a href="{{root}}index.html">خانه</a></li><li><a href="{{root}}pages/blog.html">وبلاگ</a></li><li aria-current="page" data-results-crumb>نتایج</li></ol></nav>
+      <div class="blog-box">
+        <div class="blog-box__head">
+          <h1 class="blog-box__title" data-results-title>نتایج</h1>
+          <a class="view-all" href="{{root}}pages/blog.html">همه مطالب {{icon:caret-left}}</a>
+        </div>
+        <p class="blog-results__count" role="status" data-results-count></p>
+        <ul class="post-grid" data-results-list></ul>
       </div>
     </div>
   </main>

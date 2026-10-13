@@ -30,8 +30,15 @@
   <script src="../assets/js/pages/forms.js" defer></script>
   <script src="../assets/js/main.js" defer></script>
 </head>
-<body class="page-b2b">
+<body class="page-b2b chrome-full">
   <a class="skip-link" href="#main">پرش به محتوای اصلی</a>
+
+  <div class="promo-strip">
+    <div class="container promo-strip__inner">
+      <p class="promo-strip__text">لپ‌تاپ استوک تست‌شده با <strong>۶ ماه ضمانت سلامت فیبسو</strong></p>
+      <a class="promo-strip__cta" href="../pages/shop.html?cat=laptop&amp;condition=used">مشاهده لپ‌تاپ‌های استوک <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></a>
+    </div>
+  </div>
 
   <header class="site-header" data-header>
     <div class="container site-header__main">
@@ -55,15 +62,12 @@
       </form>
 
       <div class="header-actions">
-        <a class="icon-btn icon-btn--round" href="../pages/account.html" aria-label="حساب کاربری" data-account-link>
-          <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></svg>
+        <a class="auth-btn" href="../pages/login.html" data-account-link>
+          <svg class="icon auth-btn__icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M141.66,133.66l-40,40a8,8,0,0,1-11.32-11.32L116.69,136H24a8,8,0,0,1,0-16h92.69L90.34,93.66a8,8,0,0,1,11.32-11.32l40,40A8,8,0,0,1,141.66,133.66ZM200,32H136a8,8,0,0,0,0,16h56V208H136a8,8,0,0,0,0,16h64a8,8,0,0,0,8-8V40A8,8,0,0,0,200,32Z"/></svg>
+          <span class="auth-btn__label" data-account-label>ورود <span class="auth-btn__sep" aria-hidden="true"></span> ثبت‌نام</span>
         </a>
-        <a class="icon-btn icon-btn--round" href="../pages/account.html#wishlist" aria-label="علاقه‌مندی‌ها">
-          <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"/></svg>
-          <span class="icon-btn__count" data-wish-count hidden>۰</span>
-        </a>
-        <button class="icon-btn icon-btn--round" type="button" aria-label="سبد خرید" aria-controls="cart-drawer" data-cart-trigger>
-          <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M239.89,198.12l-14.26-120a16,16,0,0,0-16-14.12H176a48,48,0,0,0-96,0H46.33a16,16,0,0,0-16,14.12l-14.26,120A16,16,0,0,0,20,210.6a16.13,16.13,0,0,0,12,5.4H223.92A16.13,16.13,0,0,0,236,210.6,16,16,0,0,0,239.89,198.12ZM128,32a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32ZM32,200,46.33,80H80v24a8,8,0,0,0,16,0V80h64v24a8,8,0,0,0,16,0V80h33.75l14.17,120Z"/></svg>
+        <button class="icon-btn icon-btn--square" type="button" aria-label="سبد خرید" aria-controls="cart-drawer" data-cart-trigger>
+          <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M104,216a16,16,0,1,1-16-16A16,16,0,0,1,104,216Zm88-16a16,16,0,1,0,16,16A16,16,0,0,0,192,200ZM239.71,74.14l-25.64,92.28A24.06,24.06,0,0,1,191,184H92.16A24.06,24.06,0,0,1,69,166.42L33.92,40H16a8,8,0,0,1,0-16H40a8,8,0,0,1,7.71,5.86L57.19,64H232a8,8,0,0,1,7.71,10.14ZM221.47,80H61.64l22.81,82.14A8,8,0,0,0,92.16,168H191a8,8,0,0,0,7.71-5.86Z"/></svg>
           <span class="icon-btn__count" data-cart-count hidden>۰</span>
         </button>
       </div>
@@ -215,36 +219,46 @@
     </nav>
   </header>
 
-  <main id="main">
-    <section class="page-hero">
-      <div class="container">
-        <h1 class="page-hero__title">فیبسو، همراه شما در دنیای شبکه</h1>
-        <p class="page-hero__lead">تأمین تجهیزات شبکه، لپ‌تاپ نو و استوک برای سازمان‌ها؛ همراه با مشاوره، اجرای زیرساخت و پشتیبانی.</p>
-        <div class="page-hero__actions">
-          <a class="btn btn--primary" href="#quote">درخواست پیش‌فاکتور</a>
-          <a class="btn btn--outline-light" href="#steps">مراحل همکاری</a>
-        </div>
-      </div>
-    </section>
+  <main id="main" class="static-page b2b">
     <div class="container">
-      <nav class="breadcrumb" aria-label="مسیر صفحه"><ol><li><a href="../index.html">خانه</a></li><li aria-current="page">خرید سازمانی</li></ol></nav>
-    </div>
-    <section class="section" aria-labelledby="why-title">
-      <div class="container">
-        <h2 class="section-title-start" id="why-title">چرا سازمان‌ها <em>فیبسو</em> را انتخاب می‌کنند؟</h2>
+      <nav class="breadcrumb" aria-label="مسیر صفحه"><ol><li><a href="../index.html">فروشگاه فیبسو</a></li><li aria-current="page">خرید سازمانی</li></ol></nav>
+      <nav class="pill-tabs" aria-label="صفحه‌های پشتیبانی">
+        <a class="pill-tabs__tab" href="../pages/contact.html">تماس با ما</a>
+        <a class="pill-tabs__tab" href="../pages/faq.html">سوالات متداول</a>
+        <a class="pill-tabs__tab" href="../pages/b2b.html" aria-current="page">خرید سازمانی</a>
+      </nav>
+
+      <section class="b2b-intro" aria-labelledby="b2b-title">
+        <div class="b2b-intro__text">
+          <p class="b2b-intro__eyebrow"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M240,208H224V96a16,16,0,0,0-16-16H144V32a16,16,0,0,0-24.88-13.32L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,32V208H48ZM112,112v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm-32,0v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm0,56v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Zm32,0v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Z"/></svg>خرید سازمانی و مشاوره شبکه</p>
+          <h1 class="b2b-intro__title" id="b2b-title">فیبسو، همراه شما در دنیای شبکه</h1>
+          <p class="b2b-intro__lead">تأمین تجهیزات شبکه، لپ‌تاپ نو و استوک برای سازمان‌ها؛ همراه با مشاوره، پیش‌فاکتور رسمی، اجرای زیرساخت و پشتیبانی.</p>
+          <div class="static-actions">
+            <a class="btn btn--primary" href="#quote">درخواست پیش‌فاکتور</a>
+            <a class="btn btn--outline" href="#steps">مراحل همکاری</a>
+          </div>
+        </div>
+        <div class="b2b-intro__art" aria-hidden="true">
+          <img src="../assets/images/products/rack.svg" alt="" width="400" height="400">
+          <img src="../assets/images/products/switch.svg" alt="" width="400" height="400">
+          <img src="../assets/images/products/laptop-business.svg" alt="" width="400" height="400">
+        </div>
+      </section>
+
+      <section class="blog-box" aria-labelledby="why-title">
+        <div class="blog-box__head"><h2 class="blog-box__title" id="why-title">چرا سازمان‌ها فیبسو را انتخاب می‌کنند؟</h2></div>
         <ul class="feature-grid">
           <li class="feature-card"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M201.89,54.66A103.43,103.43,0,0,0,128.79,24H128A104,104,0,0,0,24,128v56a24,24,0,0,0,24,24H64a24,24,0,0,0,24-24V144a24,24,0,0,0-24-24H40.36A88.12,88.12,0,0,1,190.54,65.93,87.39,87.39,0,0,1,215.65,120H192a24,24,0,0,0-24,24v40a24,24,0,0,0,24,24h24a24,24,0,0,1-24,24H136a8,8,0,0,0,0,16h56a40,40,0,0,0,40-40V128A103.41,103.41,0,0,0,201.89,54.66ZM64,136a8,8,0,0,1,8,8v40a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V136Zm128,56a8,8,0,0,1-8-8V144a8,8,0,0,1,8-8h24v56Z"/></svg><h3 class="feature-card__title">پشتیبانی فعال و پاسخ سریع</h3><p class="feature-card__text">وقتی شبکه دچار مشکل شود، هر دقیقه توقف هزینه دارد. تیم فنی فیبسو برای سازمان‌ها پشتیبانی پیوسته و واکنش سریع فراهم می‌کند.</p></li>
           <li class="feature-card"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M221.87,83.16A104.1,104.1,0,1,1,195.67,49l22.67-22.68a8,8,0,0,1,11.32,11.32l-96,96a8,8,0,0,1-11.32-11.32l27.72-27.72a40,40,0,1,0,17.87,31.09,8,8,0,1,1,16-.9,56,56,0,1,1-22.38-41.65L184.3,60.39a87.88,87.88,0,1,0,23.13,29.67,8,8,0,0,1,14.44-6.9Z"/></svg><h3 class="feature-card__title">تمرکز بر کسب‌وکار اصلی</h3><p class="feature-card__text">تأمین تجهیزات و نگهداری شبکه را به ما بسپارید تا تیم شما روی رشد کسب‌وکار تمرکز کند.</p></li>
           <li class="feature-card"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M240,56v64a8,8,0,0,1-16,0V75.31l-82.34,82.35a8,8,0,0,1-11.32,0L96,123.31,29.66,189.66a8,8,0,0,1-11.32-11.32l72-72a8,8,0,0,1,11.32,0L136,140.69,212.69,64H168a8,8,0,0,1,0-16h64A8,8,0,0,1,240,56Z"/></svg><h3 class="feature-card__title">مقیاس‌پذیری و انعطاف</h3><p class="feature-card__text">تجهیزات و راهکارها همگام با رشد سازمان شما بزرگ‌تر می‌شوند، بدون هزینه‌های ناگهانی و غیرضروری.</p></li>
           <li class="feature-card"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,48V96a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h28.69L182.06,73.37a79.56,79.56,0,0,0-56.13-23.43h-.45A79.52,79.52,0,0,0,69.59,72.71,8,8,0,0,1,58.41,61.27a96,96,0,0,1,135,.79L208,76.69V48a8,8,0,0,1,16,0ZM186.41,183.29a80,80,0,0,1-112.47-.66L59.31,168H88a8,8,0,0,0,0-16H40a8,8,0,0,0-8,8v48a8,8,0,0,0,16,0V179.31l14.63,14.63A95.43,95.43,0,0,0,130,222.06h.53a95.36,95.36,0,0,0,67.07-27.33,8,8,0,0,0-11.18-11.44Z"/></svg><h3 class="feature-card__title">به‌روز ماندن فناوری</h3><p class="feature-card__text">پیشنهاد تجهیزات و استانداردهای به‌روز شبکه و امنیت، متناسب با بودجه و نیاز واقعی سازمان.</p></li>
         </ul>
-      </div>
-    </section>
-    <section class="section section--surface" id="steps" aria-labelledby="steps-title">
-      <div class="container">
-        <div class="panel__head">
-          <h2 class="section-title-start" id="steps-title">چهار قدم تا همکاری با <em>فیبسو</em></h2>
-          <a class="btn btn--primary btn--sm" href="#quote">تکمیل فرم</a>
+      </section>
+
+      <section class="blog-box" id="steps" aria-labelledby="steps-title">
+        <div class="blog-box__head">
+          <h2 class="blog-box__title" id="steps-title">چهار قدم تا همکاری با فیبسو</h2>
+          <a class="view-all" href="#quote">تکمیل فرم <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></a>
         </div>
         <ol class="timeline">
           <li class="timeline__item"><div><h3 class="timeline__title">تماس یا ثبت درخواست مشاوره</h3><p class="timeline__text">کافی است تماس بگیرید یا فرم همین صفحه را پر کنید؛ کارشناسان فیبسو نیاز شما را بررسی و با شما هماهنگ می‌کنند.</p></div></li>
@@ -252,11 +266,10 @@
           <li class="timeline__item"><div><h3 class="timeline__title">ارائه پروپوزال و پیش‌فاکتور مکتوب</h3><p class="timeline__text">راهکار پیشنهادی، فهرست تجهیزات (نو یا استوک) و برنامه اجرا به‌صورت مکتوب و شفاف ارائه می‌شود.</p></div></li>
           <li class="timeline__item"><div><h3 class="timeline__title">تأمین، نصب و پشتیبانی</h3><p class="timeline__text">تجهیزات تأمین و نصب می‌شود و پس از راه‌اندازی، پشتیبانی و نگهداری شبکه ادامه پیدا می‌کند.</p></div></li>
         </ol>
-      </div>
-    </section>
-    <section class="section" aria-labelledby="ind-title">
-      <div class="container">
-        <h2 class="section-title-start" id="ind-title">صنایعی که فیبسو با آن‌ها همکاری می‌کند</h2>
+      </section>
+
+      <section class="blog-box" aria-labelledby="ind-title">
+        <div class="blog-box__head"><h2 class="blog-box__title" id="ind-title">صنایعی که فیبسو با آن‌ها همکاری می‌کند</h2></div>
         <ul class="industries">
           <li class="industry"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M116,176a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h28A8,8,0,0,1,116,176Zm60-8H148a8,8,0,0,0,0,16h28a8,8,0,0,0,0-16Zm64,48a8,8,0,0,1-8,8H24a8,8,0,0,1,0-16h8V88a8,8,0,0,1,12.8-6.4L96,120V88a8,8,0,0,1,12.8-6.4l38.74,29.05L159.1,29.74A16.08,16.08,0,0,1,174.94,16h18.12A16.08,16.08,0,0,1,208.9,29.74l15,105.13s.08.78.08,1.13v72h8A8,8,0,0,1,240,216Zm-77.86-94.4,8.53,6.4h36.11L193.06,32H174.94ZM48,208H208V144H168a8,8,0,0,1-4.8-1.6l-14.4-10.8,0,0L112,104v32a8,8,0,0,1-12.8,6.4L48,104Z"/></svg>تولیدی و کارخانه‌ها</li>
           <li class="industry"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M232,96a7.89,7.89,0,0,0-.3-2.2L217.35,43.6A16.07,16.07,0,0,0,202,32H54A16.07,16.07,0,0,0,38.65,43.6L24.31,93.8A7.89,7.89,0,0,0,24,96h0v16a40,40,0,0,0,16,32v72a8,8,0,0,0,8,8H208a8,8,0,0,0,8-8V144a40,40,0,0,0,16-32V96ZM54,48H202l11.42,40H42.61Zm50,56h48v8a24,24,0,0,1-48,0Zm-16,0v8a24,24,0,0,1-35.12,21.26,7.88,7.88,0,0,0-1.82-1.06A24,24,0,0,1,40,112v-8ZM200,208H56V151.2a40.57,40.57,0,0,0,8,.8,40,40,0,0,0,32-16,40,40,0,0,0,64,0,40,40,0,0,0,32,16,40.57,40.57,0,0,0,8-.8Zm4.93-75.8a8.08,8.08,0,0,0-1.8,1.05A24,24,0,0,1,168,112v-8h48v8A24,24,0,0,1,204.93,132.2Z"/></svg>فروشگاه‌های زنجیره‌ای</li>
@@ -265,13 +278,12 @@
           <li class="industry"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V240a8,8,0,0,0,16,0V199.51a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12ZM128,200c-43.27,0-68.72-21.14-80-33.71V126.4l76.24,40.66a8,8,0,0,0,7.52,0L176,143.47v46.34C163.4,195.69,147.52,200,128,200Zm80-33.75a97.83,97.83,0,0,1-16,14.25V134.93l16-8.53ZM188,118.94l-.22-.13-56-29.87a8,8,0,0,0-7.52,14.12L171,128l-43,22.93L25,96,128,41.07,231,96Z"/></svg>آموزشی و دانشگاهی</li>
           <li class="industry"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M24,104H48v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16H208V104h24a8,8,0,0,0,4.19-14.81l-104-64a8,8,0,0,0-8.38,0l-104,64A8,8,0,0,0,24,104Zm40,0H96v64H64Zm80,0v64H112V104Zm48,64H160V104h32ZM128,41.39,203.74,88H52.26ZM248,208a8,8,0,0,1-8,8H16a8,8,0,0,1,0-16H240A8,8,0,0,1,248,208Z"/></svg>اداری و مالی</li>
         </ul>
-      </div>
-    </section>
-    <section class="section" id="quote" aria-labelledby="quote-title">
-      <div class="container split">
-        <form class="panel" novalidate data-demo-form data-success="درخواست شما معتبر است. در نسخه نمایشی چیزی ارسال نشد؛ برای پیگیری فوری با ۰۲۱-۸۲۸۰۱۸۴۵ تماس بگیرید.">
-          <h2 class="panel__title" id="quote-title">درخواست پیش‌فاکتور و مشاوره</h2>
-          <div class="form-grid form-grid--2">
+      </section>
+
+      <section class="contact-send" id="quote" aria-labelledby="quote-title">
+        <h2 class="dot-title" id="quote-title">درخواست پیش‌فاکتور و مشاوره</h2>
+          <form class="contact-box contact-box--b2b" novalidate data-demo-form data-success="درخواست شما ثبت شد. این نسخه نمایشی است و چیزی ارسال نمی‌شود؛ برای پیگیری فوری با ۰۲۱-۸۲۸۰۱۸۴۵ تماس بگیرید.">
+          <div class="contact-box__fields"><div class="form-grid form-grid--2">
             <div class="field"><label class="field__label" for="q-company">نام سازمان / شرکت <span class="req" aria-hidden="true">*</span></label><input class="input" id="q-company" name="company" aria-describedby="q-company-error" data-rules="required" data-label="نام سازمان / شرکت" autocomplete="organization"><p class="field__error" id="q-company-error"></p></div>
             <div class="field"><label class="field__label" for="q-name">نام و نام خانوادگی <span class="req" aria-hidden="true">*</span></label><input class="input" id="q-name" name="name" aria-describedby="q-name-error" data-rules="required" data-label="نام و نام خانوادگی" autocomplete="name"><p class="field__error" id="q-name-error"></p></div>
             <div class="field"><label class="field__label" for="q-mobile">شماره تماس <span class="req" aria-hidden="true">*</span></label><input class="input" id="q-mobile" name="mobile" aria-describedby="q-mobile-error" data-rules="required mobile" data-label="شماره تماس" type="tel" autocomplete="tel" inputmode="tel" dir="ltr"><p class="field__error" id="q-mobile-error"></p></div>
@@ -280,80 +292,112 @@
             <div class="field"><label class="field__label" for="q-budget">بودجه تقریبی</label><select class="input" id="q-budget" name="budget" aria-describedby="q-budget-error"><option value="">انتخاب کنید</option><option>کمتر از ۵۰ میلیون تومان</option><option>۵۰ تا ۲۰۰ میلیون تومان</option><option>۲۰۰ تا ۵۰۰ میلیون تومان</option><option>بیش از ۵۰۰ میلیون تومان</option></select><p class="field__error" id="q-budget-error"></p></div>
             <div class="field field--full"><label class="field__label" for="q-details">شرح نیاز <span class="req" aria-hidden="true">*</span></label><textarea class="input" id="q-details" name="details" aria-describedby="q-details-error" data-rules="required min10" data-label="شرح نیاز"></textarea><p class="field__hint">مثلاً: ۲۰ دستگاه لپ‌تاپ اداری و یک سوییچ ۴۸ پورت</p><p class="field__error" id="q-details-error"></p></div>
           </div>
-          <div class="form-actions"><button class="btn btn--primary" type="submit">ارسال درخواست</button></div>
-          <p class="form-status" role="status" data-form-status></p>
-        </form>
-        <aside class="panel" aria-label="اطلاعات تماس واحد سازمانی">
-          <h2 class="panel__title">ارتباط مستقیم با واحد سازمانی</h2>
+          </div>
+          <aside class="b2b-direct" aria-label="اطلاعات تماس واحد سازمانی">
+          <h3 class="b2b-direct__title">ارتباط مستقیم با واحد سازمانی</h3>
           <ul class="info-list">
             <li><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"/></svg><div><strong>تلفن</strong><a href="tel:+982182801845"><span class="ltr">۰۲۱-۸۲۸۰۱۸۴۵</span></a></div></li>
             <li><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg><div><strong>ایمیل</strong><a href="mailto:info@fibeso.com"><span class="ltr">info@fibeso.com</span></a></div></li>
             <li><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"/></svg><div><strong>ساعات پاسخ‌گویی</strong>شنبه تا چهارشنبه ۹ تا ۱۸، پنجشنبه ۹ تا ۱۳</div></li>
           </ul>
         </aside>
-      </div>
-    </section>
+          <div class="contact-box__submit"><button class="btn btn--primary btn--block" type="submit">ارسال درخواست</button><p class="form-status" role="status" data-form-status></p></div>
+        </form>
+      </section>
+    </div>
   </main>
 
   <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <a class="brand" href="../index.html" aria-label="فروشگاه فیبسو، صفحه اصلی">
-            <img class="brand__mark" src="../assets/images/logo-mark-inverse.svg" alt="" width="40" height="40">
-            <span>فیبسو</span>
-          </a>
-          <p class="footer-about">فروشگاه تخصصی تجهیزات شبکه، لپ‌تاپ نو و استوک و قطعات لپ‌تاپ؛ با تست فنی، ضمانت سلامت و مشاوره پیش از خرید.</p>
-        </div>
-        <nav aria-labelledby="footer-cat-title">
-          <h2 class="footer-title" id="footer-cat-title">فروشگاه</h2>
+    <div class="site-footer__panel">
+      <div class="footer-top">
+        <a class="brand brand--inverse" href="../index.html" aria-label="فروشگاه فیبسو، صفحه اصلی">
+          <img class="brand__mark" src="../assets/images/logo-mark-inverse.svg" alt="" width="40" height="40">
+          <span>فیبسو</span>
+        </a>
+        <a class="back-to-top" href="#main">بازگشت به بالا <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M213.66,165.66a8,8,0,0,1-11.32,0L128,91.31,53.66,165.66a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,213.66,165.66Z"/></svg></a>
+      </div>
+
+      <div class="footer-cols">
+        <nav class="footer-col" aria-labelledby="fc-quick">
+          <h2 class="footer-title" id="fc-quick">دسترسی سریع</h2>
           <ul class="footer-links">
             <li><a href="../pages/shop.html?cat=laptop&amp;condition=new">لپ‌تاپ نو</a></li>
             <li><a href="../pages/shop.html?cat=laptop&amp;condition=used">لپ‌تاپ استوک</a></li>
             <li><a href="../pages/shop.html?cat=network">تجهیزات شبکه</a></li>
-            <li><a href="../pages/shop.html?cat=parts">قطعات و لوازم جانبی</a></li>
+            <li><a href="../pages/shop.html?cat=parts">قطعات لپ‌تاپ</a></li>
             <li><a href="../pages/shop.html?tag=offer">تخفیف‌ها</a></li>
+            <li><a href="../pages/blog.html">بلاگ</a></li>
           </ul>
         </nav>
-        <nav aria-labelledby="footer-help-title">
-          <h2 class="footer-title" id="footer-help-title">راهنما و خدمات</h2>
+        <nav class="footer-col" aria-labelledby="fc-best">
+          <h2 class="footer-title" id="fc-best">پرفروش‌ترین‌ها</h2>
           <ul class="footer-links">
-            <li><a href="../pages/warranty.html">ضمانت و درجه‌بندی استوک</a></li>
+            <li><a href="../pages/shop.html?q=ThinkPad">ThinkPad استوک</a></li>
+            <li><a href="../pages/shop.html?q=Latitude">Latitude استوک</a></li>
+            <li><a href="../pages/shop.html?sub=router">روتر و مودم</a></li>
+            <li><a href="../pages/shop.html?sub=switch">سوییچ شبکه</a></li>
+            <li><a href="../pages/shop.html?sub=ram">رم لپ‌تاپ</a></li>
+            <li><a href="../pages/shop.html?sub=ssd">حافظه SSD</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="fc-about">
+          <h2 class="footer-title" id="fc-about">درباره فیبسو</h2>
+          <ul class="footer-links">
+            <li><a href="../pages/about.html">درباره ما</a></li>
+            <li><a href="../pages/contact.html">تماس با ما</a></li>
             <li><a href="../pages/faq.html">سوالات متداول</a></li>
             <li><a href="../pages/b2b.html">خرید سازمانی</a></li>
-            <li><a href="../pages/blog.html">بلاگ</a></li>
-            <li><a href="../pages/about.html">درباره فیبسو</a></li>
-            <li><a href="../pages/contact.html">تماس با ما</a></li>
           </ul>
         </nav>
-        <div>
-          <h2 class="footer-title">ارتباط با فیبسو</h2>
-          <ul class="footer-contact">
-            <li>
-              <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/></svg>
-              <span>تهران، شهرک گلستان، خیابان هوانیروز، بام‌لند، برج صدف، طبقه همکف، واحد ۲۰۱۰</span>
-            </li>
-            <li>
-              <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"/></svg>
-              <a href="tel:+982182801845"><span class="ltr">۰۲۱-۸۲۸۰۱۸۴۵</span></a>
-            </li>
-            <li>
-              <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg>
-              <a href="mailto:info@fibeso.com"><span class="ltr">info@fibeso.com</span></a>
-            </li>
+        <nav class="footer-col" aria-labelledby="fc-before">
+          <h2 class="footer-title" id="fc-before">پیش از خرید</h2>
+          <ul class="footer-links">
+            <li><a href="../pages/warranty.html">درجه‌بندی کالای استوک</a></li>
+            <li><a href="../pages/faq.html#faq-order">راهنمای ثبت سفارش</a></li>
+            <li><a href="../pages/faq.html#faq-shipping">شیوه‌ها و هزینه ارسال</a></li>
+            <li><a href="../pages/b2b.html">استعلام قیمت سازمانی</a></li>
           </ul>
-        </div>
+        </nav>
+        <nav class="footer-col" aria-labelledby="fc-after">
+          <h2 class="footer-title" id="fc-after">پس از خرید</h2>
+          <ul class="footer-links">
+            <li><a href="../pages/account.html#orders">پیگیری سفارش</a></li>
+            <li><a href="../pages/warranty.html">ضمانت سلامت فیبسو</a></li>
+            <li><a href="../pages/faq.html#faq-returns">رویه بازگرداندن کالا</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="fc-terms">
+          <h2 class="footer-title" id="fc-terms">قوانین و مقررات</h2>
+          <ul class="footer-links">
+            <li><a href="../pages/terms.html">قوانین و مقررات</a></li>
+            <li><a href="../pages/terms.html#privacy">حریم خصوصی کاربران</a></li>
+          </ul>
+        </nav>
       </div>
+
+      <div class="footer-contact-row">
+        <h2 class="footer-title">ارتباط با فیبسو</h2>
+        <ul class="footer-contact">
+          <li><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"/></svg><span>تلفن: <a href="tel:+982182801845"><span class="ltr">۰۲۱-۸۲۸۰۱۸۴۵</span></a></span></li>
+          <li><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></svg><span>ایمیل: <a href="mailto:info@fibeso.com"><span class="ltr">info@fibeso.com</span></a></span></li>
+          <li><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/></svg><span>تهران، شهرک گلستان، خیابان هوانیروز، بام‌لند، برج صدف، طبقه همکف، واحد ۲۰۱۰</span></li>
+        </ul>
+      </div>
+
       <div class="footer-bottom">
-        <p>© ۱۴۰۵ فروشگاه فیبسو. همه حقوق محفوظ است.</p>
-        <p><a href="../pages/terms.html">قوانین و حریم خصوصی</a></p>
+        <p>© ۱۴۰۵ فروشگاه فیبسو. تمامی حقوق مادی و معنوی این سایت متعلق به فیبسو است.</p>
       </div>
     </div>
   </footer>
 
-  <a class="to-top" href="#main" aria-label="بازگشت به بالای صفحه" data-to-top hidden>
-    <svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M213.66,165.66a8,8,0,0,1-11.32,0L128,91.31,53.66,165.66a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,213.66,165.66Z"/></svg>
-  </a>
+  <!-- ===================== Mobile tab bar ===================== -->
+  <nav class="tabbar" aria-label="دسترسی سریع موبایل">
+    <a class="tabbar__item" href="../index.html"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"/></svg><span>خانه</span></a>
+    <button class="tabbar__item" type="button" data-nav-open aria-controls="site-nav"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></svg><span>دسته‌بندی</span></button>
+    <a class="tabbar__item" href="../pages/cart.html"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M104,216a16,16,0,1,1-16-16A16,16,0,0,1,104,216Zm88-16a16,16,0,1,0,16,16A16,16,0,0,0,192,200ZM239.71,74.14l-25.64,92.28A24.06,24.06,0,0,1,191,184H92.16A24.06,24.06,0,0,1,69,166.42L33.92,40H16a8,8,0,0,1,0-16H40a8,8,0,0,1,7.71,5.86L57.19,64H232a8,8,0,0,1,7.71,10.14ZM221.47,80H61.64l22.81,82.14A8,8,0,0,0,92.16,168H191a8,8,0,0,0,7.71-5.86Z"/></svg><span>سبد خرید</span><span class="tabbar__count" data-cart-count hidden>۰</span></a>
+    <a class="tabbar__item" href="../pages/blog.html"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M88,112a8,8,0,0,1,8-8h80a8,8,0,0,1,0,16H96A8,8,0,0,1,88,112Zm8,40h80a8,8,0,0,0,0-16H96a8,8,0,0,0,0,16ZM232,64V184a24,24,0,0,1-24,24H32A24,24,0,0,1,8,184.11V88a8,8,0,0,1,16,0v96a8,8,0,0,0,16,0V64A16,16,0,0,1,56,48H216A16,16,0,0,1,232,64Zm-16,0H56V184a23.84,23.84,0,0,1-1.37,8H208a8,8,0,0,0,8-8Z"/></svg><span>بلاگ</span></a>
+    <a class="tabbar__item" href="../pages/account.html"><svg class="icon" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" focusable="false"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"/></svg><span>حساب</span></a>
+  </nav>
 
   <!-- ===================== Mini cart ===================== -->
   <div class="backdrop" data-backdrop hidden></div>

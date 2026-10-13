@@ -1,35 +1,86 @@
-<!-- {"out": "pages/contact.html", "title": "تماس با فیبسو | فیبسو", "description": "راه‌های ارتباط با فروشگاه فیبسو: تلفن، ایمیل، آدرس و فرم تماس.", "nav": "", "css": ["pages/content.css"], "js": ["pages/forms.js"]} -->
-  <main id="main">
-    <section class="page-hero">
-      <div class="container">
-        <h1 class="page-hero__title">تماس با فیبسو</h1>
-        <p class="page-hero__lead">سوالی درباره سفارش، انتخاب کالا یا خرید سازمانی دارید؟ با ما در ارتباط باشید.</p>
-      </div>
-    </section>
+<!-- {"out": "pages/contact.html", "title": "تماس با فیبسو | فیبسو", "description": "راه‌های ارتباط با فروشگاه فیبسو: نشانی دفتر مرکزی، خدمات پس از فروش، تلفن، ایمیل و فرم ارسال پیام.", "nav": "", "css": ["pages/content.css"], "js": ["pages/forms.js"]} -->
+  <main id="main" class="static-page">
     <div class="container">
-      <nav class="breadcrumb" aria-label="مسیر صفحه"><ol><li><a href="{{root}}index.html">خانه</a></li><li aria-current="page">تماس با ما</li></ol></nav>
-      <div class="content split">
-        <form class="panel" novalidate data-demo-form data-success="پیام شما معتبر است. در نسخه نمایشی چیزی ارسال نشد؛ برای پاسخ سریع با ۰۲۱-۸۲۸۰۱۸۴۵ تماس بگیرید.">
-          <h2 class="panel__title">ارسال پیام</h2>
-          <div class="form-grid form-grid--2">
-            <div class="field"><label class="field__label" for="c-name">نام و نام خانوادگی <span class="req" aria-hidden="true">*</span></label><input class="input" id="c-name" name="name" aria-describedby="c-name-error" data-rules="required" data-label="نام و نام خانوادگی" autocomplete="name"><p class="field__error" id="c-name-error"></p></div>
-            <div class="field"><label class="field__label" for="c-mobile">شماره موبایل <span class="req" aria-hidden="true">*</span></label><input class="input" id="c-mobile" name="mobile" aria-describedby="c-mobile-error" data-rules="required mobile" data-label="شماره موبایل" type="tel" autocomplete="tel" inputmode="tel" dir="ltr"><p class="field__error" id="c-mobile-error"></p></div>
-            <div class="field"><label class="field__label" for="c-email">ایمیل</label><input class="input" id="c-email" name="email" aria-describedby="c-email-error" data-rules="email" data-label="ایمیل" type="email" autocomplete="email" dir="ltr"><p class="field__error" id="c-email-error"></p></div>
-            <div class="field"><label class="field__label" for="c-topic">موضوع <span class="req" aria-hidden="true">*</span></label><select class="input" id="c-topic" name="topic" aria-describedby="c-topic-error" data-rules="required" data-label="موضوع"><option value="">انتخاب کنید</option><option>پیگیری سفارش</option><option>مشاوره خرید</option><option>خرید سازمانی</option><option>گارانتی و خدمات پس از فروش</option><option>سایر</option></select><p class="field__error" id="c-topic-error"></p></div>
-            <div class="field field--full"><label class="field__label" for="c-message">متن پیام <span class="req" aria-hidden="true">*</span></label><textarea class="input" id="c-message" name="message" aria-describedby="c-message-error" data-rules="required min10" data-label="متن پیام"></textarea><p class="field__error" id="c-message-error"></p></div>
+      <nav class="breadcrumb" aria-label="مسیر صفحه"><ol><li><a href="{{root}}index.html">فروشگاه فیبسو</a></li><li aria-current="page">تماس با ما</li></ol></nav>
+      <nav class="pill-tabs" aria-label="صفحه‌های پشتیبانی">
+        <a class="pill-tabs__tab" href="{{root}}pages/contact.html" aria-current="page">تماس با ما</a>
+        <a class="pill-tabs__tab" href="{{root}}pages/faq.html">سوالات متداول</a>
+        <a class="pill-tabs__tab" href="{{root}}pages/b2b.html">خرید سازمانی</a>
+      </nav>
+
+      <section class="contact-info" aria-labelledby="contact-title">
+        <h1 class="dot-title" id="contact-title">تماس با ما</h1>
+        <div class="contact-info__grid">
+          <div class="contact-item">
+            <h2 class="contact-item__title">{{icon:buildings}}دفتر مرکزی فیبسو</h2>
+            <p><strong>نشانی:</strong> تهران، شهرک گلستان، خیابان هوانیروز، بام‌لند، برج صدف، طبقه همکف، واحد ۲۰۱۰</p>
+            <p class="text-muted">مراجعه حضوری برای تحویل سفارش یا بازدید کالا با هماهنگی تلفنی قبلی انجام می‌شود.</p>
           </div>
-          <div class="form-actions"><button class="btn btn--primary" type="submit">ارسال پیام</button></div>
-          <p class="form-status" role="status" data-form-status></p>
+          <div class="contact-item">
+            <h2 class="contact-item__title">{{icon:shield-check}}خدمات پس از فروش</h2>
+            <p>برای استفاده از ضمانت سلامت کالاهای استوک یا گارانتی کالاهای نو، ابتدا با پشتیبانی تماس بگیرید یا از فرم همین صفحه با موضوع «گارانتی و خدمات پس از فروش» پیام بفرستید. پس از ثبت درخواست، شیوه ارسال کالا به دفتر مرکزی و کد پیگیری برای شما ارسال می‌شود.</p>
+            <p><a href="{{root}}pages/warranty.html">شرایط ضمانت و مرجوعی را ببینید</a></p>
+          </div>
+          <div class="contact-item">
+            <h2 class="contact-item__title">{{icon:headset}}پاسخگویی فیبسو</h2>
+            <p>شنبه تا چهارشنبه ساعت ۹ تا ۱۸ و پنجشنبه ساعت ۹ تا ۱۳ پاسخگوی شما هستیم.</p>
+            <ul class="contact-links">
+              <li>{{icon:phone}}<span>تلفن:</span> <a href="tel:+982182801845"><span class="ltr">۰۲۱-۸۲۸۰۱۸۴۵</span></a></li>
+              <li>{{icon:envelope}}<span>ایمیل:</span> <a href="mailto:info@fibeso.com"><span class="ltr">info@fibeso.com</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="contact-send" aria-labelledby="send-title">
+        <h2 class="dot-title" id="send-title">ارسال پیام به فیبسو</h2>
+        <form class="contact-box" novalidate data-demo-form data-success="پیام شما ثبت شد. این نسخه نمایشی است و پیامی ارسال نمی‌شود؛ برای پاسخ فوری با ۰۲۱-۸۲۸۰۱۸۴۵ تماس بگیرید.">
+          <div class="contact-box__note">
+            <p>لطفاً پیش از ارسال پیام یا تماس تلفنی، <a href="{{root}}pages/faq.html">سوالات متداول</a> را ببینید. پاسخ بسیاری از پرسش‌های رایج درباره ارسال، کالای استوک، ضمانت و مرجوعی آنجاست.</p>
+            <a class="btn btn--sm btn--navy" href="{{root}}pages/faq.html">{{icon:question}}سوالات متداول</a>
+          </div>
+          <div class="contact-box__fields">
+            <div class="field">
+              <label class="field__label" for="c-topic">موضوع <span class="req" aria-hidden="true">*</span></label>
+              <select class="input" id="c-topic" name="topic" aria-describedby="c-topic-error" data-rules="required" data-label="موضوع"><option value="">انتخاب کنید</option><option>پیگیری سفارش</option><option>مشاوره خرید لپ‌تاپ</option><option>مشاوره تجهیزات شبکه</option><option>خرید سازمانی و پیش‌فاکتور</option><option>گارانتی و خدمات پس از فروش</option><option>مرجوعی کالا</option><option>انتقاد و پیشنهاد</option></select>
+              <p class="field__error" id="c-topic-error"></p>
+            </div>
+            <div class="form-grid form-grid--2">
+              <div class="field">
+                <label class="field__label" for="c-name">نام و نام خانوادگی <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="c-name" name="name" aria-describedby="c-name-error" data-rules="required" data-label="نام و نام خانوادگی" autocomplete="name">
+                <p class="field__error" id="c-name-error"></p>
+              </div>
+              <div class="field">
+                <label class="field__label" for="c-mobile">شماره تماس <span class="req" aria-hidden="true">*</span></label>
+                <input class="input" id="c-mobile" name="mobile" aria-describedby="c-mobile-error" data-rules="required mobile" data-label="شماره تماس" type="tel" autocomplete="tel" inputmode="tel" dir="ltr" placeholder="09121234567">
+                <p class="field__error" id="c-mobile-error"></p>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field__label" for="c-email">ایمیل</label>
+              <input class="input" id="c-email" name="email" aria-describedby="c-email-error" data-rules="email" data-label="ایمیل" type="email" autocomplete="email" dir="ltr">
+              <p class="field__error" id="c-email-error"></p>
+            </div>
+            <div class="field">
+              <label class="field__label" for="c-message">متن پیام <span class="req" aria-hidden="true">*</span></label>
+              <textarea class="input" id="c-message" name="message" aria-describedby="c-message-error" data-rules="required min10" data-label="متن پیام"></textarea>
+              <p class="field__error" id="c-message-error"></p>
+            </div>
+          </div>
+          <div class="contact-art" aria-hidden="true">
+            <span class="contact-art__bubble"><img src="{{root}}assets/images/logo-mark.svg" alt="" width="40" height="40"></span>
+            <img class="contact-art__laptop" src="{{root}}assets/images/products/laptop-business.svg" alt="" width="400" height="400">
+            <span class="contact-art__chip contact-art__chip--1">{{icon:headset}}</span>
+            <span class="contact-art__chip contact-art__chip--2">{{icon:envelope}}</span>
+            <span class="contact-art__chip contact-art__chip--3">{{icon:chat}}</span>
+            <span class="contact-art__chip contact-art__chip--4">{{icon:phone}}</span>
+          </div>
+          <div class="contact-box__submit">
+            <button class="btn btn--primary btn--block" type="submit">ارسال پیام</button>
+            <p class="form-status" role="status" data-form-status></p>
+          </div>
         </form>
-        <aside class="panel" aria-label="اطلاعات تماس">
-          <h2 class="panel__title">اطلاعات تماس</h2>
-          <ul class="info-list">
-            <li>{{icon:map-pin}}<div><strong>آدرس</strong>تهران، شهرک گلستان، خیابان هوانیروز، بام‌لند، برج صدف، طبقه همکف، واحد ۲۰۱۰</div></li>
-            <li>{{icon:phone}}<div><strong>تلفن</strong><a href="tel:+982182801845"><span class="ltr">۰۲۱-۸۲۸۰۱۸۴۵</span></a></div></li>
-            <li>{{icon:envelope}}<div><strong>ایمیل</strong><a href="mailto:info@fibeso.com"><span class="ltr">info@fibeso.com</span></a></div></li>
-            <li>{{icon:clock}}<div><strong>ساعات کاری</strong>شنبه تا چهارشنبه ۹ تا ۱۸، پنجشنبه ۹ تا ۱۳</div></li>
-          </ul>
-        </aside>
-      </div>
+      </section>
     </div>
   </main>

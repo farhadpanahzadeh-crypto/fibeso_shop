@@ -1,12 +1,26 @@
-<!-- {"out": "404.html", "title": "صفحه پیدا نشد | فیبسو", "description": "صفحه مورد نظر پیدا نشد.", "nav": "", "css": ["pages/content.css"]} -->
-  <main id="main" class="container not-found">
-    <p class="not-found__code" aria-hidden="true">۴۰۴</p>
-    <h1>صفحه مورد نظر پیدا نشد</h1>
-    <p class="text-muted">ممکن است آدرس اشتباه باشد یا این صفحه جابه‌جا شده باشد. محصول مورد نظرتان را جستجو کنید:</p>
-    <form class="search" role="search" action="{{root}}pages/shop.html" method="get">
-      <button class="search__btn" type="submit" aria-label="جستجو">{{icon:magnifying-glass}}</button>
-      <label class="visually-hidden" for="nf-q">جستجوی محصولات</label>
-      <input class="search__input" id="nf-q" name="q" type="search" placeholder="مثلاً ThinkPad یا روتر">
-    </form>
-    <div class="form-actions"><a class="btn btn--primary" href="{{root}}index.html">صفحه اصلی</a><a class="btn btn--outline" href="{{root}}pages/shop.html">فروشگاه</a></div>
+<!-- {"out": "404.html", "title": "صفحه پیدا نشد | فیبسو", "description": "صفحه مورد نظر پیدا نشد.", "nav": "", "css": ["pages/content.css"], "noindex": true} -->
+  <main id="main" class="static-page">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="مسیر صفحه"><ol><li><a href="{{root}}index.html">فروشگاه فیبسو</a></li><li aria-current="page">صفحه پیدا نشد</li></ol></nav>
+      <section class="static-card not-found" aria-labelledby="nf-title">
+        <div class="not-found__art" aria-hidden="true">
+          <p class="not-found__code">۴۰۴</p>
+          <img src="{{root}}assets/images/products/cable.svg" alt="" width="400" height="400">
+        </div>
+        <h1 class="not-found__title" id="nf-title">صفحه مورد نظر پیدا نشد</h1>
+        <p class="text-muted">انگار کابل این صفحه قطع شده است. ممکن است آدرس اشتباه باشد یا صفحه جابه‌جا شده باشد. محصول مورد نظرتان را جستجو کنید:</p>
+        <form class="search" role="search" action="{{root}}pages/shop.html" method="get">
+          <button class="search__btn" type="submit" aria-label="جستجو">{{icon:magnifying-glass}}</button>
+          <label class="visually-hidden" for="nf-q">جستجوی محصولات</label>
+          <input class="search__input" id="nf-q" name="q" type="search" placeholder="مثلاً ThinkPad یا روتر">
+        </form>
+        <div class="static-actions"><a class="btn btn--primary" href="{{root}}index.html">صفحه اصلی</a><a class="btn btn--outline" href="{{root}}pages/shop.html">فروشگاه</a></div>
+        <ul class="nf-links">
+          <li><a href="{{root}}pages/shop.html?cat=laptop&amp;condition=used">{{icon:laptop}}لپ‌تاپ استوک</a></li>
+          <li><a href="{{root}}pages/shop.html?cat=network">{{icon:network}}تجهیزات شبکه</a></li>
+          <li><a href="{{root}}pages/blog.html">{{icon:newspaper}}وبلاگ</a></li>
+          <li><a href="{{root}}pages/faq.html">{{icon:question}}سوالات متداول</a></li>
+        </ul>
+      </section>
+    </div>
   </main>

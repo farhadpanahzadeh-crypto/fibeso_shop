@@ -1,34 +1,44 @@
 <!-- {"out": "pages/b2b.html", "title": "خرید سازمانی و مشاوره شبکه | فیبسو", "description": "تأمین تجهیزات شبکه و لپ‌تاپ برای سازمان‌ها با مشاوره، بازدید حضوری، پیش‌فاکتور رسمی و پشتیبانی فیبسو.", "nav": "b2b", "css": ["pages/content.css"], "js": ["pages/forms.js"]} -->
-  <main id="main">
-    <section class="page-hero">
-      <div class="container">
-        <h1 class="page-hero__title">فیبسو، همراه شما در دنیای شبکه</h1>
-        <p class="page-hero__lead">تأمین تجهیزات شبکه، لپ‌تاپ نو و استوک برای سازمان‌ها؛ همراه با مشاوره، اجرای زیرساخت و پشتیبانی.</p>
-        <div class="page-hero__actions">
-          <a class="btn btn--primary" href="#quote">درخواست پیش‌فاکتور</a>
-          <a class="btn btn--outline-light" href="#steps">مراحل همکاری</a>
-        </div>
-      </div>
-    </section>
+  <main id="main" class="static-page b2b">
     <div class="container">
-      <nav class="breadcrumb" aria-label="مسیر صفحه"><ol><li><a href="{{root}}index.html">خانه</a></li><li aria-current="page">خرید سازمانی</li></ol></nav>
-    </div>
-    <section class="section" aria-labelledby="why-title">
-      <div class="container">
-        <h2 class="section-title-start" id="why-title">چرا سازمان‌ها <em>فیبسو</em> را انتخاب می‌کنند؟</h2>
+      <nav class="breadcrumb" aria-label="مسیر صفحه"><ol><li><a href="{{root}}index.html">فروشگاه فیبسو</a></li><li aria-current="page">خرید سازمانی</li></ol></nav>
+      <nav class="pill-tabs" aria-label="صفحه‌های پشتیبانی">
+        <a class="pill-tabs__tab" href="{{root}}pages/contact.html">تماس با ما</a>
+        <a class="pill-tabs__tab" href="{{root}}pages/faq.html">سوالات متداول</a>
+        <a class="pill-tabs__tab" href="{{root}}pages/b2b.html" aria-current="page">خرید سازمانی</a>
+      </nav>
+
+      <section class="b2b-intro" aria-labelledby="b2b-title">
+        <div class="b2b-intro__text">
+          <p class="b2b-intro__eyebrow">{{icon:buildings}}خرید سازمانی و مشاوره شبکه</p>
+          <h1 class="b2b-intro__title" id="b2b-title">فیبسو، همراه شما در دنیای شبکه</h1>
+          <p class="b2b-intro__lead">تأمین تجهیزات شبکه، لپ‌تاپ نو و استوک برای سازمان‌ها؛ همراه با مشاوره، پیش‌فاکتور رسمی، اجرای زیرساخت و پشتیبانی.</p>
+          <div class="static-actions">
+            <a class="btn btn--primary" href="#quote">درخواست پیش‌فاکتور</a>
+            <a class="btn btn--outline" href="#steps">مراحل همکاری</a>
+          </div>
+        </div>
+        <div class="b2b-intro__art" aria-hidden="true">
+          <img src="{{root}}assets/images/products/rack.svg" alt="" width="400" height="400">
+          <img src="{{root}}assets/images/products/switch.svg" alt="" width="400" height="400">
+          <img src="{{root}}assets/images/products/laptop-business.svg" alt="" width="400" height="400">
+        </div>
+      </section>
+
+      <section class="blog-box" aria-labelledby="why-title">
+        <div class="blog-box__head"><h2 class="blog-box__title" id="why-title">چرا سازمان‌ها فیبسو را انتخاب می‌کنند؟</h2></div>
         <ul class="feature-grid">
           <li class="feature-card">{{icon:headset}}<h3 class="feature-card__title">پشتیبانی فعال و پاسخ سریع</h3><p class="feature-card__text">وقتی شبکه دچار مشکل شود، هر دقیقه توقف هزینه دارد. تیم فنی فیبسو برای سازمان‌ها پشتیبانی پیوسته و واکنش سریع فراهم می‌کند.</p></li>
           <li class="feature-card">{{icon:target}}<h3 class="feature-card__title">تمرکز بر کسب‌وکار اصلی</h3><p class="feature-card__text">تأمین تجهیزات و نگهداری شبکه را به ما بسپارید تا تیم شما روی رشد کسب‌وکار تمرکز کند.</p></li>
           <li class="feature-card">{{icon:trend-up}}<h3 class="feature-card__title">مقیاس‌پذیری و انعطاف</h3><p class="feature-card__text">تجهیزات و راهکارها همگام با رشد سازمان شما بزرگ‌تر می‌شوند، بدون هزینه‌های ناگهانی و غیرضروری.</p></li>
           <li class="feature-card">{{icon:recycle}}<h3 class="feature-card__title">به‌روز ماندن فناوری</h3><p class="feature-card__text">پیشنهاد تجهیزات و استانداردهای به‌روز شبکه و امنیت، متناسب با بودجه و نیاز واقعی سازمان.</p></li>
         </ul>
-      </div>
-    </section>
-    <section class="section section--surface" id="steps" aria-labelledby="steps-title">
-      <div class="container">
-        <div class="panel__head">
-          <h2 class="section-title-start" id="steps-title">چهار قدم تا همکاری با <em>فیبسو</em></h2>
-          <a class="btn btn--primary btn--sm" href="#quote">تکمیل فرم</a>
+      </section>
+
+      <section class="blog-box" id="steps" aria-labelledby="steps-title">
+        <div class="blog-box__head">
+          <h2 class="blog-box__title" id="steps-title">چهار قدم تا همکاری با فیبسو</h2>
+          <a class="view-all" href="#quote">تکمیل فرم {{icon:caret-left}}</a>
         </div>
         <ol class="timeline">
           <li class="timeline__item"><div><h3 class="timeline__title">تماس یا ثبت درخواست مشاوره</h3><p class="timeline__text">کافی است تماس بگیرید یا فرم همین صفحه را پر کنید؛ کارشناسان فیبسو نیاز شما را بررسی و با شما هماهنگ می‌کنند.</p></div></li>
@@ -36,11 +46,10 @@
           <li class="timeline__item"><div><h3 class="timeline__title">ارائه پروپوزال و پیش‌فاکتور مکتوب</h3><p class="timeline__text">راهکار پیشنهادی، فهرست تجهیزات (نو یا استوک) و برنامه اجرا به‌صورت مکتوب و شفاف ارائه می‌شود.</p></div></li>
           <li class="timeline__item"><div><h3 class="timeline__title">تأمین، نصب و پشتیبانی</h3><p class="timeline__text">تجهیزات تأمین و نصب می‌شود و پس از راه‌اندازی، پشتیبانی و نگهداری شبکه ادامه پیدا می‌کند.</p></div></li>
         </ol>
-      </div>
-    </section>
-    <section class="section" aria-labelledby="ind-title">
-      <div class="container">
-        <h2 class="section-title-start" id="ind-title">صنایعی که فیبسو با آن‌ها همکاری می‌کند</h2>
+      </section>
+
+      <section class="blog-box" aria-labelledby="ind-title">
+        <div class="blog-box__head"><h2 class="blog-box__title" id="ind-title">صنایعی که فیبسو با آن‌ها همکاری می‌کند</h2></div>
         <ul class="industries">
           <li class="industry">{{icon:factory}}تولیدی و کارخانه‌ها</li>
           <li class="industry">{{icon:storefront}}فروشگاه‌های زنجیره‌ای</li>
@@ -49,13 +58,12 @@
           <li class="industry">{{icon:graduation-cap}}آموزشی و دانشگاهی</li>
           <li class="industry">{{icon:bank}}اداری و مالی</li>
         </ul>
-      </div>
-    </section>
-    <section class="section" id="quote" aria-labelledby="quote-title">
-      <div class="container split">
-        <form class="panel" novalidate data-demo-form data-success="درخواست شما معتبر است. در نسخه نمایشی چیزی ارسال نشد؛ برای پیگیری فوری با ۰۲۱-۸۲۸۰۱۸۴۵ تماس بگیرید.">
-          <h2 class="panel__title" id="quote-title">درخواست پیش‌فاکتور و مشاوره</h2>
-          <div class="form-grid form-grid--2">
+      </section>
+
+      <section class="contact-send" id="quote" aria-labelledby="quote-title">
+        <h2 class="dot-title" id="quote-title">درخواست پیش‌فاکتور و مشاوره</h2>
+          <form class="contact-box contact-box--b2b" novalidate data-demo-form data-success="درخواست شما ثبت شد. این نسخه نمایشی است و چیزی ارسال نمی‌شود؛ برای پیگیری فوری با ۰۲۱-۸۲۸۰۱۸۴۵ تماس بگیرید.">
+          <div class="contact-box__fields"><div class="form-grid form-grid--2">
             <div class="field"><label class="field__label" for="q-company">نام سازمان / شرکت <span class="req" aria-hidden="true">*</span></label><input class="input" id="q-company" name="company" aria-describedby="q-company-error" data-rules="required" data-label="نام سازمان / شرکت" autocomplete="organization"><p class="field__error" id="q-company-error"></p></div>
             <div class="field"><label class="field__label" for="q-name">نام و نام خانوادگی <span class="req" aria-hidden="true">*</span></label><input class="input" id="q-name" name="name" aria-describedby="q-name-error" data-rules="required" data-label="نام و نام خانوادگی" autocomplete="name"><p class="field__error" id="q-name-error"></p></div>
             <div class="field"><label class="field__label" for="q-mobile">شماره تماس <span class="req" aria-hidden="true">*</span></label><input class="input" id="q-mobile" name="mobile" aria-describedby="q-mobile-error" data-rules="required mobile" data-label="شماره تماس" type="tel" autocomplete="tel" inputmode="tel" dir="ltr"><p class="field__error" id="q-mobile-error"></p></div>
@@ -64,17 +72,17 @@
             <div class="field"><label class="field__label" for="q-budget">بودجه تقریبی</label><select class="input" id="q-budget" name="budget" aria-describedby="q-budget-error"><option value="">انتخاب کنید</option><option>کمتر از ۵۰ میلیون تومان</option><option>۵۰ تا ۲۰۰ میلیون تومان</option><option>۲۰۰ تا ۵۰۰ میلیون تومان</option><option>بیش از ۵۰۰ میلیون تومان</option></select><p class="field__error" id="q-budget-error"></p></div>
             <div class="field field--full"><label class="field__label" for="q-details">شرح نیاز <span class="req" aria-hidden="true">*</span></label><textarea class="input" id="q-details" name="details" aria-describedby="q-details-error" data-rules="required min10" data-label="شرح نیاز"></textarea><p class="field__hint">مثلاً: ۲۰ دستگاه لپ‌تاپ اداری و یک سوییچ ۴۸ پورت</p><p class="field__error" id="q-details-error"></p></div>
           </div>
-          <div class="form-actions"><button class="btn btn--primary" type="submit">ارسال درخواست</button></div>
-          <p class="form-status" role="status" data-form-status></p>
-        </form>
-        <aside class="panel" aria-label="اطلاعات تماس واحد سازمانی">
-          <h2 class="panel__title">ارتباط مستقیم با واحد سازمانی</h2>
+          </div>
+          <aside class="b2b-direct" aria-label="اطلاعات تماس واحد سازمانی">
+          <h3 class="b2b-direct__title">ارتباط مستقیم با واحد سازمانی</h3>
           <ul class="info-list">
             <li>{{icon:phone}}<div><strong>تلفن</strong><a href="tel:+982182801845"><span class="ltr">۰۲۱-۸۲۸۰۱۸۴۵</span></a></div></li>
             <li>{{icon:envelope}}<div><strong>ایمیل</strong><a href="mailto:info@fibeso.com"><span class="ltr">info@fibeso.com</span></a></div></li>
             <li>{{icon:clock}}<div><strong>ساعات پاسخ‌گویی</strong>شنبه تا چهارشنبه ۹ تا ۱۸، پنجشنبه ۹ تا ۱۳</div></li>
           </ul>
         </aside>
-      </div>
-    </section>
+          <div class="contact-box__submit"><button class="btn btn--primary btn--block" type="submit">ارسال درخواست</button><p class="form-status" role="status" data-form-status></p></div>
+        </form>
+      </section>
+    </div>
   </main>

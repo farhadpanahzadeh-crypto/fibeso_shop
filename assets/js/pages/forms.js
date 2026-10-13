@@ -1,4 +1,4 @@
-/* Generic front-end form handling for contact / B2B forms (no backend yet). */
+/* Front-end handling for the contact and B2B forms (demo: nothing is sent, there is no backend yet). */
 (function () {
   'use strict';
 
@@ -18,6 +18,8 @@
       window.setTimeout(function () {
         btn.disabled = false;
         btn.removeAttribute('aria-busy');
+        form.reset();
+        form.querySelectorAll('[aria-invalid]').forEach(function (el) { el.removeAttribute('aria-invalid'); });
         status.classList.add('form-status--success');
         status.textContent = form.getAttribute('data-success');
       }, 400);

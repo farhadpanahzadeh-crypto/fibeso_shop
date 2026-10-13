@@ -3,12 +3,10 @@
   'use strict';
 
   var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var faDigits = new Intl.NumberFormat('fa-IR', { useGrouping: false });
 
+  // Digit by digit, so leading zeros (phone numbers, codes) are kept
   function toPersianDigits(value) {
-    return String(value).replace(/\d+/g, function (n) {
-      return faDigits.format(Number(n));
-    });
+    return String(value).replace(/\d/g, function (d) { return '۰۱۲۳۴۵۶۷۸۹'[d]; });
   }
 
   // Converts Persian/Arabic-Indic digits typed by users into ASCII digits.
