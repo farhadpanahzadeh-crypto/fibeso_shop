@@ -5,6 +5,7 @@
         <ol>
           <li><a href="{{root}}index.html">خانه</a></li>
           <li><a href="{{root}}pages/shop.html" data-crumb-cat>فروشگاه</a></li>
+          <li hidden><a href="{{root}}pages/shop.html" data-crumb-sub></a></li>
           <li aria-current="page" data-crumb-title>محصول</li>
         </ol>
       </nav>
@@ -14,7 +15,7 @@
       </div>
     </div>
 
-    <section class="section section--tight" aria-labelledby="related-title" data-related-section hidden>
+    <section class="section section--tight pdp-rail" aria-labelledby="related-title" data-related-section hidden>
       <div class="container">
         <div class="rail">
           <div class="rail__head">
@@ -24,10 +25,30 @@
                 <button class="round-btn" type="button" data-scroll-prev="related" aria-label="محصولات قبلی">{{icon:caret-right}}</button>
                 <button class="round-btn" type="button" data-scroll-next="related" aria-label="محصولات بعدی">{{icon:caret-left}}</button>
               </div>
+              <a class="view-all" href="{{root}}pages/shop.html" data-related-all>نمایش همه {{icon:caret-left}}</a>
             </div>
           </div>
           <div class="scroller" data-scroller="related">
             <ul class="scroller__track" data-related aria-label="کالاهای مشابه">{{skeleton:6}}</ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--tight pdp-rail" aria-labelledby="recent-title" data-recent-section hidden>
+      <div class="container">
+        <div class="rail">
+          <div class="rail__head">
+            <h2 class="rail__title" id="recent-title">آخرین بازدیدهای شما</h2>
+            <div class="rail__tools">
+              <div class="scroller__controls">
+                <button class="round-btn" type="button" data-scroll-prev="recent" aria-label="بازدیدهای قبلی">{{icon:caret-right}}</button>
+                <button class="round-btn" type="button" data-scroll-next="recent" aria-label="بازدیدهای بعدی">{{icon:caret-left}}</button>
+              </div>
+            </div>
+          </div>
+          <div class="scroller" data-scroller="recent">
+            <ul class="scroller__track" data-recent aria-label="آخرین بازدیدهای شما"></ul>
           </div>
         </div>
       </div>

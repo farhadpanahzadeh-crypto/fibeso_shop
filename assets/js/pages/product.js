@@ -1,4 +1,5 @@
-/* Product detail page: renders one product from ?id=, buy box, tabs, reviews, related rail. */
+/* Product detail page: gallery, info, buy box, sticky section nav (intro, specs,
+   reviews), similar products and recently viewed rails. Renders ?id= */
 (function () {
   'use strict';
 
@@ -11,123 +12,188 @@
   var p = Shop.byId(id);
   var esc = Shop.escapeHtml;
   var fmt = Shop.formatPrice;
+  var ic = window.icon;
+  var SHOP = Shop.root + 'pages/shop.html';
   var CAT_LABEL = { laptop: 'لپ‌تاپ', network: 'تجهیزات شبکه', parts: 'قطعات و لوازم جانبی' };
-
-  var SVG = {
-    shield: window.icon('shield-check'),
-    truck: window.icon('truck'),
-    box: window.icon('package'),
-    share: window.icon('share'),
-    minus: window.icon('minus'),
-    plus: window.icon('plus')
+  var SUB_LABEL = {
+    router: 'مودم و روتر', 'switch': 'سوییچ شبکه', ap: 'اکسس پوینت', cable: 'کابل و پچ‌کورد', rack: 'رک شبکه',
+    nic: 'کارت شبکه', ram: 'رم لپ‌تاپ', ssd: 'حافظه SSD', charger: 'شارژر و آداپتور', mouse: 'ماوس و جانبی'
   };
 
   if (!p) {
     document.title = 'محصول پیدا نشد | فیبسو';
     root.innerHTML = '<div class="empty-state pdp-missing">' + Shop.icon.bag +
       '<h1>محصول مورد نظر پیدا نشد</h1><p>ممکن است این کالا حذف شده یا آدرس اشتباه باشد.</p>' +
-      '<a class="btn btn--primary" href="' + Shop.root + 'pages/shop.html">رفتن به فروشگاه</a></div>';
+      '<a class="btn btn--primary" href="' + SHOP + '">رفتن به فروشگاه</a></div>';
+    showRecent(null);
     return;
   }
 
-  /* ---------- Meta ---------- */
+  /* ---------- Meta + breadcrumb ---------- */
   document.title = p.title + ' | فیبسو';
   var desc = document.querySelector('meta[name="description"]');
   if (desc) desc.setAttribute('content', p.desc);
   var crumbCat = document.querySelector('[data-crumb-cat]');
-  crumbCat.textContent = CAT_LABEL[p.cat];
-  crumbCat.href = Shop.root + 'pages/shop.html?cat=' + p.cat;
+  crumbCat.textContent = CAT_LABEL[p.cat] || 'فروشگاه';
+  crumbCat.href = SHOP + '?cat=' + p.cat;
+  var crumbSub = document.querySelector('[data-crumb-sub]');
+  var subLabel = p.cat === 'laptop' ? (p.condition === 'used' ? 'لپ‌تاپ استوک' : 'لپ‌تاپ نو') : SUB_LABEL[p.sub];
+  if (subLabel) {
+    crumbSub.textContent = subLabel;
+    crumbSub.href = SHOP + (p.cat === 'laptop' ? '?cat=laptop&condition=' + p.condition : '?sub=' + p.sub);
+    crumbSub.parentNode.hidden = false;
+  }
   document.querySelector('[data-crumb-title]').textContent = p.title;
 
   var off = Shop.discountOf(p);
   var out = p.stock === 0;
+  var low = p.stock > 0 && p.stock <= 3;
   var wished = Shop.wishlist().indexOf(p.id) !== -1;
+  var used = p.condition === 'used';
 
-  var gradeNote = p.condition === 'used'
-    ? '<p class="pdp__grade"><strong>کالای استوک (کارکرده)' + (p.grade ? '، درجه ' + p.grade : '') + ':</strong> ' +
-      'این کالا پیش از فروش تست فنی شده است. ' + (p.grade === 'B' ? 'ممکن است آثار جزئی استفاده روی بدنه دیده شود.' : 'بدنه بدون خط و خش محسوس است.') +
-      ' <a href="' + Shop.root + 'pages/warranty.html">درباره درجه‌بندی</a></p>'
-    : '';
+  // Latin model name from the title, shown as the subtitle ("ThinkPad E14 Core i5")
+  var latin = (p.title.match(/[A-Za-z][A-Za-z0-9.+\-\/]*(?:\s+[A-Za-z0-9][A-Za-z0-9.+\-\/]*)*/g) || []).join(' ');
 
-  var keyspecs = p.specs.slice(0, 4).map(function (s) {
-    return '<li><span class="keyspecs__label">' + esc(s[0]) + '</span><span class="keyspecs__value">' + esc(s[1]) + '</span></li>';
+  /* ---------- Gallery: full view + close-up views of the same picture ---------- */
+  var VIEWS = [
+    { label: 'نمای کامل', s: 1, o: '50% 50%' },
+    { label: 'نمای نزدیک از بالا', s: 1.7, o: '50% 25%' },
+    { label: 'نمای نزدیک از راست', s: 1.8, o: '78% 55%' },
+    { label: 'نمای نزدیک از چپ', s: 1.8, o: '22% 55%' }
+  ];
+  function viewStyle(v) {
+    return 'transform:scale(' + v.s + ');transform-origin:' + v.o;
+  }
+  var img = Shop.imageUrl(p);
+  var thumbs = VIEWS.map(function (v, i) {
+    return '<li><button class="pdp-thumb" type="button" data-view="' + i + '" aria-pressed="' + (i === 0) + '" aria-label="' + v.label + '">' +
+      '<img src="' + img + '" alt="" width="400" height="400" style="' + viewStyle(v) + '"></button></li>';
   }).join('');
 
-  var buyActions = out
-    ? '<p class="stock-out">این کالا در حال حاضر ناموجود است.</p>' +
-      '<button class="btn btn--outline btn--block" type="button" data-notify>به من اطلاع بده</button>'
-    : '<div class="buybox__actions">' +
-        '<div class="qty" role="group" aria-label="تعداد">' +
-          '<button type="button" data-pdp-step="1" aria-label="افزایش تعداد">+</button>' +
-          '<output aria-live="polite" data-pdp-qty>۱</output>' +
-          '<button type="button" data-pdp-step="-1" aria-label="کاهش تعداد">−</button>' +
-        '</div>' +
-        '<button class="btn btn--primary" type="button" data-add-to-cart="' + p.id + '" data-amount="1">افزودن به سبد خرید</button>' +
+  /* ---------- Info column ---------- */
+  var features = p.specs.filter(function (s) { return !/وضعیت ظاهری/.test(s[0]); }).slice(0, 6).map(function (s) {
+    return '<li><span class="pdp-features__label">' + esc(s[0]) + '</span><span class="pdp-features__value">' + esc(s[1]) + '</span></li>';
+  }).join('');
+
+  var gradeBox = used
+    ? '<div class="pdp-grade">' + ic('seal-check') +
+        '<div><p class="pdp-grade__title">کالای استوک' + (p.grade ? '، درجه ' + p.grade : '') + '</p>' +
+        '<p>این کالا پیش از فروش تست فنی شده است. ' +
+          (p.grade === 'B' ? 'ممکن است آثار جزئی استفاده مانند خط و خش سطحی روی بدنه دیده شود.' : 'بدنه بدون خط و خش محسوس است.') + '</p>' +
+        '<a class="link-arrow" href="' + Shop.root + 'pages/warranty.html">درباره درجه‌بندی و ضمانت سلامت ' + ic('caret-left') + '</a></div>' +
+      '</div>'
+    : '';
+
+  /* ---------- Buy box ---------- */
+  var priceBlock = out
+    ? '<p class="buybox__out">' + ic('info') + 'این کالا در حال حاضر ناموجود است.</p>'
+    : '<div class="buybox__price">' +
+        (off ? '<div class="buybox__old"><span class="discount"><span class="visually-hidden">تخفیف </span>' + fmt(off) + '٪</span>' +
+          '<del class="price__old"><span class="visually-hidden">قیمت قبلی: </span>' + fmt(p.old) + '</del></div>' : '') +
+        '<p class="price__now">' + fmt(p.price) + ' <span class="price__unit">تومان</span></p>' +
       '</div>';
 
-  root.innerHTML =
-    '<article class="pdp">' +
-      '<div class="pdp__gallery">' +
-        '<img src="' + Shop.imageUrl(p) + '" alt="' + esc(p.title) + '" width="400" height="400">' +
-        (off ? '<span class="discount">-' + fmt(off) + '٪</span>' : '') +
-        '<div class="pdp__gallery-tools">' +
-          '<button class="icon-btn icon-btn--round pdp-wish" type="button" data-wish="' + p.id + '" aria-pressed="' + wished + '" aria-label="افزودن به علاقه‌مندی‌ها">' + Shop.icon.heart + '</button>' +
-          '<button class="icon-btn icon-btn--round" type="button" data-share aria-label="اشتراک‌گذاری">' + SVG.share + '</button>' +
+  var buyActions = out
+    ? '<button class="btn btn--outline btn--block" type="button" data-notify>' + ic('envelope') + 'موجود شد خبرم کن</button>'
+    : '<div class="buybox__actions">' +
+        '<div class="qty" role="group" aria-label="تعداد">' +
+          '<button type="button" data-pdp-step="1" aria-label="افزایش تعداد">' + ic('plus') + '</button>' +
+          '<output aria-live="polite" data-pdp-qty>۱</output>' +
+          '<button type="button" data-pdp-step="-1" aria-label="کاهش تعداد" disabled>' + ic('minus') + '</button>' +
         '</div>' +
+        '<button class="btn btn--primary buybox__add" type="button" data-add-to-cart="' + p.id + '" data-amount="1">' + ic('cart-plus') + 'افزودن به سبد خرید</button>' +
+      '</div>';
+
+  /* ---------- Sections below ---------- */
+  var specRows =
+    '<tr><th scope="row">برند</th><td>' + esc(p.brand) + '</td></tr>' +
+    (latin ? '<tr><th scope="row">مدل</th><td><span lang="en" dir="ltr">' + esc(latin) + '</span></td></tr>' : '') +
+    '<tr><th scope="row">وضعیت</th><td>' + (used ? 'استوک' + (p.grade ? '، درجه ' + p.grade : '') : 'نو') + '</td></tr>' +
+    p.specs.map(function (s) { return '<tr><th scope="row">' + esc(s[0]) + '</th><td>' + esc(s[1]) + '</td></tr>'; }).join('') +
+    '<tr><th scope="row">گارانتی</th><td>' + esc(p.warranty) + '</td></tr>';
+
+  var stars = [1, 2, 3, 4, 5].map(function (n) {
+    return '<span class="pdp-stars__star' + (n <= Math.round(p.rating) ? ' is-on' : '') + '">' + Shop.icon.star + '</span>';
+  }).join('');
+
+  root.innerHTML =
+    '<article class="pdp" aria-labelledby="pdp-title">' +
+      '<div class="pdp__gallery">' +
+        '<div class="pdp__stage">' +
+          '<img src="' + img + '" alt="' + esc(p.title) + '" width="400" height="400" data-stage style="' + viewStyle(VIEWS[0]) + '">' +
+          '<div class="pdp__tools">' +
+            '<button class="pdp-tool pdp-wish" type="button" data-wish="' + p.id + '" aria-pressed="' + wished + '" aria-label="افزودن به علاقه‌مندی‌ها">' + Shop.icon.heart + '</button>' +
+            '<button class="pdp-tool" type="button" data-share aria-label="اشتراک‌گذاری">' + ic('share') + '</button>' +
+          '</div>' +
+        '</div>' +
+        '<ul class="pdp__thumbs" aria-label="تصاویر محصول">' + thumbs + '</ul>' +
       '</div>' +
 
       '<div class="pdp__info">' +
-        '<a class="pdp__brand" href="' + Shop.root + 'pages/shop.html?brand=' + encodeURIComponent(p.brand) + '">' + esc(p.brand) + '</a>' +
-        '<h1 class="pdp__title">' + esc(p.title) + '</h1>' +
-        '<div class="pdp__meta">' + Shop.conditionHTML(p) +
-          '<span class="product-card__rating">' + Shop.icon.star + fmt(p.rating) + ' از ۵ <span>(' + fmt(p.reviews) + ' نظر)</span></span>' +
-          '<span>کد کالا: <span class="ltr">' + esc(p.id.toUpperCase()) + '</span></span>' +
+        '<h1 class="pdp__title" id="pdp-title">' + esc(p.title) + '</h1>' +
+        (latin ? '<p class="pdp__subtitle"><span lang="en" dir="ltr">' + esc(latin) + '</span></p>' : '') +
+        '<div class="pdp__meta">' +
+          '<span class="pdp__rating">' + Shop.icon.star + '<span>' + fmt(p.rating) + '</span>' +
+            '<a href="#reviews">(' + fmt(p.reviews) + ' نظر)</a></span>' +
+          Shop.conditionHTML(p) +
+          '<a class="pdp__brand" href="' + SHOP + '?brand=' + encodeURIComponent(p.brand) + '">برند: ' + esc(p.brand) + '</a>' +
         '</div>' +
-        gradeNote +
-        '<h2 class="pdp__keyspecs-title">ویژگی‌های اصلی</h2>' +
-        '<ul class="keyspecs">' + keyspecs + '</ul>' +
+        '<h2 class="pdp__h">ویژگی‌ها</h2>' +
+        '<ul class="pdp-features">' + features + '</ul>' +
+        '<a class="link-arrow pdp__all-specs" href="#specs">مشاهده همه مشخصات ' + ic('caret-left') + '</a>' +
+        gradeBox +
       '</div>' +
 
-      '<aside class="buybox" aria-label="خرید">' +
+      '<aside class="buybox" aria-labelledby="buybox-title">' +
+        '<h2 class="visually-hidden" id="buybox-title">خرید این کالا</h2>' +
         '<ul class="buybox__rows">' +
-          '<li>' + SVG.shield + '<span>' + esc(p.warranty) + '</span></li>' +
-          '<li>' + SVG.box + (out ? '<span>ناموجود</span>' : '<span class="in-stock">موجود در انبار فیبسو</span>') + '</li>' +
-          '<li>' + SVG.truck + '<span>ارسال از ۱ تا ۳ روز کاری؛ رایگان برای سفارش‌های بالای ۵ میلیون تومان</span></li>' +
+          '<li>' + ic('shield-check') + '<span>' + esc(p.warranty) + '</span></li>' +
+          '<li>' + ic('storefront') + (out ? '<span class="text-muted">ناموجود در انبار</span>'
+            : '<span><span class="in-stock">موجود در انبار فیبسو</span>' +
+              (low ? '<span class="stock-low">' + Shop.icon.stock + 'تنها ' + fmt(p.stock) + ' عدد باقی مانده</span>' : '') + '</span>') + '</li>' +
+          '<li>' + ic('truck') + '<span>ارسال ۱ تا ۳ روز کاری<span class="buybox__hint">رایگان برای سفارش‌های بالای ۵ میلیون تومان</span></span></li>' +
+          '<li>' + ic('package') + '<span><span>کد کالا: <span dir="ltr">' + esc(p.id.toUpperCase()) + '</span></span></span></li>' +
         '</ul>' +
-        (out ? '' :
-          '<div class="buybox__price">' +
-            (p.old ? '<div class="buybox__old"><del class="price__old">' + fmt(p.old) + '</del><span class="discount">-' + fmt(off) + '٪</span></div>' : '') +
-            '<span class="price__now">' + fmt(p.price) + ' <span class="price__unit">تومان</span></span>' +
-          '</div>') +
+        priceBlock +
         buyActions +
       '</aside>' +
     '</article>' +
 
-    '<section class="pdp-tabs" aria-label="اطلاعات تکمیلی">' +
-      '<div class="tabs-line" role="tablist" aria-label="اطلاعات محصول" data-tablist>' +
-        '<button class="tabs-line__tab" role="tab" type="button" id="tab-desc" aria-controls="panel-desc" aria-selected="true">توضیحات</button>' +
-        '<button class="tabs-line__tab" role="tab" type="button" id="tab-specs" aria-controls="panel-specs" aria-selected="false" tabindex="-1">مشخصات فنی</button>' +
-        '<button class="tabs-line__tab" role="tab" type="button" id="tab-reviews" aria-controls="panel-reviews" aria-selected="false" tabindex="-1">نظرات (' + fmt(p.reviews) + ')</button>' +
-      '</div>' +
-      '<div class="tab-panel pdp-desc" id="panel-desc" role="tabpanel" aria-labelledby="tab-desc" tabindex="0">' +
-        '<p>' + esc(p.desc) + '</p>' +
-        '<p>' + (p.condition === 'used'
-          ? 'همه کالاهای استوک فیبسو پیش از ارسال توسط کارشناسان فنی تست می‌شوند و وضعیت ظاهری آن‌ها به‌صورت شفاف در صفحه محصول درج می‌شود.'
-          : 'این کالا نو و آکبند است و با گارانتی معتبر عرضه می‌شود.') + '</p>' +
-      '</div>' +
-      '<div class="tab-panel" id="panel-specs" role="tabpanel" aria-labelledby="tab-specs" tabindex="0" hidden>' +
-        '<table class="spec-table"><caption class="visually-hidden">مشخصات فنی ' + esc(p.title) + '</caption><tbody>' +
-          '<tr><th scope="row">برند</th><td>' + esc(p.brand) + '</td></tr>' +
-          '<tr><th scope="row">وضعیت</th><td>' + (p.condition === 'used' ? 'استوک' + (p.grade ? '، درجه ' + p.grade : '') : 'نو') + '</td></tr>' +
-          p.specs.map(function (s) { return '<tr><th scope="row">' + esc(s[0]) + '</th><td>' + esc(s[1]) + '</td></tr>'; }).join('') +
-          '<tr><th scope="row">گارانتی</th><td>' + esc(p.warranty) + '</td></tr>' +
-        '</tbody></table>' +
-      '</div>' +
-      '<div class="tab-panel" id="panel-reviews" role="tabpanel" aria-labelledby="tab-reviews" tabindex="0" hidden>' +
+    '<nav class="pdp-nav" aria-label="بخش‌های صفحه محصول" data-pdp-nav>' +
+      '<ul>' +
+        '<li><a href="#intro" aria-current="true">معرفی</a></li>' +
+        '<li><a href="#specs">مشخصات فنی</a></li>' +
+        '<li><a href="#reviews">نظرات <span class="pdp-nav__count">' + fmt(p.reviews) + '</span></a></li>' +
+      '</ul>' +
+    '</nav>' +
+
+    '<div class="pdp-sections">' +
+      '<section class="pdp-section" id="intro" aria-labelledby="intro-title">' +
+        '<h2 class="pdp-section__title" id="intro-title">معرفی</h2>' +
+        '<div class="pdp-prose">' +
+          '<p>' + esc(p.desc) + '</p>' +
+          '<p>' + (used
+            ? 'همه کالاهای استوک فیبسو پیش از ارسال توسط کارشناسان فنی تست می‌شوند و وضعیت ظاهری آن‌ها به‌صورت شفاف در صفحه محصول درج می‌شود.'
+            : 'این کالا نو و آکبند است و با ' + esc(p.warranty) + ' عرضه می‌شود.') + '</p>' +
+        '</div>' +
+      '</section>' +
+
+      '<section class="pdp-section" id="specs" aria-labelledby="specs-title">' +
+        '<h2 class="pdp-section__title" id="specs-title">مشخصات فنی</h2>' +
+        '<table class="spec-table"><caption class="visually-hidden">مشخصات فنی ' + esc(p.title) + '</caption><tbody>' + specRows + '</tbody></table>' +
+      '</section>' +
+
+      '<section class="pdp-section" id="reviews" aria-labelledby="reviews-title">' +
+        '<h2 class="pdp-section__title" id="reviews-title">نظرات خریداران</h2>' +
         '<div class="reviews">' +
-          '<div><h2 class="panel__title">نظر خریداران</h2><ul class="review-list" data-review-list></ul></div>' +
-          '<form class="panel" novalidate data-review-form>' +
-            '<h2 class="panel__title">نظر خود را بنویسید</h2>' +
+          '<div class="reviews__summary">' +
+            '<p class="reviews__score"><strong>' + fmt(p.rating) + '</strong> از ۵</p>' +
+            '<div class="pdp-stars" aria-hidden="true">' + stars + '</div>' +
+            '<p class="text-muted">بر اساس ' + fmt(p.reviews) + ' نظر خریداران</p>' +
+          '</div>' +
+          '<ul class="review-list" data-review-list></ul>' +
+          '<form class="panel review-form" novalidate data-review-form>' +
+            '<h3 class="panel__title">نظر خود را بنویسید</h3>' +
             '<div class="form-grid">' +
               '<fieldset class="field"><legend class="field__label">امتیاز شما</legend>' +
                 '<div class="rating-input" data-rating>' +
@@ -145,14 +211,26 @@
             '</div>' +
           '</form>' +
         '</div>' +
-      '</div>' +
-    '</section>' +
+      '</section>' +
+    '</div>' +
 
     (out ? '' :
-      '<div class="buybar" aria-label="خرید سریع">' +
-        '<div class="price"><span class="price__now">' + fmt(p.price) + ' <span class="price__unit">تومان</span></span></div>' +
+      '<div class="buybar" role="region" aria-label="خرید سریع">' +
+        '<div class="buybar__price">' +
+          (off ? '<span class="buybar__old"><span class="discount">' + fmt(off) + '٪</span><del class="price__old">' + fmt(p.old) + '</del></span>' : '') +
+          '<span class="price__now">' + fmt(p.price) + ' <span class="price__unit">تومان</span></span>' +
+        '</div>' +
         '<button class="btn btn--primary" type="button" data-add-to-cart="' + p.id + '" data-amount="1">افزودن به سبد</button>' +
       '</div>');
+
+  /* ---------- Gallery views ---------- */
+  var stage = root.querySelector('[data-stage]');
+  root.querySelector('.pdp__thumbs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-view]');
+    if (!b) return;
+    stage.setAttribute('style', viewStyle(VIEWS[Number(b.getAttribute('data-view'))]));
+    root.querySelectorAll('[data-view]').forEach(function (t) { t.setAttribute('aria-pressed', String(t === b)); });
+  });
 
   /* ---------- Quantity picker feeds the add-to-cart amount ---------- */
   var qty = 1;
@@ -162,6 +240,8 @@
     if (!step) return;
     qty = Math.min(10, Math.max(1, qty + Number(step.getAttribute('data-pdp-step'))));
     qtyOut.textContent = fmt(qty);
+    root.querySelector('[data-pdp-step="-1"]').disabled = qty <= 1;
+    root.querySelector('[data-pdp-step="1"]').disabled = qty >= 10;
     root.querySelectorAll('.buybox [data-add-to-cart]').forEach(function (b) { b.setAttribute('data-amount', qty); });
   });
 
@@ -182,46 +262,49 @@
     }
   });
 
-  /* ---------- Tabs (WAI-ARIA, automatic activation; RTL arrows) ---------- */
-  var tablist = root.querySelector('[data-tablist]');
-  var tabs = Array.prototype.slice.call(tablist.querySelectorAll('[role="tab"]'));
-  function selectTab(tab, focus) {
-    tabs.forEach(function (t) {
-      var on = t === tab;
-      t.setAttribute('aria-selected', String(on));
-      t.tabIndex = on ? 0 : -1;
-      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
-    });
-    if (focus) tab.focus();
+  /* ---------- Sticky section nav: sits under the sticky header, tracks the section in view ---------- */
+  var header = document.querySelector('.site-header');
+  function syncOffset() {
+    var h = header ? header.getBoundingClientRect().height : 0;
+    document.documentElement.style.setProperty('--pdp-sticky-top', Math.round(h) + 'px');
   }
-  tablist.addEventListener('click', function (e) {
-    var t = e.target.closest('[role="tab"]');
-    if (t) selectTab(t);
+  syncOffset();
+  window.addEventListener('resize', syncOffset);
+
+  var navLinks = Array.prototype.slice.call(root.querySelectorAll('[data-pdp-nav] a'));
+  var sections = navLinks.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
+  function setCurrent(i) {
+    navLinks.forEach(function (a, j) {
+      if (i === j) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+    });
+  }
+  var nav = root.querySelector('[data-pdp-nav]');
+  function spy() {
+    var line = nav.getBoundingClientRect().bottom + 96;
+    var current = 0;
+    sections.forEach(function (s, i) { if (s.getBoundingClientRect().top <= line) current = i; });
+    setCurrent(current);
+  }
+  nav.addEventListener('click', function (e) {
+    var a = e.target.closest('a');
+    if (a) setCurrent(navLinks.indexOf(a));
   });
-  tablist.addEventListener('keydown', function (e) {
-    var i = tabs.indexOf(document.activeElement);
-    var map = { ArrowLeft: 1, ArrowRight: -1 };
-    if (e.key in map) {
-      e.preventDefault();
-      selectTab(tabs[(i + map[e.key] + tabs.length) % tabs.length], true);
-    } else if (e.key === 'Home' || e.key === 'End') {
-      e.preventDefault();
-      selectTab(tabs[e.key === 'Home' ? 0 : tabs.length - 1], true);
-    }
-  });
+  var ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(function () { ticking = false; spy(); });
+  }, { passive: true });
 
   /* ---------- Reviews (sample + front-end only form) ---------- */
-  var SAMPLE = [
-    { name: 'محمد', rating: 5, text: 'کالا سالم و دقیقاً مطابق توضیحات رسید. بسته‌بندی عالی بود.', date: '۲ مهر ۱۴۰۵' },
-    { name: 'سارا', rating: 4, text: 'از کیفیت راضی هستم. ارسال کمی بیشتر از انتظارم طول کشید.', date: '۱۸ شهریور ۱۴۰۵' }
-  ];
+  // Buyer reviews come from the server once it exists; until then the list starts empty.
   var listEl = root.querySelector('[data-review-list]');
   function reviewHTML(r) {
     return '<li class="review"><div class="review__head"><span class="review__author">' + esc(r.name) + '</span>' +
       '<span class="product-card__rating">' + Shop.icon.star + fmt(r.rating) + '</span>' +
       '<span class="text-muted">' + esc(r.date) + '</span></div><p class="review__text">' + esc(r.text) + '</p></li>';
   }
-  listEl.innerHTML = SAMPLE.map(reviewHTML).join('');
+  listEl.innerHTML = '<li class="review review--empty text-muted">هنوز نظری برای این کالا ثبت نشده است. اولین نفر باشید.</li>';
 
   var form = root.querySelector('[data-review-form]');
   form.addEventListener('submit', function (e) {
@@ -240,17 +323,38 @@
       if (er[2] && !first) first = er[1] || form.querySelector('input[name="rating"]');
     });
     if (first) { first.focus(); return; }
+    var empty = listEl.querySelector('.review--empty');
+    if (empty) empty.remove();
     listEl.insertAdjacentHTML('afterbegin', reviewHTML({ name: form.elements.name.value.trim(), rating: Number(rating.value), text: form.elements.text.value.trim(), date: 'هم‌اکنون' }));
     status.className = 'form-status form-status--success';
     status.textContent = 'نظر شما فقط در همین مرورگر نمایش داده شد؛ ثبت نهایی نظرها پس از اتصال به سرور فعال می‌شود.';
     form.reset();
   });
 
-  /* ---------- Related products ---------- */
-  var related = Shop.query({ cat: p.cat }).filter(function (x) { return x.id !== p.id; }).slice(0, 10);
+  /* ---------- Similar products: same sub-category first, then the same category ---------- */
+  var related = Shop.query({ cat: p.cat }).filter(function (x) { return x.id !== p.id; });
+  related.sort(function (a, b) {
+    var sa = (a.sub === p.sub && a.condition === p.condition) ? 0 : (a.sub === p.sub || a.condition === p.condition) ? 1 : 2;
+    var sb = (b.sub === p.sub && b.condition === p.condition) ? 0 : (b.sub === p.sub || b.condition === p.condition) ? 1 : 2;
+    return sa - sb;
+  });
+  related = related.slice(0, 10);
   if (related.length) {
     document.querySelector('[data-related-section]').hidden = false;
+    document.querySelector('[data-related-all]').href = SHOP + '?cat=' + p.cat;
     Shop.render(document.querySelector('[data-related]'), related, 'li');
-    UI.initScrollers(document);
+  }
+
+  showRecent(p.id);
+  Shop.addRecent(p.id);
+  UI.initScrollers(document);
+
+  /* ---------- Recently viewed (read before recording this visit) ---------- */
+  function showRecent(currentId) {
+    var list = Shop.recent().filter(function (x) { return x.id !== currentId; }).slice(0, 10);
+    if (!list.length) return;
+    document.querySelector('[data-recent-section]').hidden = false;
+    Shop.render(document.querySelector('[data-recent]'), list, 'li');
+    if (!currentId) UI.initScrollers(document);
   }
 })();
