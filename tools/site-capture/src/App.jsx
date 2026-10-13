@@ -6,6 +6,7 @@ const DEFAULTS = {
   perPattern: 3,
   dedupe: true,
   focus: true,
+  only: '',
   fresh: false,
   headed: false,
   seeds: '',
@@ -112,6 +113,7 @@ export default function App() {
       if (e.type === 'fill' && map.has(e.index)) map.get(e.index).filling = e.viewports;
       if (e.type === 'shot' && map.has(e.index)) map.get(e.index).shots[e.viewport] = e;
       if (e.type === 'error' && map.has(e.index)) map.get(e.index).errors.push(e);
+      if (e.type === 'removed') map.delete(e.index);   // replaced by a new capture of the same address
     }
     for (const i of deleted) map.delete(i);
     return [...map.values()];
@@ -155,14 +157,29 @@ export default function App() {
 
   async function onSubmit(e) {
     e.preventDefault();
-    if (!form.desktop && !form.mobile) { setError('حداقل یکی از دسکتاپ یا موبایل را انتخاب کنید.'); return; }
     try {
       new URL(form.url);
     } catch { setError('آدرس کامل سایت را وارد کنید، مثلاً https://www.example.com'); return; }
+    await startCapture({ only: '' });
+  }
+
+  // Single-page mode: photograph exactly these addresses, nothing else
+  const onlyList = form.only.split(/\s+/).filter(Boolean);
+  async function onOnly() {
+    const bad = onlyList.find((x) => { try { return !/^https?:$/.test(new URL(x).protocol); } catch { return true; } });
+    if (!onlyList.length || bad) { setError(bad ? `آدرس کامل نیست: ${bad}` : 'آدرس صفحه را وارد کنید.'); return; }
+    const hosts = new Set(onlyList.map((x) => new URL(x).origin));
+    if (hosts.size > 1) { setError('همه آدرس‌ها باید از یک سایت باشند؛ هر سایت را جدا بدهید.'); return; }
+    await startCapture({ only: form.only, fresh: false });
+  }
+
+  async function startCapture(extra) {
+    if (!form.desktop && !form.mobile) { setError('حداقل یکی از دسکتاپ یا موبایل را انتخاب کنید.'); return; }
     setStarting(true);
     try {
       await post('/api/capture', {
         ...form,
+        ...extra,
         useAuth: false,
         viewports: [form.desktop && 'desktop', form.mobile && 'mobile'].filter(Boolean)
       });
@@ -251,6 +268,15 @@ export default function App() {
             <button className="btn" type="submit" disabled={running || starting}>{starting ? 'در حال ارسال…' : running ? 'در حال عکس‌برداری…' : 'شروع'}</button>
             {running && <button className="btn ghost" type="button" onClick={() => post('/api/stop')}>توقف</button>}
           </div>
+          <fieldset className="panel-box">
+            <legend>فقط یک صفحه مشخص</legend>
+            <p className="muted">آدرس صفحه را بدهید تا فقط از همان (دسکتاپ و موبایل) عکس گرفته شود؛ بدون گشتن در سایت. چند آدرس هم می‌شود، هر خط یکی. اگر قبلاً گرفته شده، عکس جدید جایش را می‌گیرد.</p>
+            <textarea dir="ltr" rows="2" value={form.only} onChange={set('only')} placeholder="https://www.example.com/product/123" aria-label="آدرس صفحه" />
+            <button type="button" className="btn ghost" disabled={running || starting || !onlyList.length} onClick={onOnly}>
+              {onlyList.length > 1 ? `فقط همین ${fa(onlyList.length)} صفحه` : 'فقط همین صفحه'}
+            </button>
+          </fieldset>
+
           {outRoot && <p className="muted">پوشه خروجی: <code dir="ltr">{outRoot}</code></p>}
         </form>
 
@@ -260,7 +286,8 @@ export default function App() {
             <span className="muted">{fa(pages.length)} صفحه</span>
           </div>
           {fatal && <p className="error">{fatal.message}</p>}
-          {done && <p className="ok">تمام شد: {fa(done.pages)} صفحه جدید، {fa(done.filled)} نمای جاافتاده تکمیل شد، {fa(done.skipped)} صفحه تکراری رد شد{done.failed ? `، ${fa(done.failed)} صفحه باز نشد` : ''}. در مجموع {fa(done.total)} صفحه در <code dir="ltr">{done.outDir}</code> است. این پوشه را کامیت و پوش کنید.</p>}
+          {done && done.only && <p className="ok">تمام شد: {fa(done.pages)} صفحه گرفته شد{done.failed ? `، ${fa(done.failed)} صفحه باز نشد` : ''}. عکس‌ها در <code dir="ltr">{done.outDir}</code> است.</p>}
+          {done && !done.only && <p className="ok">تمام شد: {fa(done.pages)} صفحه جدید، {fa(done.filled)} نمای جاافتاده تکمیل شد، {fa(done.skipped)} صفحه تکراری رد شد{done.failed ? `، ${fa(done.failed)} صفحه باز نشد` : ''}. در مجموع {fa(done.total)} صفحه در <code dir="ltr">{done.outDir}</code> است. این پوشه را کامیت و پوش کنید.</p>}
           {done && done.missing && done.missing.length > 0 && (
             <p className="muted">پیدا نشد: {done.missing.map((k) => KIND_LABEL[k] || k).join('، ')}. اگر آدرسشان را می‌دانید، در «تنظیمات بیشتر» به «آدرس‌های اضافه» بدهید.</p>
           )}

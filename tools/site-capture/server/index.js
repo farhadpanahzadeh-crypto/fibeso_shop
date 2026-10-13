@@ -44,8 +44,11 @@ app.get('/api/events', (req, res) => {
 });
 
 function captureOptions(b) {
+  // Single-page mode: the addresses to photograph, one per line (same site as the first)
+  const only = String(b.only || '').split(/\s+/).filter((x) => /^https?:\/\//.test(x)).slice(0, 100);
   return {
-    url: new URL(b.url).href,
+    url: new URL(only[0] || b.url).href,
+    only: only.length ? only : undefined,
     outDir: OUT_ROOT,
     maxPages: clamp(b.maxPages, 1, 500, 40),
     maxVisits: clamp(b.maxVisits, 1, 2000, 150),

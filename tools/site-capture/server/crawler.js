@@ -409,10 +409,20 @@ export async function capture(options, emit = () => {}) {
     return queue.splice(best, 1)[0];
   };
   const capped = (kind) => opts.focus && FOCUS_CAP[kind] != null && (kindCount[kind] || 0) >= FOCUS_CAP[kind];
-  // Seeds keep their query string: panel pages often need it
-  for (const s of [...seeds].reverse()) enqueue(normalise(s, origin, true), 0, true);
   const startNorm = normalise(start.href, origin, true).href;
   let siteDown = false;
+  /* Single-page mode (opts.only): just the given addresses, no crawling, no
+     dedupe; a page captured before is photographed again and replaces the old one. */
+  const only = Array.isArray(opts.only) && opts.only.length
+    ? opts.only.map((x) => { try { return new URL(x); } catch { return null; } }).filter((u) => u && u.origin === origin)
+    : null;
+  const keptPending = manifest.pending || [];
+  if (only) {
+    for (const u of only) { u.hash = ''; seen.delete(u.href); enqueue(u, 0, true); }
+    opts.maxPages = opts.maxVisits = queue.length;
+  } else {
+  // Seeds keep their query string: panel pages often need it
+  for (const s of [...seeds].reverse()) enqueue(normalise(s, origin, true), 0, true);
   enqueue(normalise(start.href, origin, true), 0, true);
   for (const f of retry) { try { enqueue(new URL(f.url), f.depth || 0, !!f.forced); } catch { /* skip */ } }
   // Continue where the last run stopped...
@@ -427,7 +437,8 @@ export async function capture(options, emit = () => {}) {
     for (const href of p.links || []) enqueue(normalise(href, origin, opts.keepQuery), (p.depth || 0) + 1, false);
   }
   for (const g of GUESSES) enqueue(normalise(origin + g, origin, opts.keepQuery), 1, false, true);
-  let searchTried = !!kindCount.search;
+  }
+  let searchTried = !!kindCount.search || !!only;
   const cartFilled = {};
 
   emit({
@@ -437,7 +448,7 @@ export async function capture(options, emit = () => {}) {
   });
 
   const save = async () => {
-    manifest.pending = queue.map((q) => ({ url: q.url.href, depth: q.depth, forced: q.forced || undefined, guess: q.guess }));
+    manifest.pending = only ? keptPending : queue.map((q) => ({ url: q.url.href, depth: q.depth, forced: q.forced || undefined, guess: q.guess }));
     await fs.writeFile(manifestFile, JSON.stringify(manifest, null, 2), 'utf8');
   };
 
@@ -467,7 +478,7 @@ export async function capture(options, emit = () => {}) {
       const u = normalise(href, origin, opts.keepQuery);
       if (!u) continue;
       if (kept.length < MAX_LINKS_KEPT && !kept.includes(u.href)) kept.push(u.href);
-      if (depth < opts.maxDepth) enqueue(u, depth + 1, false);
+      if (!only && depth < opts.maxDepth) enqueue(u, depth + 1, false);
     }
     return kept;
   };
@@ -480,7 +491,7 @@ export async function capture(options, emit = () => {}) {
       await p2.waitForTimeout(600);
       entry.shots[vp] = await shoot(p2, dir, vp, opts);
       emit({ type: 'shot', index: entry.index, viewport: vp, files: entry.shots[vp].files.map((f) => rel(entry.slug, f)), height: entry.shots[vp].height });
-      if (entry.kind === 'product') await fillCart(p2, vp);
+      if (entry.kind === 'product' && !only) await fillCart(p2, vp);
       return true;
     } catch (err) {
       emit({ type: 'error', index: entry.index, url: entry.url, viewport: vp, message: String(err.message || err).split('\n')[0] });
@@ -500,7 +511,7 @@ export async function capture(options, emit = () => {}) {
   let fresh = 0;
   try {
     /* ---------- 1. Complete earlier pages that miss a requested view ---------- */
-    for (const entry of manifest.pages) {
+    for (const entry of only ? [] : manifest.pages) {
       if (opts.signal?.aborted) break;
       entry.shots = entry.shots || {};
       const missing = opts.viewports.filter((vp) => !entry.shots[vp]);
@@ -536,7 +547,7 @@ export async function capture(options, emit = () => {}) {
         if (guess && res && res.status() >= 400) { emit({ type: 'log', message: `${url.pathname} در این سایت وجود ندارد.` }); continue; }
         const finalNorm = normalise(finalUrl.href, origin, true);
         if (finalNorm && finalNorm.href !== url.href) {
-          if (captured.has(finalNorm.href)) continue;   // e.g. /checkout sent back to a page we already have
+          if (!only && captured.has(finalNorm.href)) continue;   // e.g. /checkout sent back to a page we already have
           kind = kindOfUrl(finalNorm);                  // e.g. /checkout -> /login
         }
         if (kind === 'other') kind = (await kindFromDom(page)) || kind;
@@ -552,12 +563,22 @@ export async function capture(options, emit = () => {}) {
         // Focus mode: each wanted kind gets its own sample even if it shares a layout
         const pool = opts.focus ? templates.filter((t) => t.kind === kind) : templates;
         const match = opts.dedupe ? sameTemplate(fp, pool, opts.threshold) : null;
-        if (match && !(forced && hasAuth)) {
+        if (match && !only && !(forced && hasAuth)) {
           const links = await harvestLinks(page, depth);
           manifest.skipped.push({ url: url.href, sameAs: match.index, depth, links });
           run.skipped += 1;
           emit({ type: 'skip', url: url.href, sameAs: match.index, slug: match.slug });
           continue;
+        }
+
+        // Same address photographed before: the new capture replaces it
+        const old = only && manifest.pages.find((p) => p.url === url.href);
+        if (old) {
+          if (/^[a-z0-9-]+$/i.test(old.slug)) await fs.rm(path.join(outDir, 'pages', old.slug), { recursive: true, force: true });
+          manifest.pages = manifest.pages.filter((p) => p !== old);
+          const t = templates.findIndex((x) => x.index === old.index);
+          if (t !== -1) templates.splice(t, 1);
+          emit({ type: 'removed', index: old.index });
         }
 
         index += 1;
@@ -578,7 +599,7 @@ export async function capture(options, emit = () => {}) {
         entry.notes = await pageNotes(page);
         if (opts.saveHtml) await fs.writeFile(path.join(dir, 'page.html'), await page.content(), 'utf8');
         entry.links = await harvestLinks(page, depth);
-        if (kind === 'product') await fillCart(page, first);
+        if (kind === 'product' && !only) await fillCart(page, first);
 
         for (const vp of opts.viewports.slice(1)) await shootViewport(vp, entry, dir);
 
@@ -631,7 +652,7 @@ export async function capture(options, emit = () => {}) {
     type: 'done', outDir,
     pages: run.captured, skipped: run.skipped, filled: run.filled, failed: run.failed,
     total: manifest.pages.length, pending: queue.length,
-    kinds: kindCount, missing: TARGETS.filter((k) => !kindCount[k])
+    kinds: kindCount, missing: only ? [] : TARGETS.filter((k) => !kindCount[k]), only: !!only
   });
   return manifest;
 }

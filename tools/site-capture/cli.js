@@ -4,6 +4,7 @@
      node cli.js https://example.com --login      (sign in by hand; the session is detected, saved and the capture runs signed in)
      node cli.js https://example.com --auth       (re-use the saved session)
      node cli.js https://example.com --fresh      (forget earlier captures of this site and start over)
+     node cli.js https://example.com/p/1 https://example.com/cart --only   (just these pages, nothing else)
      node cli.js https://example.com --seed https://example.com/profile/orders --seed ... */
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -12,7 +13,8 @@ import { capture, recordLogin } from './server/crawler.js';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
 const seeds = args.flatMap((a, i) => (a === '--seed' && args[i + 1] ? [args[i + 1]] : []));
-const url = args.find((a, i) => /^https?:\/\//.test(a) && args[i - 1] !== '--seed');
+const urls = args.filter((a, i) => /^https?:\/\//.test(a) && args[i - 1] !== '--seed' && args[i - 1] !== '--login-url');
+const url = urls[0];
 const flag = (name) => args.includes(name);
 const value = (name, fallback) => {
   const i = args.indexOf(name);
@@ -21,7 +23,7 @@ const value = (name, fallback) => {
 
 if (!url) {
   console.log('Usage: node cli.js <https://site> [--max 40] [--visits 150] [--per-pattern 3] [--depth 4] [--slice 2000]\n' +
-    '                    [--desktop-only | --mobile-only] [--png] [--keep-query] [--no-dedupe] [--all]\n' +
+    '                    [--desktop-only | --mobile-only] [--png] [--keep-query] [--no-dedupe] [--all] [--only]\n' +
     '                    [--seed <url> ...] [--login [--login-url <url>]] [--login-only] [--auth] [--fresh] [--headed]');
   process.exit(1);
 }
@@ -56,6 +58,7 @@ await capture({
   format: flag('--png') ? 'png' : 'jpeg',
   useAuth: flag('--auth') || flag('--login'),
   fresh: flag('--fresh'),
+  only: flag('--only') ? urls : undefined,
   headed: flag('--headed')
 }, (e) => {
   if (e.type === 'start') console.log(`saving to ${e.outDir}${e.auth ? ' (signed in, ' + e.seeds + ' panel pages)' : ''}` +
