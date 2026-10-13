@@ -1,45 +1,74 @@
-<!-- {"out": "pages/login.html", "title": "ورود و ثبت‌نام | فیبسو", "description": "ورود یا ثبت‌نام در فروشگاه فیبسو با شماره موبایل.", "noindex": true, "css": ["pages/auth.css"], "js": ["pages/login.js"]} -->
+<!-- {"out": "pages/login.html", "title": "ورود و ثبت‌نام | فیبسو", "description": "ورود یا ثبت‌نام در فروشگاه فیبسو با شماره موبایل.", "noindex": true, "css": ["pages/auth.css"], "js": ["pages/login.js"], "tab": "account", "chrome": "bare"} -->
   <main id="main" class="auth">
-    <div class="auth__card">
+    <div class="auth__form-side">
       <a class="brand auth__brand" href="{{root}}index.html" aria-label="فروشگاه فیبسو، صفحه اصلی">
-        <img class="brand__mark" src="{{root}}assets/images/logo-mark.svg" alt="" width="40" height="40">
+        <img class="brand__mark" src="{{root}}assets/images/logo-mark.svg" alt="" width="48" height="48">
         <span>فیبسو</span>
       </a>
 
-      <!-- Step 1: mobile number -->
-      <form class="auth__step" novalidate data-step="mobile">
-        <h1 class="auth__title">ورود | ثبت‌نام</h1>
-        <p class="auth__lead">سلام! لطفاً شماره موبایل خود را وارد کنید.</p>
-        <div class="field">
-          <label class="field__label" for="login-mobile">شماره موبایل</label>
-          <input class="input" id="login-mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="09121234567" data-rules="required mobile" data-label="شماره موبایل" aria-describedby="login-mobile-error">
-          <p class="field__error" id="login-mobile-error"></p>
+      <div class="auth__body">
+        <!-- Sign in and sign up share one mobile + code flow; the tab only changes the wording -->
+        <div class="auth__tabs" role="tablist" aria-label="نوع ورود" data-auth-tabs>
+          <button class="auth__tab" type="button" role="tab" id="tab-login" aria-selected="true" aria-controls="auth-panel" data-mode="login">ورود</button>
+          <span class="auth__tabs-sep" aria-hidden="true"></span>
+          <button class="auth__tab" type="button" role="tab" id="tab-signup" aria-selected="false" aria-controls="auth-panel" tabindex="-1" data-mode="signup">ثبت‌نام</button>
         </div>
-        <button class="btn btn--primary btn--block" type="submit">دریافت کد تأیید</button>
-        <p class="auth__terms">ورود شما به معنای پذیرش <a href="{{root}}pages/terms.html">قوانین و حریم خصوصی فیبسو</a> است.</p>
-      </form>
 
-      <!-- Step 2: one-time code -->
-      <form class="auth__step" novalidate data-step="code" hidden>
-        <h1 class="auth__title" tabindex="-1">کد تأیید را وارد کنید</h1>
-        <p class="auth__lead">کد تأیید برای شماره <strong class="ltr" data-show-mobile></strong> ارسال شد.
-          <button class="link-btn" type="button" data-edit-mobile>ویرایش شماره</button></p>
-        <div class="alert alert--warning">
-          {{icon:warning}}
-          <span>نسخه نمایشی: پیامکی ارسال نمی‌شود. کد <strong class="ltr">12345</strong> را وارد کنید.</span>
+        <div class="auth__panel" id="auth-panel" role="tabpanel" aria-labelledby="tab-login">
+          <!-- Step 1: mobile number -->
+          <form class="auth__step" novalidate data-step="mobile">
+            <h1 class="auth__title" data-auth-title>خوش اومدی :)</h1>
+            <div class="field">
+              <label class="field__label auth__label" for="login-mobile">شماره موبایل خود را وارد کنید</label>
+              <input class="input auth__input" id="login-mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="۰۹۱۲ ۱۲۳ ۴۵۶۷" data-rules="required mobile" data-label="شماره موبایل" aria-describedby="login-mobile-error login-mobile-hint">
+              <p class="field__hint" id="login-mobile-hint" data-auth-hint>کد تأیید یک‌بار مصرف به همین شماره پیامک می‌شود.</p>
+              <p class="field__error" id="login-mobile-error"></p>
+            </div>
+            <button class="btn btn--primary btn--block auth__submit" type="submit">ادامه</button>
+          </form>
+
+          <!-- Step 2: one-time code -->
+          <form class="auth__step" novalidate data-step="code" hidden>
+            <h1 class="auth__title" tabindex="-1">کد تأیید را وارد کنید</h1>
+            <p class="auth__lead">کد ۵ رقمی به شماره <strong class="ltr" data-show-mobile></strong> ارسال شد.
+              <button class="link-btn" type="button" data-edit-mobile>ویرایش شماره</button></p>
+            <div class="alert alert--warning">
+              {{icon:warning}}
+              <span>نسخه نمایشی: پیامکی ارسال نمی‌شود. کد <strong class="ltr">12345</strong> را وارد کنید.</span>
+            </div>
+            <div class="field">
+              <label class="field__label auth__label" for="login-code">کد تأیید</label>
+              <input class="input auth__input otp" id="login-code" name="code" inputmode="numeric" autocomplete="one-time-code" dir="ltr" maxlength="5" aria-describedby="login-code-error">
+              <p class="field__error" id="login-code-error"></p>
+            </div>
+            <div class="field" data-name-field hidden>
+              <label class="field__label auth__label" for="login-name">نام و نام خانوادگی</label>
+              <input class="input auth__input" id="login-name" name="name" autocomplete="name" aria-describedby="login-name-error">
+              <p class="field__error" id="login-name-error"></p>
+            </div>
+            <button class="btn btn--primary btn--block auth__submit" type="submit">تأیید و ورود</button>
+            <p class="auth__resend" aria-live="polite"><span data-timer></span> <button class="link-btn" type="button" data-resend hidden>ارسال دوباره کد</button></p>
+          </form>
         </div>
-        <div class="field">
-          <label class="field__label" for="login-code">کد ۵ رقمی</label>
-          <input class="input otp" id="login-code" name="code" inputmode="numeric" autocomplete="one-time-code" dir="ltr" maxlength="5" aria-describedby="login-code-error">
-          <p class="field__error" id="login-code-error"></p>
-        </div>
-        <div class="field" data-name-field hidden>
-          <label class="field__label" for="login-name">نام و نام خانوادگی</label>
-          <input class="input" id="login-name" name="name" autocomplete="name" aria-describedby="login-name-error">
-          <p class="field__error" id="login-name-error"></p>
-        </div>
-        <button class="btn btn--primary btn--block" type="submit">تأیید و ورود</button>
-        <p class="auth__resend" aria-live="polite"><span data-timer></span> <button class="link-btn" type="button" data-resend hidden>ارسال دوباره کد</button></p>
-      </form>
+      </div>
+
+      <p class="auth__terms">ورود یا ثبت‌نام شما به معنای پذیرش <a href="{{root}}pages/terms.html">قوانین و مقررات</a> و <a href="{{root}}pages/terms.html#privacy">حریم خصوصی</a> فیبسو است.</p>
     </div>
+
+    <aside class="auth__visual" aria-label="درباره فیبسو">
+      <div class="auth__art" aria-hidden="true">
+        <img class="auth__art-main" src="{{root}}assets/images/products/laptop-business.svg" alt="" width="400" height="400">
+        <img class="auth__art-side auth__art-side--a" src="{{root}}assets/images/products/router.svg" alt="" width="400" height="400">
+        <img class="auth__art-side auth__art-side--b" src="{{root}}assets/images/products/ssd.svg" alt="" width="400" height="400">
+      </div>
+      <div class="auth__pitch">
+        <p class="auth__pitch-title">لپ‌تاپ نو و استوک، قطعات و تجهیزات شبکه</p>
+        <p class="auth__pitch-text">با یک حساب فیبسو سفارش‌ها، نشانی‌ها و فاکتورهای خرید سازمانی را یک‌جا دنبال کنید.</p>
+        <ul class="auth__points">
+          <li>{{icon:shield-check}} تست فنی پیش از ارسال</li>
+          <li>{{icon:truck}} ارسال به سراسر کشور</li>
+          <li>{{icon:headset}} مشاوره پیش از خرید</li>
+        </ul>
+      </div>
+    </aside>
   </main>

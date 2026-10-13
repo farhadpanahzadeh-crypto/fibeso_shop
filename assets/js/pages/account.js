@@ -1,4 +1,6 @@
-/* User panel: hash-routed sections (dashboard, orders, wishlist, addresses, profile). */
+/* User panel: hash-routed sections. Desktop shows the sidebar next to the
+   active section (dashboard by default); phones show the menu first (#menu)
+   and open each section full width with a back header. */
 (function () {
   'use strict';
 
@@ -12,126 +14,264 @@
 
   var fmt = Shop.formatPrice;
   var esc = Shop.escapeHtml;
-  var SECTIONS = ['dashboard', 'orders', 'wishlist', 'addresses', 'profile'];
-  var STATUS = { processing: 'در حال پردازش', shipped: 'ارسال‌شده', delivered: 'تحویل‌شده' };
-  var dateFmt = new Intl.DateTimeFormat('fa-IR-u-ca-persian', { year: 'numeric', month: 'long', day: 'numeric' });
+  var fa = UI.toPersianDigits;
+  var icon = window.icon;
+  var shopUrl = Shop.root + 'pages/shop.html';
 
-  /* ---------- Header card ---------- */
+  var SECTIONS = ['dashboard', 'orders', 'wishlist', 'comments', 'addresses', 'messages', 'recent', 'profile', 'wallet'];
+  var TITLES = {
+    dashboard: 'پیشخوان', orders: 'سفارش‌های من', wishlist: 'کالاهای مورد علاقه', comments: 'نظرات',
+    addresses: 'نشانی‌ها', messages: 'پیام‌ها', recent: 'آخرین کالاهای دیده شده', profile: 'مشخصات فردی', wallet: 'کیف پول'
+  };
+  var STATUS = {
+    processing: 'در حال پردازش', shipped: 'ارسال شده', delivered: 'تحویل شده',
+    returned: 'مرجوعی', cancelled: 'لغو شده'
+  };
+  var GROUPS = {
+    current: ['processing', 'shipped'], delivered: ['delivered'], returned: ['returned'], cancelled: ['cancelled']
+  };
+  var dateFmt = new Intl.DateTimeFormat('fa-IR-u-ca-persian', { year: 'numeric', month: 'long', day: 'numeric' });
+  var phoneMq = window.matchMedia('(max-width: 47.99rem)');
+
+  var accountEl = document.querySelector('[data-account]');
+  var railEl = document.querySelector('[data-recent-rail]');
+
+  function formatDate(iso) {
+    var d = new Date(iso);
+    return isNaN(d) ? '' : dateFmt.format(d);
+  }
+
+  function emptyHTML(art, title, text, action, href) {
+    return '<div class="acc-empty">' +
+      '<span class="acc-empty__art" aria-hidden="true">' + icon(art) + '</span>' +
+      '<p class="acc-empty__title">' + title + '</p>' +
+      (text ? '<p class="acc-empty__text">' + text + '</p>' : '') +
+      (action ? '<a class="btn btn--outline btn--sm" href="' + href + '">' + action + '</a>' : '') +
+    '</div>';
+  }
+
+  /* ---------- Sidebar header, wallet strip, message badge ---------- */
   function renderUser() {
     document.querySelector('[data-user-name]').textContent = user.name || 'کاربر فیبسو';
-    document.querySelector('[data-user-mobile]').textContent = user.mobile;
-    document.querySelector('[data-user-initial]').textContent = (user.name || 'ف').trim().charAt(0);
+    document.querySelector('[data-user-mobile]').textContent = fa(user.mobile || '');
+    document.querySelector('[data-wallet-total]').textContent = fmt(Store.wallet().total);
+    var unread = Store.messages().filter(function (m) { return m.unread; }).length;
+    var badge = document.querySelector('[data-message-count]');
+    badge.textContent = fmt(unread);
+    badge.hidden = !unread;
+    badge.setAttribute('aria-label', fmt(unread) + ' پیام خوانده نشده');
   }
 
   /* ---------- Routing ---------- */
-  function show(name, focus) {
-    if (SECTIONS.indexOf(name) === -1) name = 'dashboard';
+  var lastSection = null;
+
+  function route(focus) {
+    var name = window.location.hash.slice(1);
+    var phone = phoneMq.matches;
+    if (SECTIONS.indexOf(name) === -1) name = phone ? 'menu' : 'dashboard';
+    accountEl.setAttribute('data-view', name === 'menu' ? 'menu' : 'section');
+
     SECTIONS.forEach(function (s) {
-      document.getElementById(s).hidden = s !== name;
-      var link = document.querySelector('[data-section-link="' + s + '"]');
-      if (s === name) link.setAttribute('aria-current', 'page'); else link.removeAttribute('aria-current');
+      document.getElementById('acc-' + s).hidden = s !== name;
     });
+    document.querySelectorAll('[data-section-link]').forEach(function (link) {
+      if (link.getAttribute('data-section-link') === name) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+    });
+
+    railEl.hidden = !((name === 'dashboard' && !phone) || name === 'menu') || !Shop.recent().length;
+
+    if (name === 'menu') {
+      document.title = 'حساب کاربری | فیبسو';
+      if (focus) {
+        var back = lastSection && document.querySelector('.account__nav [data-section-link="' + lastSection + '"]');
+        (back || document.querySelector('.account__nav .account__link')).focus();
+      }
+      return;
+    }
+
     RENDER[name]();
-    document.title = document.getElementById(name + '-title').textContent + ' | پنل کاربری فیبسو';
-    if (focus) document.getElementById(name + '-title').focus();
+    lastSection = name;
+    document.title = TITLES[name] + ' | حساب کاربری فیبسو';
+    if (focus) {
+      document.getElementById(name + '-title').focus({ preventScroll: true });
+      var top = accountEl.getBoundingClientRect().top + window.scrollY - 96;
+      if (window.scrollY > top) window.scrollTo(0, Math.max(0, top));
+    }
   }
 
-  window.addEventListener('hashchange', function () {
-    show(window.location.hash.slice(1), true);
-  });
-
-  /* ---------- Dashboard ---------- */
-  function renderDashboard() {
-    var orders = Store.orders();
-    var open = orders.filter(function (o) { return o.status !== 'delivered'; }).length;
-    var el = document.querySelector('[data-dashboard]');
-    el.innerHTML =
-      '<p class="text-muted dash-intro">' + esc(user.name || '') + ' عزیز، به پنل کاربری فیبسو خوش آمدید.</p>' +
-      '<div class="kpis">' +
-        kpi('#orders', orders.length, 'همه سفارش‌ها') +
-        kpi('#orders', open, 'سفارش‌های جاری') +
-        kpi('#wishlist', Shop.wishlist().length, 'علاقه‌مندی‌ها') +
-        kpi('#addresses', Store.addresses().length, 'آدرس‌های ذخیره‌شده') +
-      '</div>' +
-      '<section class="panel"><div class="panel__head"><h2 class="panel__title">آخرین سفارش‌ها</h2>' +
-        (orders.length ? '<a class="view-all" href="#orders">مشاهده همه</a>' : '') + '</div>' +
-        (orders.length ? '<div class="order-list order-list--flush">' + orders.slice(0, 2).map(orderHTML).join('') + '</div>'
-          : emptyHTML('هنوز سفارشی ثبت نکرده‌اید.', 'شروع خرید', Shop.root + 'pages/shop.html')) +
-      '</section>';
-  }
-
-  function kpi(href, value, label) {
-    return '<a class="kpi" href="' + href + '"><span class="kpi__value">' + fmt(value) + '</span><span class="kpi__label">' + label + '</span></a>';
-  }
-
-  function emptyHTML(text, action, href) {
-    return '<div class="empty-state">' + Shop.icon.bag + '<p>' + text + '</p>' +
-      (action ? '<a class="btn btn--outline" href="' + href + '">' + action + '</a>' : '') + '</div>';
-  }
+  window.addEventListener('hashchange', function () { route(true); });
+  phoneMq.addEventListener('change', function () { route(false); });
 
   /* ---------- Orders ---------- */
-  var orderFilter = '';
-
-  function orderHTML(o) {
-    return '<article class="order">' +
-      '<header class="order__head"><span class="order__id">سفارش <span class="ltr">' + esc(o.id) + '</span></span>' +
-        '<time datetime="' + o.date + '">' + dateFmt.format(new Date(o.date)) + '</time>' +
-        '<span class="status status--' + o.status + '">' + STATUS[o.status] + '</span></header>' +
-      '<div class="order__body"><div class="order__thumbs">' + o.items.slice(0, 4).map(function (i) {
-          return '<img src="' + (Shop.byId(i.id) ? Shop.imageUrl(Shop.byId(i.id)) : Shop.root + 'assets/images/products/' + i.img + '.svg') + '" alt="' + esc(i.title) + '" width="56" height="56">';
-        }).join('') + '</div>' +
-        '<span>مبلغ کل: <span class="order__total">' + fmt(o.total) + ' تومان</span></span></div>' +
-      '<details><summary>جزئیات سفارش</summary><div class="order__detail">' +
-        '<ul class="order__lines">' + o.items.map(function (i) {
-          return '<li><span>' + esc(i.title) + ' × ' + fmt(i.qty) + '</span><strong>' + fmt(i.qty * i.price) + '</strong></li>';
+  function orderHTML(o, compact) {
+    var items = o.items || [];
+    return '<article class="order-card">' +
+      '<header class="order-card__head">' +
+        '<dl class="order-card__meta">' +
+          '<div><dt>شماره سفارش</dt><dd class="ltr">' + esc(o.id) + '</dd></div>' +
+          '<div><dt>تاریخ ثبت</dt><dd><time datetime="' + esc(o.date) + '">' + formatDate(o.date) + '</time></dd></div>' +
+          '<div><dt>مبلغ کل</dt><dd>' + fmt(o.total) + ' تومان</dd></div>' +
+        '</dl>' +
+        '<span class="status status--' + esc(o.status) + '">' + (STATUS[o.status] || STATUS.processing) + '</span>' +
+      '</header>' +
+      '<div class="order-card__thumbs">' + items.slice(0, 5).map(function (i) {
+        var p = Shop.byId(i.id);
+        return '<img src="' + (p ? Shop.imageUrl(p) : Shop.root + 'assets/images/products/' + esc(i.img) + '.svg') + '" alt="' + esc(i.title) + '" width="64" height="64" loading="lazy">';
+      }).join('') + (items.length > 5 ? '<span class="order-card__more">+' + fmt(items.length - 5) + '</span>' : '') + '</div>' +
+      (compact ? '' :
+      '<details class="order-card__details"><summary>جزئیات سفارش ' + icon('caret-down') + '</summary><div class="order-card__detail">' +
+        '<ul class="order-card__lines">' + items.map(function (i) {
+          return '<li><span>' + esc(i.title) + ' × ' + fmt(i.qty) + '</span><strong>' + fmt(i.qty * i.price) + ' تومان</strong></li>';
         }).join('') +
-        '<li><span>هزینه ارسال</span><strong>' + (o.shipping ? fmt(o.shipping) : 'رایگان / پس‌کرایه') + '</strong></li></ul>' +
-        '<dl class="order__info"><dt>تحویل‌گیرنده</dt><dd>' + esc(o.address.name) + '، <span class="ltr">' + esc(o.address.mobile) + '</span></dd>' +
-          '<dt>آدرس</dt><dd>' + esc(Store.addressText(o.address)) + '</dd>' +
-          '<dt>روش ارسال</dt><dd>' + esc(o.shippingMethod) + '</dd>' +
-          '<dt>روش پرداخت</dt><dd>' + esc(o.payment) + ' (نسخه نمایشی؛ پرداختی انجام نشده)</dd></dl>' +
-      '</div></details></article>';
+        '<li><span>هزینه ارسال</span><strong>' + (o.shipping ? fmt(o.shipping) + ' تومان' : 'رایگان / پس‌کرایه') + '</strong></li></ul>' +
+        (o.address ? '<dl class="order-card__info"><dt>تحویل‌گیرنده</dt><dd>' + esc(o.address.name) + '، ' + fa(esc(o.address.mobile)) + '</dd>' +
+          '<dt>نشانی</dt><dd>' + esc(Store.addressText(o.address)) + '</dd>' +
+          (o.shippingMethod ? '<dt>روش ارسال</dt><dd>' + esc(o.shippingMethod) + '</dd>' : '') +
+          (o.payment ? '<dt>روش پرداخت</dt><dd>' + esc(o.payment) + ' (نسخه نمایشی؛ پرداختی انجام نشده)</dd>' : '') + '</dl>' : '') +
+      '</div></details>') +
+    '</article>';
+  }
+
+  var orderGroup = 'current';
+  var orderQuery = '';
+  var orderTabs = Array.prototype.slice.call(document.querySelectorAll('[data-order-tabs] [role="tab"]'));
+  var orderPanel = document.getElementById('order-panel');
+
+  function inGroup(o, g) {
+    return GROUPS[g].indexOf(STATUS[o.status] ? o.status : 'processing') !== -1;
   }
 
   function renderOrders() {
-    var list = Store.orders().filter(function (o) { return !orderFilter || o.status === orderFilter; });
-    document.querySelector('[data-orders]').innerHTML = list.length ? list.map(orderHTML).join('')
-      : emptyHTML(orderFilter ? 'سفارشی با این وضعیت ندارید.' : 'هنوز سفارشی ثبت نکرده‌اید.', 'رفتن به فروشگاه', Shop.root + 'pages/shop.html');
+    var all = Store.orders();
+    Object.keys(GROUPS).forEach(function (g) {
+      document.querySelector('[data-order-count="' + g + '"]').textContent = '(' + fmt(all.filter(function (o) { return inGroup(o, g); }).length) + ')';
+    });
+    var q = Store.latin(orderQuery).toLowerCase();
+    var list = all.filter(function (o) {
+      if (!inGroup(o, orderGroup)) return false;
+      if (!q) return true;
+      return String(o.id).toLowerCase().indexOf(q) !== -1 ||
+        (o.items || []).some(function (i) { return String(i.title).toLowerCase().indexOf(q) !== -1; });
+    });
+    document.querySelector('[data-orders]').innerHTML = list.length ? list.map(function (o) { return orderHTML(o); }).join('')
+      : '<div class="acc-empty acc-empty--muted">' +
+          '<span class="acc-empty__art acc-empty__art--orders" aria-hidden="true">' + icon('package') + '<span class="acc-empty__badge">' + icon('clock') + '</span></span>' +
+          '<p class="acc-empty__title">' + (q ? 'سفارشی با این عبارت پیدا نشد' : 'سفارش فعالی در این بخش وجود ندارد') + '</p>' +
+          (all.length || q ? '' : '<a class="btn btn--outline btn--sm" href="' + shopUrl + '">رفتن به فروشگاه</a>') +
+        '</div>';
   }
 
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('[data-order-tabs] [role="tab"]'));
   function selectOrderTab(tab, focus) {
-    tabs.forEach(function (t) {
+    orderTabs.forEach(function (t) {
       t.setAttribute('aria-selected', String(t === tab));
       t.tabIndex = t === tab ? 0 : -1;
     });
-    orderFilter = tab.getAttribute('data-status');
+    orderGroup = tab.getAttribute('data-group');
+    orderPanel.setAttribute('aria-labelledby', tab.id);
     renderOrders();
     if (focus) tab.focus();
   }
-  tabs.forEach(function (t) { t.addEventListener('click', function () { selectOrderTab(t); }); });
-  document.querySelector('[data-order-tabs]').addEventListener('keydown', function (e) {
-    var i = tabs.indexOf(document.activeElement);
-    var map = { ArrowLeft: 1, ArrowRight: -1 };
-    if (e.key in map) {
-      e.preventDefault();
-      selectOrderTab(tabs[(i + map[e.key] + tabs.length) % tabs.length], true);
-    }
+  orderTabs.forEach(function (t) { t.addEventListener('click', function () { selectOrderTab(t); }); });
+  tabKeys(document.querySelector('[data-order-tabs]'), orderTabs, selectOrderTab);
+
+  document.querySelector('[data-order-search]').addEventListener('input', function (e) {
+    orderQuery = e.target.value.trim();
+    renderOrders();
   });
 
-  /* ---------- Wishlist ---------- */
+  /* Arrow keys move between tabs (RTL: left = next) */
+  function tabKeys(list, tabs, select) {
+    list.addEventListener('keydown', function (e) {
+      var i = tabs.indexOf(document.activeElement);
+      var map = { ArrowLeft: 1, ArrowRight: -1 };
+      if (i === -1) return;
+      if (e.key in map) {
+        e.preventDefault();
+        select(tabs[(i + map[e.key] + tabs.length) % tabs.length], true);
+      } else if (e.key === 'Home' || e.key === 'End') {
+        e.preventDefault();
+        select(tabs[e.key === 'Home' ? 0 : tabs.length - 1], true);
+      }
+    });
+  }
+
+  /* ---------- Dashboard ---------- */
+  function renderDashboard() {
+    var rows = [
+      ['نام و نام خانوادگی', user.name],
+      ['پست الکترونیکی', user.email],
+      ['شماره موبایل', fa(user.mobile || '')],
+      ['کد ملی', user.nationalCode ? fa(user.nationalCode) : ''],
+      ['دریافت خبرنامه', user.newsletter ? 'بله' : 'خیر'],
+      ['نام شرکت', user.company]
+    ];
+    document.querySelector('[data-dashboard-profile]').innerHTML =
+      '<div class="dash-profile">' +
+        '<span class="dash-profile__avatar" aria-hidden="true">' + icon('user') + '</span>' +
+        '<div class="dash-profile__box">' +
+          '<dl class="dash-profile__grid">' + rows.map(function (r) {
+            return '<div><dt>' + r[0] + '</dt><dd>' + (r[1] ? esc(r[1]) : '<span class="text-muted">ثبت نشده</span>') + '</dd></div>';
+          }).join('') + '</dl>' +
+          '<a class="btn btn--primary btn--sm dash-profile__edit" href="#profile">' + icon('pencil') + ' ویرایش اطلاعات</a>' +
+        '</div>' +
+      '</div>';
+
+    var orders = Store.orders();
+    document.querySelector('[data-dashboard-orders]').innerHTML = orders.length
+      ? '<div class="order-list">' + orders.slice(0, 2).map(function (o) { return orderHTML(o, true); }).join('') + '</div>'
+      : '<p class="dash-none">هنوز سفارشی ثبت نکرده‌اید. <a href="' + shopUrl + '">مشاهده لپ‌تاپ‌ها و تجهیزات شبکه</a></p>';
+  }
+
+  /* ---------- Recently viewed rail (dashboard / phone menu) ---------- */
+  function renderRail() {
+    var list = Shop.recent();
+    Shop.render(document.querySelector('[data-recent-track]'), list.slice(0, 12), 'li');
+    UI.initScrollers(railEl);
+  }
+
+  /* ---------- Wishlist / recent grids ---------- */
   function renderWishlist() {
     var ids = Shop.wishlist();
     var list = Shop.products.filter(function (p) { return ids.indexOf(p.id) !== -1; });
     Shop.render(document.querySelector('[data-wishlist]'), list, 'li',
-      '<li>' + emptyHTML('فهرست علاقه‌مندی‌های شما خالی است. با دکمه قلب روی هر کالا آن را اضافه کنید.', 'مشاهده محصولات', Shop.root + 'pages/shop.html') + '</li>');
+      '<li class="acc-grid__empty">' + emptyHTML('heart', 'فهرست علاقه‌مندی‌های شما خالی است',
+        'با زدن دکمه قلب روی هر کالا، آن را برای مقایسه و خرید بعدی اینجا نگه دارید.', 'مشاهده محصولات', shopUrl) + '</li>');
   }
+
+  function renderRecent() {
+    Shop.render(document.querySelector('[data-recent]'), Shop.recent(), 'li',
+      '<li class="acc-grid__empty">' + emptyHTML('eye', 'هنوز کالایی را مشاهده نکرده‌اید',
+        'کالاهایی که باز می‌کنید اینجا می‌مانند تا دوباره پیدا کردنشان آسان باشد.', 'رفتن به فروشگاه', shopUrl) + '</li>');
+  }
+
   Shop.onChange(function () {
-    if (!document.getElementById('wishlist').hidden) renderWishlist();
+    if (!document.getElementById('acc-wishlist').hidden) renderWishlist();
   });
 
+  /* ---------- Comments (static empty state in the template) ---------- */
+  function renderComments() {}
+
+  /* ---------- Messages ---------- */
+  function renderMessages() {
+    var list = Store.messages();
+    document.querySelector('[data-messages]').innerHTML = list.map(function (m) {
+      return '<li class="msg' + (m.unread ? ' msg--unread' : '') + '">' +
+        '<span class="msg__icon" aria-hidden="true">' + icon(m.kind === 'order' ? 'package' : 'envelope-open') + '</span>' +
+        '<div class="msg__body">' +
+          '<p class="msg__title">' + (m.unread ? '<span class="visually-hidden">خوانده نشده: </span>' : '') + esc(m.title) + '</p>' +
+          '<p class="msg__text">' + esc(m.text) + '</p>' +
+          (m.kind === 'order' ? '<a class="msg__link" href="#orders">مشاهده سفارش ' + icon('caret-left') + '</a>' : '') +
+        '</div>' +
+        '<time class="msg__date" datetime="' + esc(m.date) + '">' + formatDate(m.date) + '</time>' +
+      '</li>';
+    }).join('');
+    Store.markMessagesSeen();
+    renderUser();
+  }
+
   /* ---------- Addresses ---------- */
-  var dialog = document.querySelector('[data-address-dialog]');
+  var addrDialog = document.querySelector('[data-address-dialog]');
   var addrForm = document.querySelector('[data-address-form]');
   var editingId = null;
   var opener = null;
@@ -139,33 +279,40 @@
   function renderAddresses() {
     var list = Store.addresses();
     document.querySelector('[data-addresses]').innerHTML = list.length ? list.map(function (a) {
-      return '<li class="address-item' + (a.isDefault ? ' address-item--default' : '') + '">' +
-        '<div class="address-item__head"><span>' + esc(a.name) + '</span>' + (a.isDefault ? '<span class="badge">آدرس پیش‌فرض</span>' : '') + '</div>' +
-        '<p>' + esc(Store.addressText(a)) + '</p>' +
-        '<p class="text-muted">موبایل: <span class="ltr">' + esc(a.mobile) + '</span> · کد پستی: <span class="ltr">' + esc(a.postal) + '</span></p>' +
-        '<div class="address-item__actions">' +
-          '<button class="btn btn--outline btn--sm" type="button" data-address-edit="' + a.id + '">ویرایش</button>' +
-          (a.isDefault ? '' : '<button class="btn btn--outline btn--sm" type="button" data-address-default="' + a.id + '">انتخاب به‌عنوان پیش‌فرض</button>') +
-          '<button class="btn btn--sm btn--danger-text" type="button" data-address-delete="' + a.id + '">حذف</button>' +
+      return '<li class="address-card' + (a.isDefault ? ' address-card--default' : '') + '">' +
+        '<div class="address-card__head">' + icon('map-pin') + '<p class="address-card__text">' + esc(Store.addressText(a)) + '</p>' +
+          (a.isDefault ? '<span class="badge">نشانی پیش‌فرض</span>' : '') + '</div>' +
+        '<ul class="address-card__meta">' +
+          '<li>' + icon('user') + esc(a.name) + '</li>' +
+          '<li>' + icon('phone') + fa(esc(a.mobile)) + '</li>' +
+          '<li>' + icon('envelope') + 'کد پستی ' + fa(esc(a.postal)) + '</li>' +
+        '</ul>' +
+        '<div class="address-card__actions">' +
+          '<button class="btn btn--outline btn--sm" type="button" data-address-edit="' + esc(a.id) + '">' + icon('pencil') + ' ویرایش</button>' +
+          (a.isDefault ? '' : '<button class="btn btn--outline btn--sm" type="button" data-address-default="' + esc(a.id) + '">انتخاب به‌عنوان پیش‌فرض</button>') +
+          '<button class="btn btn--sm btn--danger-text" type="button" data-address-delete="' + esc(a.id) + '">' + icon('trash') + ' <span>حذف</span></button>' +
         '</div></li>';
-    }).join('') : '<li>' + emptyHTML('هنوز آدرسی ذخیره نکرده‌اید.') + '</li>';
+    }).join('') : '<li>' + emptyHTML('map-pin', 'هنوز نشانی‌ای ذخیره نکرده‌اید', 'نشانی‌های ذخیره‌شده هنگام ثبت سفارش برای انتخاب سریع نمایش داده می‌شوند.') + '</li>';
   }
 
   function openAddressDialog(address) {
     opener = document.activeElement;
     editingId = address ? address.id : null;
-    document.getElementById('address-dialog-title').textContent = address ? 'ویرایش آدرس' : 'آدرس جدید';
+    document.getElementById('address-dialog-title').textContent = address ? 'ویرایش نشانی' : 'نشانی جدید';
     document.querySelector('[data-address-fields]').innerHTML = Store.addressFields('dlg-', address || { name: user.name, mobile: user.mobile }) +
-      '<label class="check"><input type="checkbox" name="isDefault"' + (address && address.isDefault ? ' checked' : '') + '> آدرس پیش‌فرض باشد</label>';
-    dialog.showModal();
+      '<label class="check"><input type="checkbox" name="isDefault"' + (address && address.isDefault ? ' checked' : '') + '> نشانی پیش‌فرض باشد</label>';
+    addrDialog.showModal();
     document.getElementById('dlg-name').focus();
   }
 
-  function closeDialog() {
-    dialog.close();
-  }
-  dialog.addEventListener('close', function () { if (opener) opener.focus(); });
-  dialog.querySelectorAll('[data-dialog-close]').forEach(function (b) { b.addEventListener('click', closeDialog); });
+  [addrDialog, document.querySelector('[data-field-dialog]')].forEach(function (d) {
+    d.addEventListener('close', function () {
+      if (opener && document.body.contains(opener)) opener.focus();
+    });
+    d.querySelectorAll('[data-dialog-close]').forEach(function (b) {
+      b.addEventListener('click', function () { d.close(); });
+    });
+  });
 
   addrForm.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -178,9 +325,10 @@
       street: data.street, postal: data.postal, plaque: addrForm.elements.plaque.value.trim(),
       isDefault: addrForm.elements.isDefault.checked || (current && current.isDefault)
     });
-    closeDialog();
+    var wasEditing = editingId;
+    addrDialog.close();
     renderAddresses();
-    Shop.toast(editingId ? 'آدرس ویرایش شد' : 'آدرس جدید ذخیره شد');
+    Shop.toast(wasEditing ? 'نشانی ویرایش شد' : 'نشانی جدید ذخیره شد');
   });
 
   document.querySelector('[data-address-add]').addEventListener('click', function () { openAddressDialog(null); });
@@ -193,14 +341,14 @@
     // Two-step inline delete instead of window.confirm()
     if (del && del.getAttribute('data-confirm') !== 'true') {
       del.setAttribute('data-confirm', 'true');
-      del.textContent = 'حذف شود؟ دوباره بزنید';
+      del.querySelector('span').textContent = 'حذف شود؟ دوباره بزنید';
       window.setTimeout(function () {
-        if (document.body.contains(del)) { del.removeAttribute('data-confirm'); del.textContent = 'حذف'; }
+        if (document.body.contains(del)) { del.removeAttribute('data-confirm'); del.querySelector('span').textContent = 'حذف'; }
       }, 4000);
     } else if (del) {
       Store.deleteAddress(del.getAttribute('data-address-delete'));
       renderAddresses();
-      Shop.toast('آدرس حذف شد');
+      Shop.toast('نشانی حذف شد');
       document.querySelector('[data-address-add]').focus();
     }
     if (def) {
@@ -208,51 +356,179 @@
       a.isDefault = true;
       Store.saveAddress(a);
       renderAddresses();
-      Shop.toast('آدرس پیش‌فرض تغییر کرد');
+      Shop.toast('نشانی پیش‌فرض تغییر کرد');
     }
   });
 
-  /* ---------- Profile ---------- */
-  function renderProfile() {
-    var form = document.querySelector('[data-profile-form]');
-    form.innerHTML = '<div class="form-grid form-grid--2">' +
-      Store.field('pf-name', 'name', 'نام و نام خانوادگی', { rules: 'required', autocomplete: 'name', value: user.name }) +
-      '<div class="field"><label class="field__label" for="pf-mobile">شماره موبایل</label>' +
-        '<input class="input" id="pf-mobile" value="' + esc(user.mobile) + '" dir="ltr" readonly aria-describedby="pf-mobile-hint">' +
-        '<p class="field__hint" id="pf-mobile-hint">شماره موبایل شناسه ورود شماست و از اینجا قابل تغییر نیست.</p></div>' +
-      Store.field('pf-email', 'email', 'ایمیل', { rules: 'email', type: 'email', autocomplete: 'email', dir: 'ltr', value: user.email }) +
-      Store.field('pf-company', 'company', 'نام شرکت (برای خرید سازمانی)', { autocomplete: 'organization', value: user.company }) +
-      '</div><div class="form-actions"><button class="btn btn--primary" type="submit">ذخیره تغییرات</button></div>' +
-      '<p class="form-status" role="status" data-form-status></p>';
+  /* ---------- Personal / legal info ---------- */
+  var PROFILE = {
+    person: {
+      note: 'این اطلاعات برای صدور فاکتور و پیگیری سفارش‌ها استفاده می‌شود.',
+      fields: [
+        { key: 'name', label: 'نام و نام خانوادگی', rules: 'required', autocomplete: 'name' },
+        { key: 'email', label: 'پست الکترونیکی', rules: 'email', type: 'email', autocomplete: 'email', dir: 'ltr' },
+        { key: 'mobile', label: 'شماره موبایل', locked: 'شماره موبایل شناسه ورود شماست و قابل تغییر نیست.', number: true },
+        { key: 'nationalCode', label: 'کد ملی', rules: 'national', inputmode: 'numeric', dir: 'ltr', number: true, hint: '۱۰ رقم' },
+        { key: 'birthDate', label: 'تاریخ تولد', rules: 'date', inputmode: 'numeric', dir: 'ltr', number: true, hint: 'مثلاً ۱۳۷۰/۰۵/۲۱' },
+        { key: 'job', label: 'شغل', autocomplete: 'organization-title' },
+        { key: 'newsletter', label: 'دریافت خبرنامه', bool: 'خبرنامه پیشنهادهای ویژه لپ‌تاپ و تجهیزات شبکه را دریافت می‌کنم.' }
+      ]
+    },
+    legal: {
+      note: 'برای خرید سازمانی و دریافت فاکتور رسمی، مشخصات شرکت را تکمیل کنید.',
+      fields: [
+        { key: 'company', label: 'نام شرکت یا سازمان', autocomplete: 'organization' },
+        { key: 'economicCode', label: 'کد اقتصادی', rules: 'digits', inputmode: 'numeric', dir: 'ltr', number: true },
+        { key: 'companyNationalId', label: 'شناسه ملی', rules: 'nationalId', inputmode: 'numeric', dir: 'ltr', number: true, hint: '۱۱ رقم' },
+        { key: 'registrationNumber', label: 'شماره ثبت', rules: 'digits', inputmode: 'numeric', dir: 'ltr', number: true },
+        { key: 'companyPhone', label: 'تلفن ثابت', rules: 'phone', inputmode: 'tel', dir: 'ltr', number: true, hint: 'با کد شهر' }
+      ]
+    }
+  };
+  var profileKind = 'person';
+  var profileTabs = Array.prototype.slice.call(document.querySelectorAll('[data-profile-tabs] [role="tab"]'));
+  var fieldDialog = document.querySelector('[data-field-dialog]');
+  var fieldForm = document.querySelector('[data-field-form]');
+  var editingField = null;
+
+  function findField(key) {
+    return PROFILE.person.fields.concat(PROFILE.legal.fields).filter(function (f) { return f.key === key; })[0];
   }
 
-  document.querySelector('[data-profile-form]').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var form = e.target;
-    var data = Store.validateForm(form);
-    if (!data) return;
-    user = Store.updateUser({ name: data.name, email: data.email, company: form.elements.company.value.trim() });
-    Store.write('fibeso-known-' + user.mobile, user);
-    renderUser();
-    var status = form.querySelector('[data-form-status]');
-    status.className = 'form-status form-status--success';
-    status.textContent = 'اطلاعات حساب ذخیره شد (در همین مرورگر).';
+  function displayValue(f) {
+    var v = user[f.key];
+    if (f.bool) return v ? 'بله' : 'خیر';
+    if (!v) return '';
+    return f.number ? fa(v) : v;
+  }
+
+  function renderProfile() {
+    var conf = PROFILE[profileKind];
+    document.querySelector('[data-profile-note]').textContent = conf.note;
+    document.querySelector('[data-profile-fields]').innerHTML = conf.fields.map(function (f) {
+      var v = displayValue(f);
+      return '<div class="info-item">' +
+        '<div class="info-item__text"><dt>' + f.label + '</dt>' +
+          '<dd>' + (v ? esc(v) : '<span class="info-item__empty">ثبت نشده</span>') + '</dd></div>' +
+        (f.locked
+          ? '<span class="info-item__lock" title="' + f.locked + '">' + icon('shield-check') + '<span class="visually-hidden">' + f.locked + '</span></span>'
+          : '<button class="info-item__edit" type="button" data-edit-field="' + f.key + '" aria-label="ویرایش ' + f.label + '">' + icon('pencil') + '</button>') +
+      '</div>';
+    }).join('');
+  }
+
+  function selectProfileTab(tab, focus) {
+    profileTabs.forEach(function (t) {
+      t.setAttribute('aria-selected', String(t === tab));
+      t.tabIndex = t === tab ? 0 : -1;
+    });
+    profileKind = tab.getAttribute('data-kind');
+    document.getElementById('profile-panel').setAttribute('aria-labelledby', tab.id);
+    renderProfile();
+    if (focus) tab.focus();
+  }
+  profileTabs.forEach(function (t) { t.addEventListener('click', function () { selectProfileTab(t); }); });
+  tabKeys(document.querySelector('[data-profile-tabs]'), profileTabs, selectProfileTab);
+
+  document.querySelector('[data-profile-fields]').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-edit-field]');
+    if (!btn) return;
+    var f = findField(btn.getAttribute('data-edit-field'));
+    opener = btn;
+    editingField = f;
+    document.getElementById('field-dialog-title').textContent = 'ویرایش ' + f.label;
+    document.querySelector('[data-field-body]').innerHTML = f.bool
+      ? '<label class="check"><input type="checkbox" id="fd-input" name="value"' + (user[f.key] ? ' checked' : '') + '> ' + f.bool + '</label>'
+      : Store.field('fd-input', 'value', f.label, {
+        rules: f.rules, type: f.type, autocomplete: f.autocomplete, inputmode: f.inputmode, dir: f.dir,
+        hint: f.hint, value: f.number && user[f.key] ? fa(user[f.key]) : user[f.key]
+      });
+    fieldDialog.showModal();
+    var input = document.getElementById('fd-input');
+    input.focus();
+    if (input.select && input.type !== 'checkbox') input.select();
   });
 
+  fieldForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = editingField;
+    if (!f) return;
+    var input = fieldForm.elements.value;
+    var value;
+    if (f.bool) {
+      value = input.checked;
+    } else {
+      var data = Store.validateForm(fieldForm);
+      if (!data) return;
+      value = input.value.trim();
+      if (f.number) value = Store.latin(value).replace(/[\s-]/g, '');
+    }
+    var patch = {};
+    patch[f.key] = value;
+    user = Store.updateUser(patch);
+    Store.write('fibeso-known-' + user.mobile, user);
+    fieldDialog.close();
+    renderUser();
+    renderProfile();
+    var again = document.querySelector('[data-edit-field="' + f.key + '"]');
+    if (again) { opener = null; again.focus(); }
+    Shop.toast(f.label + ' ذخیره شد');
+  });
+
+  /* ---------- Wallet ---------- */
+  function renderWallet() {
+    var w = Store.wallet();
+    var toman = function (n) { return '<span class="balance__value">' + fmt(n) + ' <small>تومان</small></span>'; };
+    document.querySelector('[data-wallet]').innerHTML =
+      '<section class="wallet__block" aria-labelledby="w-split">' +
+        '<h3 class="wallet__title" id="w-split">' + icon('stack') + ' تفکیک موجودی‌ها</h3>' +
+        '<ul class="balances">' +
+          '<li class="balance"><span class="balance__label">موجودی نقدی</span>' + toman(w.cash) + '</li>' +
+          '<li class="balance"><span class="balance__label">موجودی هدیه</span>' + toman(w.gift) + '</li>' +
+          '<li class="balance balance--total"><span class="balance__label">موجودی کل</span>' + toman(w.total) + '</li>' +
+        '</ul>' +
+      '</section>' +
+      '<section class="wallet__block" aria-labelledby="w-detail">' +
+        '<h3 class="wallet__title" id="w-detail">' + icon('wallet') + ' جزئیات کیف پول</h3>' +
+        '<dl class="wallet__details">' +
+          '<div><dt>موجودی قابل برداشت</dt><dd>' + fmt(w.cash) + ' تومان</dd></div>' +
+          '<div><dt>قابل خرید با کیف پول</dt><dd>' + fmt(w.total) + ' تومان</dd></div>' +
+          '<div><dt>قابل خرید با کارت هدیه</dt><dd>' + fmt(w.gift) + ' تومان</dd></div>' +
+        '</dl>' +
+      '</section>' +
+      '<section class="wallet__block" aria-labelledby="w-tx">' +
+        '<h3 class="wallet__title" id="w-tx">' + icon('clock') + ' تراکنش‌های اخیر</h3>' +
+        '<div class="tx-wrap"><table class="tx">' +
+          '<thead><tr><th scope="col">نوع تراکنش</th><th scope="col">مبلغ</th><th scope="col">کد سفارش</th><th scope="col">تاریخ تراکنش</th></tr></thead>' +
+          '<tbody>' + (w.transactions.length ? w.transactions.map(function (t) {
+            return '<tr><td>' + esc(t.type) + '</td><td>' + fmt(t.amount) + ' تومان</td><td class="ltr">' + esc(t.order || '') + '</td><td>' + formatDate(t.date) + '</td></tr>';
+          }).join('') : '<tr><td class="tx__empty" colspan="4">تراکنشی برای نمایش وجود ندارد</td></tr>') + '</tbody>' +
+        '</table></div>' +
+      '</section>' +
+      '<div class="alert">' + icon('info') + '<span>افزایش موجودی و برداشت از کیف پول پس از راه‌اندازی درگاه پرداخت فیبسو فعال می‌شود.</span></div>';
+  }
+
   /* ---------- Logout ---------- */
-  document.querySelector('[data-logout]').addEventListener('click', function () {
-    Store.logout();
-    window.location.href = Shop.root + 'index.html';
+  document.querySelectorAll('[data-logout]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      Store.logout();
+      window.location.href = Shop.root + 'index.html';
+    });
   });
 
   var RENDER = {
     dashboard: renderDashboard,
     orders: renderOrders,
     wishlist: renderWishlist,
+    comments: renderComments,
     addresses: renderAddresses,
-    profile: renderProfile
+    messages: renderMessages,
+    recent: renderRecent,
+    profile: renderProfile,
+    wallet: renderWallet
   };
 
   renderUser();
-  show(window.location.hash.slice(1), false);
+  renderRail();
+  route(false);
 })();

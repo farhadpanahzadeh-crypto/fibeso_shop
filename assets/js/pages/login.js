@@ -25,6 +25,35 @@
     return;
   }
 
+  /* ---------- «ورود | ثبت‌نام» tabs: same flow, different wording ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[data-auth-tabs] [role="tab"]'));
+  var panel = document.getElementById('auth-panel');
+  var COPY = {
+    login: { title: 'خوش اومدی :)', hint: 'کد تأیید یک‌بار مصرف به همین شماره پیامک می‌شود.' },
+    signup: { title: 'به فیبسو خوش اومدی :)', hint: 'با شماره موبایل حساب جدید بسازید؛ نام شما را در مرحله بعد می‌پرسیم.' }
+  };
+  var mode = 'login';
+  function selectTab(tab, focus) {
+    tabs.forEach(function (t) {
+      t.setAttribute('aria-selected', String(t === tab));
+      t.tabIndex = t === tab ? 0 : -1;
+    });
+    mode = tab.getAttribute('data-mode');
+    panel.setAttribute('aria-labelledby', tab.id);
+    document.querySelector('[data-auth-title]').textContent = COPY[mode].title;
+    document.querySelector('[data-auth-hint]').textContent = COPY[mode].hint;
+    if (!mobileForm.hidden) document.getElementById('login-mobile').focus();
+    if (focus) tab.focus();
+  }
+  tabs.forEach(function (t) { t.addEventListener('click', function () { selectTab(t); }); });
+  document.querySelector('[data-auth-tabs]').addEventListener('keydown', function (e) {
+    var i = tabs.indexOf(document.activeElement);
+    if (i !== -1 && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+      e.preventDefault();
+      selectTab(tabs[(i + 1) % tabs.length], true);
+    }
+  });
+
   function startTimer() {
     var left = 120;
     resendBtn.hidden = true;

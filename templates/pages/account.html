@@ -1,86 +1,199 @@
-<!-- {"out": "pages/account.html", "title": "پنل کاربری | فیبسو", "description": "پنل کاربری فیبسو: سفارش‌ها، علاقه‌مندی‌ها، آدرس‌ها و اطلاعات حساب.", "noindex": true, "css": ["pages/account.css"], "js": ["pages/account.js"]} -->
-  <main id="main" class="page-section">
-    <div class="container account">
-      <aside class="account__side" aria-label="منوی پنل کاربری">
-        <div class="account__user">
-          <span class="account__avatar" aria-hidden="true" data-user-initial></span>
-          <div>
-            <p class="account__name" data-user-name></p>
-            <p class="account__mobile ltr" data-user-mobile></p>
-          </div>
-        </div>
-        <nav class="account__nav" aria-label="بخش‌های پنل">
-          <a class="account__link" href="#dashboard" data-section-link="dashboard">
-            {{icon:layout}}
-            پیشخوان
-          </a>
-          <a class="account__link" href="#orders" data-section-link="orders">
-            {{icon:package}}
-            سفارش‌ها
-          </a>
-          <a class="account__link" href="#wishlist" data-section-link="wishlist">
-            {{icon:heart}}
-            علاقه‌مندی‌ها
-          </a>
-          <a class="account__link" href="#addresses" data-section-link="addresses">
-            {{icon:map-pin}}
-            آدرس‌ها
-          </a>
-          <a class="account__link" href="#profile" data-section-link="profile">
-            {{icon:user}}
-            اطلاعات حساب
-          </a>
-          <button class="account__link account__logout" type="button" data-logout>
-            {{icon:sign-out}}
-            خروج از حساب
-          </button>
+<!-- {"out": "pages/account.html", "title": "حساب کاربری | فیبسو", "description": "پنل کاربری فیبسو: سفارش‌ها، علاقه‌مندی‌ها، نشانی‌ها، کیف پول و مشخصات حساب.", "noindex": true, "css": ["pages/account.css"], "js": ["pages/account.js"], "tab": "account", "chrome": "full"} -->
+  <main id="main" class="page-section account-page">
+    <h1 class="visually-hidden">حساب کاربری فیبسو</h1>
+    <div class="container account" data-account data-view="section">
+      <!-- Wallet balance strip (above the content panel on desktop, first on phones) -->
+      <div class="wallet-strip">
+        <p class="wallet-strip__label">موجودی کیف پول:</p>
+        <p class="wallet-strip__value"><span data-wallet-total>۰</span> تومان</p>
+        <a class="wallet-strip__link" href="#wallet">افزایش موجودی {{icon:caret-left}}</a>
+      </div>
+
+      <aside class="account__side" aria-label="منوی حساب کاربری">
+        <a class="account__hello" href="#dashboard" data-section-link="dashboard">
+          {{icon:user-circle}}
+          <span data-user-name>کاربر فیبسو</span>
+        </a>
+        <p class="account__mobile ltr" data-user-mobile></p>
+        <button class="btn btn--outline btn--sm account__logout-top" type="button" data-logout>
+          {{icon:sign-out}}
+          خروج
+        </button>
+
+        <nav class="account__nav" aria-label="بخش‌های حساب کاربری">
+          <ul>
+            <li><a class="account__link" href="#orders" data-section-link="orders">{{icon:package}}<span>سفارش‌های من</span>{{icon:caret-left account__chev}}</a></li>
+            <li><a class="account__link" href="#wishlist" data-section-link="wishlist">{{icon:heart}}<span>کالاهای مورد علاقه</span>{{icon:caret-left account__chev}}</a></li>
+            <li><a class="account__link" href="#comments" data-section-link="comments">{{icon:chat}}<span>نظرات</span>{{icon:caret-left account__chev}}</a></li>
+            <li><a class="account__link" href="#addresses" data-section-link="addresses">{{icon:map-pin}}<span>نشانی‌ها</span>{{icon:caret-left account__chev}}</a></li>
+            <li><a class="account__link" href="#messages" data-section-link="messages">{{icon:envelope}}<span>پیام‌ها</span><span class="account__count" data-message-count hidden></span>{{icon:caret-left account__chev}}</a></li>
+            <li><a class="account__link" href="#recent" data-section-link="recent">{{icon:eye}}<span>آخرین کالاهای دیده شده</span>{{icon:caret-left account__chev}}</a></li>
+            <li><a class="account__link" href="#profile" data-section-link="profile">{{icon:id-card}}<span>مشخصات فردی</span>{{icon:caret-left account__chev}}</a></li>
+            <li><a class="account__link" href="#wallet" data-section-link="wallet">{{icon:wallet}}<span>کیف پول</span>{{icon:caret-left account__chev}}</a></li>
+            <li><button class="account__link" type="button" data-logout>{{icon:sign-out}}<span>خروج</span>{{icon:caret-left account__chev}}</button></li>
+          </ul>
         </nav>
       </aside>
 
-      <div class="account__main">
-        <section class="account__section" id="dashboard" aria-labelledby="dashboard-title" data-section>
-          <h1 class="account__title" id="dashboard-title" tabindex="-1">پیشخوان</h1>
-          <div data-dashboard></div>
-        </section>
-        <section class="account__section" id="orders" aria-labelledby="orders-title" data-section hidden>
-          <h1 class="account__title" id="orders-title" tabindex="-1">سفارش‌های من</h1>
-          <div class="tabs-line" role="tablist" aria-label="وضعیت سفارش" data-order-tabs>
-            <button class="tabs-line__tab" role="tab" type="button" aria-selected="true" data-status="">همه</button>
-            <button class="tabs-line__tab" role="tab" type="button" aria-selected="false" tabindex="-1" data-status="processing">در حال پردازش</button>
-            <button class="tabs-line__tab" role="tab" type="button" aria-selected="false" tabindex="-1" data-status="shipped">ارسال‌شده</button>
-            <button class="tabs-line__tab" role="tab" type="button" aria-selected="false" tabindex="-1" data-status="delivered">تحویل‌شده</button>
+      <div class="account__panel">
+        <!-- Dashboard -->
+        <section class="acc-section" id="acc-dashboard" aria-labelledby="dashboard-title" data-section hidden>
+          <div class="acc-head acc-head--plain">
+            <a class="acc-back" href="#menu" aria-label="بازگشت به منوی حساب">{{icon:caret-right}}</a>
+            <h2 class="acc-title" id="dashboard-title" tabindex="-1">{{icon:user}} مشخصات فردی</h2>
           </div>
-          <div class="order-list" role="tabpanel" aria-label="فهرست سفارش‌ها" data-orders></div>
+          <div data-dashboard-profile></div>
+
+          <div class="acc-subhead">
+            <h3 class="acc-subtitle">{{icon:package}} آخرین سفارش‌ها</h3>
+          </div>
+          <div data-dashboard-orders></div>
+          <a class="see-all" href="#orders"><span class="see-all__dots" aria-hidden="true">{{icon:dots}}</span> دیدن همه سفارش‌های من</a>
         </section>
-        <section class="account__section" id="wishlist" aria-labelledby="wishlist-title" data-section hidden>
-          <h1 class="account__title" id="wishlist-title" tabindex="-1">علاقه‌مندی‌ها</h1>
-          <ul class="product-grid account__grid" data-wishlist></ul>
+
+        <!-- Orders -->
+        <section class="acc-section" id="acc-orders" aria-labelledby="orders-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="#menu" aria-label="بازگشت به منوی حساب">{{icon:caret-right}}</a>
+            <h2 class="acc-title" id="orders-title" tabindex="-1">سفارش‌های من</h2>
+            <div class="acc-search">
+              <label class="visually-hidden" for="order-search">جستجو در سفارش‌ها</label>
+              {{icon:magnifying-glass}}
+              <input id="order-search" type="search" placeholder="جستجو کنید" autocomplete="off" data-order-search>
+            </div>
+          </div>
+          <div class="order-tabs" role="tablist" aria-label="وضعیت سفارش" data-order-tabs>
+            <button class="order-tabs__tab" role="tab" type="button" id="otab-current" aria-selected="true" aria-controls="order-panel" data-group="current">جاری <span data-order-count="current">(۰)</span></button>
+            <button class="order-tabs__tab" role="tab" type="button" id="otab-delivered" aria-selected="false" aria-controls="order-panel" tabindex="-1" data-group="delivered">تحویل شده <span data-order-count="delivered">(۰)</span></button>
+            <button class="order-tabs__tab" role="tab" type="button" id="otab-returned" aria-selected="false" aria-controls="order-panel" tabindex="-1" data-group="returned">مرجوعی <span data-order-count="returned">(۰)</span></button>
+            <button class="order-tabs__tab" role="tab" type="button" id="otab-cancelled" aria-selected="false" aria-controls="order-panel" tabindex="-1" data-group="cancelled">لغو شده <span data-order-count="cancelled">(۰)</span></button>
+          </div>
+          <div class="order-list" id="order-panel" role="tabpanel" aria-labelledby="otab-current" data-orders></div>
         </section>
-        <section class="account__section" id="addresses" aria-labelledby="addresses-title" data-section hidden>
-          <div class="panel__head">
-            <h1 class="account__title" id="addresses-title" tabindex="-1">آدرس‌ها</h1>
-            <button class="btn btn--primary btn--sm" type="button" data-address-add>افزودن آدرس جدید</button>
+
+        <!-- Wishlist -->
+        <section class="acc-section" id="acc-wishlist" aria-labelledby="wishlist-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="#menu" aria-label="بازگشت به منوی حساب">{{icon:caret-right}}</a>
+            <h2 class="acc-title" id="wishlist-title" tabindex="-1">کالاهای مورد علاقه</h2>
+          </div>
+          <ul class="product-grid acc-grid" data-wishlist></ul>
+        </section>
+
+        <!-- Comments -->
+        <section class="acc-section" id="acc-comments" aria-labelledby="comments-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="#menu" aria-label="بازگشت به منوی حساب">{{icon:caret-right}}</a>
+            <h2 class="acc-title" id="comments-title" tabindex="-1">نظرات</h2>
+          </div>
+          <div class="acc-empty">
+            <span class="acc-empty__art" aria-hidden="true">{{icon:chat}}</span>
+            <p class="acc-empty__title">هنوز نظری ثبت نکرده‌اید</p>
+            <p class="acc-empty__text">پس از دریافت سفارش، از صفحه هر کالا تجربه خود را بنویسید تا به خریداران دیگر در انتخاب لپ‌تاپ یا تجهیزات شبکه کمک کند.</p>
+            <a class="btn btn--outline btn--sm" href="{{root}}pages/shop.html">رفتن به فروشگاه</a>
+          </div>
+        </section>
+
+        <!-- Addresses -->
+        <section class="acc-section" id="acc-addresses" aria-labelledby="addresses-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="#menu" aria-label="بازگشت به منوی حساب">{{icon:caret-right}}</a>
+            <h2 class="acc-title" id="addresses-title" tabindex="-1">نشانی‌ها</h2>
+            <button class="btn btn--outline btn--sm acc-head__action" type="button" data-address-add>{{icon:plus}} افزودن نشانی</button>
           </div>
           <ul class="address-list" data-addresses></ul>
         </section>
-        <section class="account__section" id="profile" aria-labelledby="profile-title" data-section hidden>
-          <h1 class="account__title" id="profile-title" tabindex="-1">اطلاعات حساب</h1>
-          <form class="panel" novalidate data-profile-form></form>
+
+        <!-- Messages -->
+        <section class="acc-section" id="acc-messages" aria-labelledby="messages-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="#menu" aria-label="بازگشت به منوی حساب">{{icon:caret-right}}</a>
+            <h2 class="acc-title" id="messages-title" tabindex="-1">پیام‌ها</h2>
+          </div>
+          <ul class="msg-list" data-messages></ul>
+        </section>
+
+        <!-- Recently viewed -->
+        <section class="acc-section" id="acc-recent" aria-labelledby="recent-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="#menu" aria-label="بازگشت به منوی حساب">{{icon:caret-right}}</a>
+            <h2 class="acc-title" id="recent-title" tabindex="-1">آخرین کالاهای دیده شده</h2>
+          </div>
+          <ul class="product-grid acc-grid" data-recent></ul>
+        </section>
+
+        <!-- Personal / legal info -->
+        <section class="acc-section" id="acc-profile" aria-labelledby="profile-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="#menu" aria-label="بازگشت به منوی حساب">{{icon:caret-right}}</a>
+            <h2 class="acc-title" id="profile-title" tabindex="-1">مشخصات</h2>
+          </div>
+          <div class="seg" role="tablist" aria-label="نوع مشخصات" data-profile-tabs>
+            <button class="seg__tab" role="tab" type="button" id="ptab-person" aria-selected="true" aria-controls="profile-panel" data-kind="person">مشخصات فردی</button>
+            <button class="seg__tab" role="tab" type="button" id="ptab-legal" aria-selected="false" aria-controls="profile-panel" tabindex="-1" data-kind="legal">مشخصات حقوقی</button>
+          </div>
+          <div id="profile-panel" role="tabpanel" aria-labelledby="ptab-person">
+            <p class="acc-note" data-profile-note></p>
+            <dl class="info-grid" data-profile-fields></dl>
+          </div>
+        </section>
+
+        <!-- Wallet -->
+        <section class="acc-section" id="acc-wallet" aria-labelledby="wallet-title" data-section hidden>
+          <div class="acc-head">
+            <a class="acc-back" href="#menu" aria-label="بازگشت به منوی حساب">{{icon:caret-right}}</a>
+            <h2 class="acc-title" id="wallet-title" tabindex="-1">کیف پول</h2>
+          </div>
+          <div class="wallet" data-wallet></div>
         </section>
       </div>
+
+      <!-- Recently viewed rail: under the dashboard (desktop) or the menu (phones) -->
+      <section class="rail account__rail" aria-labelledby="recent-rail-title" data-recent-rail hidden>
+        <div class="rail__head">
+          <h2 class="rail__title" id="recent-rail-title">آخرین کالاهای دیده شده</h2>
+          <div class="rail__tools">
+            <div class="scroller__controls">
+              <button class="round-btn" type="button" data-scroll-prev="acc-recent" aria-label="کالاهای قبلی">{{icon:caret-right}}</button>
+              <button class="round-btn" type="button" data-scroll-next="acc-recent" aria-label="کالاهای بعدی">{{icon:caret-left}}</button>
+            </div>
+          </div>
+        </div>
+        <div class="scroller" data-scroller="acc-recent">
+          <ul class="scroller__track" aria-label="آخرین کالاهای دیده شده" data-recent-track></ul>
+        </div>
+      </section>
     </div>
 
+    <!-- Address form -->
     <dialog class="dialog" aria-labelledby="address-dialog-title" data-address-dialog>
       <form novalidate data-address-form>
         <div class="dialog__head">
-          <h2 class="dialog__title" id="address-dialog-title">آدرس جدید</h2>
+          <h2 class="dialog__title" id="address-dialog-title">نشانی جدید</h2>
           <button class="icon-btn" type="button" aria-label="بستن" data-dialog-close>
             {{icon:x}}
           </button>
         </div>
         <div class="dialog__body" data-address-fields></div>
         <div class="dialog__foot">
-          <button class="btn btn--primary" type="submit">ذخیره آدرس</button>
+          <button class="btn btn--primary" type="submit">ذخیره نشانی</button>
+          <button class="btn btn--outline" type="button" data-dialog-close>انصراف</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Single field editor for the profile grid -->
+    <dialog class="dialog dialog--sm" aria-labelledby="field-dialog-title" data-field-dialog>
+      <form novalidate data-field-form>
+        <div class="dialog__head">
+          <h2 class="dialog__title" id="field-dialog-title">ویرایش</h2>
+          <button class="icon-btn" type="button" aria-label="بستن" data-dialog-close>
+            {{icon:x}}
+          </button>
+        </div>
+        <div class="dialog__body" data-field-body></div>
+        <div class="dialog__foot">
+          <button class="btn btn--primary" type="submit">ذخیره</button>
           <button class="btn btn--outline" type="button" data-dialog-close>انصراف</button>
         </div>
       </form>

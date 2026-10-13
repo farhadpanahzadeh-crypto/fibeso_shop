@@ -3,7 +3,7 @@
 (function () {
   'use strict';
 
-  var KEYS = { user: 'fibeso-user', addresses: 'fibeso-addresses', orders: 'fibeso-orders' };
+  var KEYS = { user: 'fibeso-user', addresses: 'fibeso-addresses', orders: 'fibeso-orders', wallet: 'fibeso-wallet', seen: 'fibeso-messages-seen' };
 
   function read(key, fallback) {
     try {
@@ -46,7 +46,12 @@
     mobile: function (v) { return /^(?:\+98|0098|0)?9\d{9}$/.test(latin(v).replace(/[\s-]/g, '')) ? '' : 'شماره موبایل معتبر نیست؛ مثلاً ۰۹۱۲۱۲۳۴۵۶۷.'; },
     postal: function (v) { return /^\d{10}$/.test(latin(v).replace(/[\s-]/g, '')) ? '' : 'کد پستی باید ۱۰ رقم باشد.'; },
     email: function (v) { return !v || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? '' : 'ایمیل معتبر نیست.'; },
-    min10: function (v) { return v.length >= 10 ? '' : 'حداقل ۱۰ حرف بنویسید.'; }
+    min10: function (v) { return v.length >= 10 ? '' : 'حداقل ۱۰ حرف بنویسید.'; },
+    national: function (v) { return /^\d{10}$/.test(latin(v).replace(/[\s-]/g, '')) ? '' : 'کد ملی باید ۱۰ رقم باشد.'; },
+    nationalId: function (v) { return /^\d{11}$/.test(latin(v).replace(/[\s-]/g, '')) ? '' : 'شناسه ملی شرکت باید ۱۱ رقم باشد.'; },
+    digits: function (v, label) { return /^\d+$/.test(latin(v).replace(/[\s-]/g, '')) ? '' : label + ' فقط شامل رقم است.'; },
+    phone: function (v) { return /^0\d{10}$/.test(latin(v).replace(/[\s-]/g, '')) ? '' : 'شماره تلفن را با کد شهر وارد کنید؛ مثلاً ۰۲۱۸۸۰۰۰۰۰۰.'; },
+    date: function (v) { return /^1[34]\d{2}\/\d{1,2}\/\d{1,2}$/.test(latin(v).replace(/\s/g, '')) ? '' : 'تاریخ را به شکل ۱۳۷۰/۰۵/۲۱ وارد کنید.'; }
   };
 
   /* Validate inputs carrying data-rules="required mobile" and data-label="...".
@@ -199,6 +204,53 @@
       list.unshift(order);
       write(KEYS.orders, list);
       return order;
+    },
+
+    /* ---- Wallet (demo: no top-up or payment exists yet, balances stay 0) ---- */
+    wallet: function () {
+      var w = read(KEYS.wallet, {});
+      var cash = Number(w.cash) || 0;
+      var gift = Number(w.gift) || 0;
+      return { cash: cash, gift: gift, total: cash + gift, transactions: Array.isArray(w.transactions) ? w.transactions : [] };
+    },
+
+    /* ---- Messages: generated from the account and its orders ----
+       [{id, title, text, date, kind, unread}] newest first. */
+    messages: function () {
+      var u = read(KEYS.user, null);
+      var seen = read(KEYS.seen, []);
+      var STATUS_TEXT = {
+        processing: 'ثبت شد و در حال بررسی و آماده‌سازی برای ارسال است.',
+        shipped: 'ارسال شد. کد رهگیری پس از تحویل به شرکت حمل پیامک می‌شود.',
+        delivered: 'تحویل شد. امیدواریم از خرید خود راضی باشید.',
+        returned: 'به‌عنوان مرجوعی ثبت شد و پس از بررسی کارشناس نتیجه اعلام می‌شود.',
+        cancelled: 'لغو شد. اگر مبلغی پرداخت کرده باشید، به حساب شما بازگردانده می‌شود.'
+      };
+      var list = read(KEYS.orders, []).map(function (o) {
+        return {
+          id: 'order-' + o.id + '-' + o.status,
+          kind: 'order',
+          orderId: o.id,
+          title: 'سفارش ' + o.id,
+          text: 'سفارش شما ' + (STATUS_TEXT[o.status] || STATUS_TEXT.processing),
+          date: o.date
+        };
+      });
+      if (u) {
+        list.push({
+          id: 'welcome',
+          kind: 'welcome',
+          title: 'به فیبسو خوش آمدید',
+          text: 'حساب شما ساخته شد. از این پنل می‌توانید سفارش‌ها، نشانی‌ها و مشخصات خرید سازمانی خود را مدیریت کنید.',
+          date: u.joined || new Date().toISOString()
+        });
+      }
+      list.sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+      list.forEach(function (m) { m.unread = seen.indexOf(m.id) === -1; });
+      return list;
+    },
+    markMessagesSeen: function () {
+      write(KEYS.seen, this.messages().map(function (m) { return m.id; }));
     }
   };
 })();

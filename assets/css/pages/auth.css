@@ -1,30 +1,111 @@
-/* Login / sign-up */
+/* Login / sign-up: split screen. Form column on the start side, navy brand
+   panel with product drawings on the end side (hidden on phones). */
 
 .auth {
   display: grid;
-  place-items: center;
-  min-height: 70vh;
-  padding: var(--space-10) var(--gutter);
+  min-height: 100dvh;
+  background: var(--color-surface);
 }
 
-.auth__card {
-  display: grid;
-  gap: var(--space-5);
-  width: min(100%, 26rem);
-  padding: clamp(1.5rem, 1rem + 3vw, 2.5rem);
-  border: var(--border-width) solid var(--color-border);
-  border-radius: var(--radius-xl);
-  background: var(--color-surface);
-  box-shadow: var(--shadow-md);
+@media (min-width: 64rem) {
+  .auth {
+    grid-template-columns: minmax(26rem, 2fr) 3fr;
+  }
+
+  /* The terms line at the bottom of the form replaces the mini footer here */
+  .page-login .mini-footer {
+    display: none;
+  }
+}
+
+/* ---------- Form column ---------- */
+.auth__form-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-6) var(--gutter) var(--space-6);
+}
+
+@media (min-width: 64rem) {
+  .auth__form-side {
+    padding: var(--space-10) clamp(2rem, 3vw, 3rem) var(--space-6);
+  }
 }
 
 .auth__brand {
-  justify-self: center;
+  align-self: center;
+  font-size: var(--fs-xl);
+}
+
+.auth__brand .brand__mark {
+  width: 3rem;
+  height: 3rem;
+}
+
+.auth__body {
+  display: grid;
+  gap: var(--space-6);
+  width: min(100%, 26rem);
+  margin-inline: auto;
+}
+
+@media (min-width: 64rem) {
+  .auth__body {
+    width: 100%;
+    max-width: 26rem;
+    margin-block: auto;
+    padding-bottom: var(--space-10);
+  }
+}
+
+/* Tabs: «ورود | ثبت‌نام» */
+.auth__tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.auth__tab {
+  position: relative;
+  min-width: 5.5rem;
+  min-height: 2.75rem;
+  padding: 0 var(--space-3);
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+}
+
+.auth__tab[aria-selected="true"] {
+  color: var(--color-text);
+  font-weight: var(--fw-bold);
+}
+
+.auth__tab[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  inset-inline: var(--space-4);
+  bottom: 0.2rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-primary);
+}
+
+.auth__tab:hover {
+  color: var(--color-text);
+}
+
+.auth__tabs-sep {
+  width: 1px;
+  height: 1.25rem;
+  background: var(--color-border-strong);
 }
 
 .auth__step {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-5);
 }
 
 .auth__step[hidden] {
@@ -32,19 +113,58 @@
 }
 
 .auth__title {
-  font-size: var(--fs-xl);
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+  text-align: center;
+}
+
+.auth__label {
+  font-weight: var(--fw-medium);
+}
+
+.auth__input {
+  min-height: 3.75rem;
+  font-size: var(--fs-md);
+}
+
+.auth__submit {
+  min-height: 3.5rem;
+  margin-top: var(--space-4);
 }
 
 .auth__lead,
-.auth__terms,
 .auth__resend {
   color: var(--color-text-muted);
   font-size: var(--fs-sm);
+  text-align: center;
 }
 
-.auth__terms,
-.auth__resend {
+.field__hint {
+  color: var(--color-text-muted);
+  font-size: var(--fs-xs);
+}
+
+.auth__terms {
+  color: var(--color-text-muted);
+  font-size: var(--fs-xs);
+  line-height: var(--lh-normal);
   text-align: center;
+}
+
+@media (min-width: 64rem) {
+  .auth__terms {
+    text-align: start;
+  }
+}
+
+.auth__terms a {
+  color: var(--color-primary-hover);
+  font-weight: var(--fw-medium);
+  text-decoration: none;
+}
+
+.auth__terms a:hover {
+  text-decoration: underline;
 }
 
 .otp {
@@ -62,4 +182,123 @@
   font-weight: var(--fw-bold);
   text-decoration: underline;
   text-underline-offset: 0.25em;
+}
+
+/* ---------- Brand panel ---------- */
+.auth__visual {
+  display: none;
+}
+
+@media (min-width: 64rem) {
+  .auth__visual {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--space-8);
+    height: 100dvh;
+    padding: var(--space-12) clamp(2rem, 5vw, 5rem);
+    overflow: hidden;
+    background: var(--color-footer);
+    color: var(--color-text-inverse);
+  }
+}
+
+.auth__art {
+  position: relative;
+  width: min(100%, 30rem);
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+
+/* Soft rings behind the drawings */
+.auth__art::before,
+.auth__art::after {
+  content: "";
+  position: absolute;
+  border: var(--border-width) solid var(--color-border-inverse);
+  border-radius: 50%;
+}
+
+.auth__art::before {
+  inset: 4%;
+}
+
+.auth__art::after {
+  inset: 18%;
+  background: var(--color-border-inverse);
+  opacity: 0.4;
+}
+
+.auth__art img {
+  position: absolute;
+  z-index: 1;
+  height: auto;
+}
+
+.auth__art-main {
+  inset: 8% 6% auto;
+  width: 88%;
+}
+
+.auth__art-side {
+  width: 34%;
+  padding: 2%;
+  border-radius: var(--radius-lg);
+  background: var(--color-media);
+  box-shadow: var(--shadow-lg);
+}
+
+.auth__art-side--a {
+  inset-inline-start: -2%;
+  bottom: 6%;
+  transform: rotate(4deg);
+}
+
+.auth__art-side--b {
+  inset-inline-end: -2%;
+  top: 2%;
+  width: 26%;
+  transform: rotate(-6deg);
+}
+
+.auth__pitch {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 34rem;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.auth__pitch-title {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-black);
+  line-height: var(--lh-tight);
+}
+
+.auth__pitch-text {
+  color: var(--color-text-inverse-muted);
+}
+
+.auth__points {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2) var(--space-5);
+  margin-top: var(--space-2);
+  color: var(--color-text-inverse-muted);
+  font-size: var(--fs-sm);
+}
+
+.auth__points li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.auth__points svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--color-sky);
 }
