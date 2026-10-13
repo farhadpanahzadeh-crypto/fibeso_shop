@@ -8,10 +8,14 @@
     window.UI.initCounters(document);
   }
 
-  // Header account icon: name the signed-in user for assistive tech
+  // Header login button becomes the account link once signed in
   var user = window.Store && window.Store.user();
+  var root = document.documentElement.getAttribute('data-root') || '';
   document.querySelectorAll('[data-account-link]').forEach(function (a) {
-    a.setAttribute('aria-label', user ? 'پنل کاربری ' + (user.name || '') : 'ورود یا ثبت‌نام');
-    a.classList.toggle('is-signed-in', !!user);
+    if (!user) return;
+    a.href = root + 'pages/account.html';
+    a.classList.add('is-signed-in');
+    var label = a.querySelector('[data-account-label]');
+    if (label) label.textContent = user.name || 'حساب کاربری';
   });
 })();

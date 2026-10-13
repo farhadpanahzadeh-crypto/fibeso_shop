@@ -45,6 +45,18 @@ ICONS = {
     "wifi": ("regular", "wifi-high"), "plugs": ("regular", "plugs-connected"),
     "info": ("regular", "info"), "trash": ("regular", "trash"), "pencil": ("regular", "pencil-simple"),
     "minus": ("bold", "minus"), "plus": ("bold", "plus"), "seal-check": ("regular", "seal-check"),
+    "monitor": ("regular", "monitor"), "memory": ("regular", "memory"), "hard-drive": ("regular", "hard-drive"),
+    "wallet": ("regular", "wallet"), "chat": ("regular", "chat-circle-dots"), "envelope-open": ("regular", "envelope-open"),
+    "eye": ("regular", "eye"), "id-card": ("regular", "identification-card"), "arrow-left": ("regular", "arrow-left"),
+    "arrow-right": ("regular", "arrow-right"), "credit-card": ("regular", "credit-card"),
+    "sliders": ("regular", "sliders-horizontal"), "stack": ("regular", "stack"), "question": ("regular", "question"),
+    "sign-in": ("regular", "sign-in"), "return": ("regular", "arrow-u-up-left"), "dots": ("regular", "dots-three"),
+    "instagram": ("regular", "instagram-logo"), "telegram": ("regular", "telegram-logo"),
+    "whatsapp": ("regular", "whatsapp-logo"), "linkedin": ("regular", "linkedin-logo"),
+    "lightning": ("fill", "lightning"), "calendar": ("regular", "calendar-blank"), "receipt": ("regular", "receipt"),
+    "x-circle": ("regular", "x-circle"), "fire": ("fill", "fire"), "timer": ("regular", "timer"),
+    "newspaper": ("regular", "newspaper"), "user-circle": ("regular", "user-circle"),
+    "list-bullets": ("regular", "list-bullets"), "map": ("regular", "map-trifold"),
 }
 
 

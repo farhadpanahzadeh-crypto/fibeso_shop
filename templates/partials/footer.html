@@ -1,62 +1,94 @@
   <footer class="site-footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <a class="brand" href="{{root}}index.html" aria-label="فروشگاه فیبسو، صفحه اصلی">
-            <img class="brand__mark" src="{{root}}assets/images/logo-mark-inverse.svg" alt="" width="40" height="40">
-            <span>فیبسو</span>
-          </a>
-          <p class="footer-about">فروشگاه تخصصی تجهیزات شبکه، لپ‌تاپ نو و استوک و قطعات لپ‌تاپ؛ با تست فنی، ضمانت سلامت و مشاوره پیش از خرید.</p>
-        </div>
-        <nav aria-labelledby="footer-cat-title">
-          <h2 class="footer-title" id="footer-cat-title">فروشگاه</h2>
+    <div class="site-footer__panel">
+      <div class="footer-top">
+        <a class="brand brand--inverse" href="{{root}}index.html" aria-label="فروشگاه فیبسو، صفحه اصلی">
+          <img class="brand__mark" src="{{root}}assets/images/logo-mark-inverse.svg" alt="" width="40" height="40">
+          <span>فیبسو</span>
+        </a>
+        <a class="back-to-top" href="#main">بازگشت به بالا {{icon:caret-up}}</a>
+      </div>
+
+      <div class="footer-cols">
+        <nav class="footer-col" aria-labelledby="fc-quick">
+          <h2 class="footer-title" id="fc-quick">دسترسی سریع</h2>
           <ul class="footer-links">
             <li><a href="{{root}}pages/shop.html?cat=laptop&amp;condition=new">لپ‌تاپ نو</a></li>
             <li><a href="{{root}}pages/shop.html?cat=laptop&amp;condition=used">لپ‌تاپ استوک</a></li>
             <li><a href="{{root}}pages/shop.html?cat=network">تجهیزات شبکه</a></li>
-            <li><a href="{{root}}pages/shop.html?cat=parts">قطعات و لوازم جانبی</a></li>
+            <li><a href="{{root}}pages/shop.html?cat=parts">قطعات لپ‌تاپ</a></li>
             <li><a href="{{root}}pages/shop.html?tag=offer">تخفیف‌ها</a></li>
+            <li><a href="{{root}}pages/blog.html">بلاگ</a></li>
           </ul>
         </nav>
-        <nav aria-labelledby="footer-help-title">
-          <h2 class="footer-title" id="footer-help-title">راهنما و خدمات</h2>
+        <nav class="footer-col" aria-labelledby="fc-best">
+          <h2 class="footer-title" id="fc-best">پرفروش‌ترین‌ها</h2>
           <ul class="footer-links">
-            <li><a href="{{root}}pages/warranty.html">ضمانت و درجه‌بندی استوک</a></li>
+            <li><a href="{{root}}pages/shop.html?q=ThinkPad">ThinkPad استوک</a></li>
+            <li><a href="{{root}}pages/shop.html?q=Latitude">Latitude استوک</a></li>
+            <li><a href="{{root}}pages/shop.html?sub=router">روتر و مودم</a></li>
+            <li><a href="{{root}}pages/shop.html?sub=switch">سوییچ شبکه</a></li>
+            <li><a href="{{root}}pages/shop.html?sub=ram">رم لپ‌تاپ</a></li>
+            <li><a href="{{root}}pages/shop.html?sub=ssd">حافظه SSD</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="fc-about">
+          <h2 class="footer-title" id="fc-about">درباره فیبسو</h2>
+          <ul class="footer-links">
+            <li><a href="{{root}}pages/about.html">درباره ما</a></li>
+            <li><a href="{{root}}pages/contact.html">تماس با ما</a></li>
             <li><a href="{{root}}pages/faq.html">سوالات متداول</a></li>
             <li><a href="{{root}}pages/b2b.html">خرید سازمانی</a></li>
-            <li><a href="{{root}}pages/blog.html">بلاگ</a></li>
-            <li><a href="{{root}}pages/about.html">درباره فیبسو</a></li>
-            <li><a href="{{root}}pages/contact.html">تماس با ما</a></li>
           </ul>
         </nav>
-        <div>
-          <h2 class="footer-title">ارتباط با فیبسو</h2>
-          <ul class="footer-contact">
-            <li>
-              {{icon:map-pin}}
-              <span>تهران، شهرک گلستان، خیابان هوانیروز، بام‌لند، برج صدف، طبقه همکف، واحد ۲۰۱۰</span>
-            </li>
-            <li>
-              {{icon:phone}}
-              <a href="tel:+982182801845"><span class="ltr">۰۲۱-۸۲۸۰۱۸۴۵</span></a>
-            </li>
-            <li>
-              {{icon:envelope}}
-              <a href="mailto:info@fibeso.com"><span class="ltr">info@fibeso.com</span></a>
-            </li>
+        <nav class="footer-col" aria-labelledby="fc-before">
+          <h2 class="footer-title" id="fc-before">پیش از خرید</h2>
+          <ul class="footer-links">
+            <li><a href="{{root}}pages/warranty.html">درجه‌بندی کالای استوک</a></li>
+            <li><a href="{{root}}pages/faq.html#faq-order">راهنمای ثبت سفارش</a></li>
+            <li><a href="{{root}}pages/faq.html#faq-shipping">شیوه‌ها و هزینه ارسال</a></li>
+            <li><a href="{{root}}pages/b2b.html">استعلام قیمت سازمانی</a></li>
           </ul>
-        </div>
+        </nav>
+        <nav class="footer-col" aria-labelledby="fc-after">
+          <h2 class="footer-title" id="fc-after">پس از خرید</h2>
+          <ul class="footer-links">
+            <li><a href="{{root}}pages/account.html#orders">پیگیری سفارش</a></li>
+            <li><a href="{{root}}pages/warranty.html">ضمانت سلامت فیبسو</a></li>
+            <li><a href="{{root}}pages/faq.html#faq-returns">رویه بازگرداندن کالا</a></li>
+          </ul>
+        </nav>
+        <nav class="footer-col" aria-labelledby="fc-terms">
+          <h2 class="footer-title" id="fc-terms">قوانین و مقررات</h2>
+          <ul class="footer-links">
+            <li><a href="{{root}}pages/terms.html">قوانین و مقررات</a></li>
+            <li><a href="{{root}}pages/terms.html#privacy">حریم خصوصی کاربران</a></li>
+          </ul>
+        </nav>
       </div>
+
+      <div class="footer-contact-row">
+        <h2 class="footer-title">ارتباط با فیبسو</h2>
+        <ul class="footer-contact">
+          <li>{{icon:phone}}<span>تلفن: <a href="tel:+982182801845"><span class="ltr">۰۲۱-۸۲۸۰۱۸۴۵</span></a></span></li>
+          <li>{{icon:envelope}}<span>ایمیل: <a href="mailto:info@fibeso.com"><span class="ltr">info@fibeso.com</span></a></span></li>
+          <li>{{icon:map-pin}}<span>تهران، شهرک گلستان، خیابان هوانیروز، بام‌لند، برج صدف، طبقه همکف، واحد ۲۰۱۰</span></li>
+        </ul>
+      </div>
+
       <div class="footer-bottom">
-        <p>© ۱۴۰۵ فروشگاه فیبسو. همه حقوق محفوظ است.</p>
-        <p><a href="{{root}}pages/terms.html">قوانین و حریم خصوصی</a></p>
+        <p>© ۱۴۰۵ فروشگاه فیبسو. تمامی حقوق مادی و معنوی این سایت متعلق به فیبسو است.</p>
       </div>
     </div>
   </footer>
 
-  <a class="to-top" href="#main" aria-label="بازگشت به بالای صفحه" data-to-top hidden>
-    {{icon:caret-up}}
-  </a>
+  <!-- ===================== Mobile tab bar ===================== -->
+  <nav class="tabbar" aria-label="دسترسی سریع موبایل">
+    <a class="tabbar__item" href="{{root}}index.html"{{tab:home}}>{{icon:house}}<span>خانه</span></a>
+    <button class="tabbar__item" type="button" data-nav-open aria-controls="site-nav">{{icon:squares}}<span>دسته‌بندی</span></button>
+    <a class="tabbar__item" href="{{root}}pages/cart.html"{{tab:cart}}>{{icon:cart-plus}}<span>سبد خرید</span><span class="tabbar__count" data-cart-count hidden>۰</span></a>
+    <a class="tabbar__item" href="{{root}}pages/blog.html"{{tab:blog}}>{{icon:newspaper}}<span>بلاگ</span></a>
+    <a class="tabbar__item" href="{{root}}pages/account.html"{{tab:account}}>{{icon:user}}<span>حساب</span></a>
+  </nav>
 
   <!-- ===================== Mini cart ===================== -->
   <div class="backdrop" data-backdrop hidden></div>

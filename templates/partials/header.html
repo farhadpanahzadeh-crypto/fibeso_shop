@@ -1,3 +1,10 @@
+  <div class="promo-strip">
+    <div class="container promo-strip__inner">
+      <p class="promo-strip__text">لپ‌تاپ استوک تست‌شده با <strong>۶ ماه ضمانت سلامت فیبسو</strong></p>
+      <a class="promo-strip__cta" href="{{root}}pages/shop.html?cat=laptop&amp;condition=used">مشاهده لپ‌تاپ‌های استوک {{icon:caret-left}}</a>
+    </div>
+  </div>
+
   <header class="site-header" data-header>
     <div class="container site-header__main">
       <button class="icon-btn nav-toggle" type="button" aria-controls="site-nav" aria-expanded="false" data-nav-toggle>
@@ -20,15 +27,12 @@
       </form>
 
       <div class="header-actions">
-        <a class="icon-btn icon-btn--round" href="{{root}}pages/account.html" aria-label="حساب کاربری" data-account-link>
-          {{icon:user}}
+        <a class="auth-btn" href="{{root}}pages/login.html" data-account-link>
+          {{icon:sign-in auth-btn__icon}}
+          <span class="auth-btn__label" data-account-label>ورود <span class="auth-btn__sep" aria-hidden="true"></span> ثبت‌نام</span>
         </a>
-        <a class="icon-btn icon-btn--round" href="{{root}}pages/account.html#wishlist" aria-label="علاقه‌مندی‌ها">
-          {{icon:heart}}
-          <span class="icon-btn__count" data-wish-count hidden>۰</span>
-        </a>
-        <button class="icon-btn icon-btn--round" type="button" aria-label="سبد خرید" aria-controls="cart-drawer" data-cart-trigger>
-          {{icon:bag}}
+        <button class="icon-btn icon-btn--square" type="button" aria-label="سبد خرید" aria-controls="cart-drawer" data-cart-trigger>
+          {{icon:cart-plus}}
           <span class="icon-btn__count" data-cart-count hidden>۰</span>
         </button>
       </div>

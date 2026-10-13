@@ -16,6 +16,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 TPL = ROOT / "templates"
 NAV_KEYS = ("home", "offers", "new", "used", "network", "parts", "b2b")
+TAB_KEYS = ("home", "cart", "blog", "account")  # mobile tab bar
+# "chrome" picks the page frame: full (header + footer + tab bar), checkout
+# (logo-only header, small footer) or bare (no header/footer, e.g. login)
+CHROME = {
+    "full": ("header.html", "footer.html"),
+    "checkout": ("header-checkout.html", "footer-min.html"),
+    "bare": (None, "footer-min.html"),
+}
 
 HEAD = """<!doctype html>
 <html lang="fa" dir="rtl" data-root="{root}">
@@ -49,7 +57,7 @@ HEAD = """<!doctype html>
 {js}
   <script src="{root}assets/js/main.js" defer></script>
 </head>
-<body class="page-{slug}">
+<body class="page-{slug} chrome-{chrome}">
   <a class="skip-link" href="#main">پرش به محتوای اصلی</a>
 
 """
@@ -73,19 +81,20 @@ SKELETON = ('<li class="skeleton-card" aria-hidden="true"><span class="skeleton 
             '<span class="skeleton skeleton--price"></span></li>')
 
 
-def render(text, root, nav):
+def render(text, root, nav, tab=""):
     text = re.sub(r"\{\{icon:([a-z0-9 _-]+)\}\}", icon_svg, text)
     # {{skeleton:N}} -> N placeholder cards, replaced when scripts render real products
     text = re.sub(r"\{\{skeleton:(\d+)\}\}", lambda m: SKELETON * int(m.group(1)), text)
     text = text.replace("{{root}}", root)
     for key in NAV_KEYS:
         text = text.replace("{{cur:%s}}" % key, ' aria-current="page"' if key == nav else "")
+    for key in TAB_KEYS:
+        text = text.replace("{{tab:%s}}" % key, ' aria-current="page"' if key == tab else "")
     return text
 
 
 def build():
-    header = (TPL / "partials" / "header.html").read_text(encoding="utf-8")
-    footer = (TPL / "partials" / "footer.html").read_text(encoding="utf-8")
+    partial = lambda name: (TPL / "partials" / name).read_text(encoding="utf-8") if name else ""
     count = 0
     for tpl in sorted((TPL / "pages").glob("*.html")):
         raw = tpl.read_text(encoding="utf-8")
@@ -97,12 +106,16 @@ def build():
         out = ROOT / meta["out"]
         root = "../" * (len(Path(meta["out"]).parts) - 1)
         nav = meta.get("nav", "")
+        tab = meta.get("tab", "")
+        header_name, footer_name = CHROME[meta.get("chrome", "full")]
+        header, footer = partial(header_name), partial(footer_name)
         css = "\n".join(f'  <link rel="stylesheet" href="{root}assets/css/{c}">' for c in meta.get("css", []))
         js = "\n".join(f'  <script src="{root}assets/js/{j}" defer></script>' for j in meta.get("js", []))
         robots = '\n  <meta name="robots" content="noindex">' if meta.get("noindex") else ""
         page = HEAD.format(root=root, title=meta["title"], description=meta["description"],
-                           css=css, js=js, robots=robots, slug=tpl.stem)
-        page += render(header, root, nav) + "\n" + render(body, root, nav) + "\n" + render(footer, root, nav)
+                           css=css, js=js, robots=robots, slug=tpl.stem,
+                           chrome=meta.get("chrome", "full"))
+        page += render(header, root, nav, tab) + "\n" + render(body, root, nav, tab) + "\n" + render(footer, root, nav, tab)
         page += "</body>\n</html>\n"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(page, encoding="utf-8")

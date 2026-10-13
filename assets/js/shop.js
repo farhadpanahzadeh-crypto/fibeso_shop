@@ -83,7 +83,9 @@
     star: ic('star-fill'),
     check: ic('check'),
     bag: ic('bag'),
-    x: ic('x')
+    x: ic('x'),
+    stock: ic('package'),
+    timer: ic('timer')
   };
 
   function discountOf(p) {
@@ -99,44 +101,105 @@
   function priceHTML(p) {
     if (p.stock === 0) return '<span class="stock-out">ناموجود</span>';
     return '<div class="price">' +
-      (p.old ? '<del class="price__old"><span class="visually-hidden">قیمت قبلی: </span>' + formatPrice(p.old) + '</del>' : '') +
       '<span class="price__now">' + formatPrice(p.price) + ' <span class="price__unit">تومان</span></span>' +
+      (p.old ? '<del class="price__old"><span class="visually-hidden">قیمت قبلی: </span>' + formatPrice(p.old) + '</del>' : '') +
     '</div>';
   }
 
-  function cardHTML(p) {
+  /* Up to three key specs shown as an icon row on cards (laptops: screen, CPU, RAM) */
+  var SPEC_ICON = [[/پورت/, 'network'], [/بی‌سیم|باند|Wi-Fi/, 'wifi'], [/ظرفیت|حافظه/, 'hard-drive'],
+    [/توان|تغذیه|درگاه/, 'plugs'], [/نوع|رابط|رده|اتصال/, 'cpu'], [/نصب|ارتفاع|عمق|طول/, 'rack']];
+  function cardSpecs(p) {
+    if (p.cat === 'laptop') {
+      var cpu = (p.cpu.match(/Core i\d|Ryzen \d|Celeron|Apple \w+/) || [p.cpu.split(' ').slice(-1)[0]])[0];
+      return [
+        ['monitor', p.screen.split(' ').slice(0, 2).join(' ')],
+        ['cpu', cpu],
+        ['memory', p.ram.split(' ')[0] + ' گیگ']
+      ];
+    }
+    return (p.specs || []).filter(function (s) { return !/وضعیت ظاهری/.test(s[0]); }).slice(0, 3).map(function (s) {
+      var name = 'info';
+      SPEC_ICON.some(function (m) { if (m[0].test(s[0])) { name = m[1]; return true; } return false; });
+      var v = s[1].replace(/\s*\(.*\)/, '');
+      return [name, v.length > 16 ? v.slice(0, 15) + '…' : v];
+    });
+  }
+
+  /* Timed offers: each product gets a stable end time later today (demo data) */
+  function offerEnd(p) {
+    var h = 0;
+    for (var i = 0; i < p.id.length; i++) h = (h * 31 + p.id.charCodeAt(i)) % 997;
+    var d = new Date();
+    d.setHours(18 + (h % 6), (h * 7) % 60, 0, 0);
+    if (d.getTime() < Date.now()) d.setDate(d.getDate() + 1);
+    return d.getTime();
+  }
+
+  function countdownText(end) {
+    var left = Math.max(0, Math.floor((end - Date.now()) / 1000));
+    var hh = Math.floor(left / 3600), mm = Math.floor(left / 60) % 60, ss = left % 60;
+    return [hh, mm, ss].map(function (n) { return faPad(n); }).join(':');
+  }
+  var faDigits = new Intl.NumberFormat('fa-IR', { minimumIntegerDigits: 2, useGrouping: false });
+  function faPad(n) { return faDigits.format(n); }
+
+  var countdownTimer = null;
+  function startCountdowns() {
+    if (countdownTimer) return;
+    var tick = function () {
+      var els = document.querySelectorAll('[data-countdown]');
+      if (!els.length) { window.clearInterval(countdownTimer); countdownTimer = null; return; }
+      els.forEach(function (el) { el.textContent = countdownText(Number(el.getAttribute('data-countdown'))); });
+    };
+    countdownTimer = window.setInterval(tick, 1000);
+    tick();
+  }
+
+  /* opts.timer: show the "special offer" band with a countdown (discounted items only) */
+  function cardHTML(p, opts) {
+    opts = opts || {};
     var off = discountOf(p);
     var wished = wishlist.indexOf(p.id) !== -1;
-    var cartBtn = p.stock === 0 ? '' :
-      '<button class="add-to-cart" type="button" data-add-to-cart="' + p.id + '" aria-label="افزودن ' + escapeHtml(p.title) + ' به سبد خرید">' + ICON.cart + '</button>';
+    var low = p.stock > 0 && p.stock <= 3;
+    var timer = opts.timer && off && p.stock !== 0;
+    var end = timer ? offerEnd(p) : 0;
 
-    return '<article class="product-card' + (p.stock === 0 ? ' product-card--out' : '') + '">' +
+    return '<article class="product-card' + (p.stock === 0 ? ' product-card--out' : '') + (timer ? ' product-card--timer' : '') + '">' +
+      (timer ? '<p class="product-card__timer"><span>تخفیف ویژه</span>' +
+        '<span class="visually-hidden">زمان باقی‌مانده: </span><time class="countdown" data-countdown="' + end + '">' + countdownText(end) + '</time></p>' : '') +
       '<div class="product-card__media">' +
         '<img src="' + imageUrl(p) + '" alt="" width="400" height="400" loading="lazy">' +
-        '<div class="product-card__flags">' +
-          (off ? '<span class="discount"><span class="visually-hidden">تخفیف </span>-' + formatPrice(off) + '٪</span>' : '') +
-        '</div>' +
+        '<div class="product-card__flags">' + conditionHTML(p) + '</div>' +
         '<button class="product-card__wish" type="button" data-wish="' + p.id + '" aria-pressed="' + wished + '" aria-label="افزودن ' + escapeHtml(p.title) + ' به علاقه‌مندی‌ها">' + ICON.heart + '</button>' +
       '</div>' +
-      '<div class="product-card__body">' +
-        '<h3 class="product-card__title"><a href="' + PRODUCT_URL + p.id + '">' + escapeHtml(p.title) + '</a></h3>' +
-        '<div class="product-card__meta">' + conditionHTML(p) +
-          '<span class="product-card__rating">' + ICON.star + formatPrice(p.rating) +
-          ' <span>(' + formatPrice(p.reviews) + ')</span><span class="visually-hidden"> نظر</span></span>' +
-        '</div>' +
-        '<div class="product-card__foot">' + priceHTML(p) + cartBtn + '</div>' +
+      '<ul class="product-card__specs" aria-label="مشخصات کلیدی">' + cardSpecs(p).map(function (s) {
+        return '<li>' + ic(s[0]) + '<span>' + escapeHtml(s[1]) + '</span></li>';
+      }).join('') + '</ul>' +
+      '<h3 class="product-card__title"><a href="' + PRODUCT_URL + p.id + '">' + escapeHtml(p.title) + '</a></h3>' +
+      '<div class="product-card__meta">' +
+        '<span class="product-card__rating">' + ICON.star + formatPrice(p.rating) +
+        '<span class="visually-hidden"> از ۵، ' + formatPrice(p.reviews) + ' نظر</span></span>' +
+        (low ? '<span class="stock-low">' + ICON.stock + formatPrice(p.stock) + ' عدد در انبار باقی مانده</span>' : '') +
+      '</div>' +
+      '<div class="product-card__foot">' +
+        (off && p.stock !== 0 ? '<span class="discount"><span class="visually-hidden">تخفیف </span>' + formatPrice(off) + '٪</span>' : '') +
+        priceHTML(p) +
       '</div>' +
     '</article>';
   }
 
-  function render(container, list, wrapTag, emptyHTML) {
+  function render(container, list, wrapTag, emptyHTML, opts) {
+    if (!container) return;
     if (!list.length) {
       container.innerHTML = emptyHTML || '<li class="empty-state">محصولی برای نمایش وجود ندارد.</li>';
       return;
     }
     container.innerHTML = list.map(function (p) {
-      return wrapTag ? '<' + wrapTag + '>' + cardHTML(p) + '</' + wrapTag + '>' : cardHTML(p);
+      var card = cardHTML(p, opts);
+      return wrapTag ? '<' + wrapTag + '>' + card + '</' + wrapTag + '>' : card;
     }).join('');
+    if (opts && opts.timer) startCountdowns();
   }
 
   /* ---------- Toast ---------- */
@@ -180,6 +243,18 @@
     updateWishCount();
     emit();
     return i === -1;
+  }
+
+  /* ---------- Recently viewed (product page records, cart/account show) ---------- */
+  var RECENT_KEY = 'fibeso-recent';
+  function recent() {
+    return read(RECENT_KEY, []).filter(function (id) { return byId[id]; }).map(function (id) { return byId[id]; });
+  }
+  function addRecent(id) {
+    if (!byId[id]) return;
+    var list = read(RECENT_KEY, []).filter(function (x) { return x !== id; });
+    list.unshift(id);
+    write(RECENT_KEY, list.slice(0, 12));
   }
 
   /* ---------- Cart ---------- */
@@ -349,6 +424,9 @@
     matches: matches,
     render: render,
     cardHTML: cardHTML,
+    cardSpecs: cardSpecs,
+    offerEnd: offerEnd,
+    startCountdowns: startCountdowns,
     conditionHTML: conditionHTML,
     priceHTML: priceHTML,
     qtyHTML: qtyHTML,
@@ -366,6 +444,8 @@
     cartQty: function (id) { return cart[id] || 0; },
     setQty: setQty,
     clearCart: clearCart,
+    recent: recent,
+    addRecent: addRecent,
     onChange: function (fn) { listeners.push(fn); }
   };
 })();

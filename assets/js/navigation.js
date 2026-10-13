@@ -44,9 +44,20 @@
       }
     });
 
+    // Mobile tab bar "categories" opens the same drawer
+    document.querySelectorAll('[data-nav-open]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (desktop.matches) return;
+        setOpen(true);
+        var close = nav.querySelector('[data-nav-close]');
+        if (close) close.focus();
+      });
+    });
+
     document.addEventListener('click', function (event) {
       if (desktop.matches || toggle.getAttribute('aria-expanded') !== 'true') return;
-      if (!nav.contains(event.target) && !toggle.contains(event.target)) setOpen(false);
+      if (!nav.contains(event.target) && !toggle.contains(event.target) &&
+          !event.target.closest('[data-nav-open]')) setOpen(false);
     });
 
     desktop.addEventListener('change', function () {
