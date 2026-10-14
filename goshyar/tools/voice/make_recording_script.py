@@ -60,6 +60,11 @@ def main():
         groups[section_of(l["id"])].append(l)
 
     recorded = set(os.listdir(RECORDED)) if os.path.isdir(RECORDED) else set()
+    tts_path = os.path.join(OUT, "tts_generated.json")
+    tts = set()
+    if os.path.exists(tts_path):
+        with open(tts_path, encoding="utf-8") as f:
+            tts = {k + ".mp3" for k in json.load(f).get("files", {})}
     os.makedirs(OUT, exist_ok=True)
 
     fmt = data.get("format", {})
@@ -106,14 +111,18 @@ def main():
 
     with open(os.path.join(OUT, "recording_list.csv"), "w", encoding="utf-8-sig", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["id", "file", "text", "event", "screen", "group", "delay_ms", "recorded"])
+        w.writerow(["id", "file", "text", "event", "screen", "group", "delay_ms", "recorded"])  # recorded: yes | tts | no
         for l in lines:
             name = os.path.basename(l["file"])
             w.writerow([l["id"], name, l["text"], l.get("event", ""), l.get("screen", ""), l.get("group", ""),
-                        l.get("delayMs", 0), "yes" if name in recorded else "no"])
+                        l.get("delayMs", 0),
+                        "tts" if name in tts and name in recorded else ("yes" if name in recorded else "no")])
 
-    print("%d lines → docs/voice/RECORDING_SCRIPT.md, docs/voice/recording_list.csv (%d recorded)"
-          % (len(lines), len([l for l in lines if os.path.basename(l["file"]) in recorded])))
+    names = [os.path.basename(l["file"]) for l in lines]
+    print("%d lines → docs/voice/RECORDING_SCRIPT.md, docs/voice/recording_list.csv "
+          "(%d recorded, %d temporary TTS)"
+          % (len(lines), len([n for n in names if n in recorded and n not in tts]),
+             len([n for n in names if n in recorded and n in tts])))
 
 
 if __name__ == "__main__":

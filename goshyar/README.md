@@ -75,7 +75,7 @@ assets/
   images/ audio/ fonts/        دارایی‌های داخلی (همیشه آفلاین)
 android/                       پروژه‌ی اندروید (فقط MainActivity.kt برای انتقال داده‌ی قدیمی)
 cloudflare/                    Worker، پیکربندی R2 و اسکریپت‌های انتشار
-tools/                         آماده‌سازی دارایی‌ها، ضبط صدا، ابزارهای نسخه‌ی قدیمی
+tools/                         آماده‌سازی دارایی‌ها، ضبط صدا، استودیوی صداگذاری، ابزارهای نسخه‌ی قدیمی
 docs/voice/                    فیلم‌نامه‌ی ضبط و فهرست فایل‌ها (تولیدی)
 legacy/                        پشتیبان کد منبع نسخه‌ی Java
 art/source/canva/              تصویرهای منبع ساخته‌شده با Canva
@@ -87,6 +87,8 @@ art/source/canva/              تصویرهای منبع ساخته‌شده ب�
   تست سلامت محتوا ارجاع‌های شکسته را پیدا می‌کند.
 - **جمله‌های گوینده:** `assets/content/voice_lines.json`، سپس
   `python3 tools/voice/make_recording_script.py` تا فیلم‌نامه‌ی ضبط به‌روز شود.
+- **صدای موقت با TTS:** استودیوی صداگذاری `tools/voice-studio/` (`npm start`) جمله‌ها را از همین JSON
+  می‌خواند و با آواشو صدای ماشینی موقت می‌سازد؛ ضبط انسانی را هرگز بازنویسی نمی‌کند.
 - **صدای ضبط‌شده:** `tools/voice/import_recordings.sh <پوشه‌ی فایل‌های استودیو>`
   (یکسان‌سازی بلندی و تبدیل به MP3 در `assets/audio/voice/`).
 - **تصویرها:** `python3 tools/prepare_assets.py --legacy <مسیر goshyar_game>`؛
