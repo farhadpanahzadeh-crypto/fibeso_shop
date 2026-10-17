@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>هپییک | پلتفرم خرید موتورسیکلت و قطعات</title>
+  <meta name="description" content="هپییک، پلتفرم خرید موتورسیکلت، قطعات یدکی، کلاه و تجهیزات موتورسواری با مشاوره، ضمانت اصالت و تحویل در محل.">
+  <meta name="theme-color" content="#0D1C31">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/vazirmatn-arabic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/vendor/swiper/swiper-bundle.min.css">
+  <link rel="stylesheet" href="assets/vendor/phosphor/regular/style.css">
+  <link rel="stylesheet" href="assets/vendor/phosphor/fill/style.css">
+  <link rel="stylesheet" href="assets/css/hapeec.css">
+  <script>
+    try { const t = localStorage.getItem("hapeec-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">رفتن به محتوای اصلی</a>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="hapeec-mark" viewBox="0 0 100 100">
+      <path d="M25.4 86.5A44 44 0 1 1 74.6 86.5" fill="none" stroke="currentColor" stroke-width="3.6"/>
+      <g stroke="currentColor" stroke-width="3" stroke-linecap="round">
+        <path d="M50 6v7"/><path d="M12 28l6 3.5"/><path d="M88 28l-6 3.5"/><path d="M6 50h7"/><path d="M12 72l6-3.5"/><path d="M88 72l-6-3.5"/>
+      </g>
+      <path d="M87 50h7" stroke="#EC6A14" stroke-width="3" stroke-linecap="round"/>
+      <path d="M29 73h9l11-46h-9zM55 73h9l11-46h-9z" fill="currentColor"/>
+      <path d="M36 61L71 35" stroke="#EC6A14" stroke-width="4.2" stroke-linecap="round"/>
+      <circle cx="36" cy="61" r="3.6" fill="#fff" stroke="#EC6A14" stroke-width="2.4"/>
+      <circle cx="71.5" cy="34.6" r="3.6" fill="#EC6A14"/>
+      <path d="M25.4 86.5A44 44 0 0 0 74.6 86.5" fill="none" stroke="#EC6A14" stroke-width="6.5" stroke-linecap="round"/>
+      <path d="M37 80q13 6 26 0" fill="none" stroke="#EC6A14" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
+  <div class="promo-strip">
+    <div class="container">
+      <span>ارسال رایگان قطعات برای خرید بالای <strong>۲ میلیون تومان</strong></span>
+      <a href="#">شرایط ارسال</a>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="header-top">
+        <a class="logo" href="./" aria-label="هپییک، صفحه‌ی اصلی">
+          <svg class="logo__mark" aria-hidden="true"><use href="#hapeec-mark"/></svg>
+          <span class="logo__type">
+            <span class="wordmark">H<span class="wordmark__a" aria-hidden="true"></span>PEEC</span>
+            <span class="logo__tag">MOTORCYCLE PLATFORM</span>
+          </span>
+        </a>
+
+        <form class="search" role="search" action="#" onsubmit="return false">
+          <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+          <label for="q" class="sr-only">جستجو</label>
+          <input id="q" type="search" placeholder="جستجوی موتور، قطعه یا برند" autocomplete="off">
+          <div class="search__panel">
+            <h3><i class="ph ph-trend-up" aria-hidden="true"></i>جستجوهای پرطرفدار</h3>
+            <div class="chips">
+              <a class="chip" href="#">کلاه کاسکت</a>
+              <a class="chip" href="#">لنت ترمز CG 125</a>
+              <a class="chip" href="#">روغن 10W-40</a>
+              <a class="chip" href="#">لاستیک تیوبلس</a>
+              <a class="chip" href="#">اسکوتر ۱۵۰</a>
+              <a class="chip" href="#">چراغ LED</a>
+            </div>
+          </div>
+        </form>
+
+        <div class="header-actions">
+          <button class="icon-btn" type="button" id="themeToggle" aria-label="تغییر حالت روشن و تیره">
+            <i class="ph ph-moon" aria-hidden="true"></i>
+          </button>
+          <a class="btn btn--ghost" href="#"><i class="ph ph-sign-in" aria-hidden="true"></i>ورود | ثبت‌نام</a>
+          <span class="sep" aria-hidden="true"></span>
+          <a class="icon-btn" href="#" aria-label="سبد خرید">
+            <i class="ph ph-shopping-cart-simple" aria-hidden="true"></i>
+            <span class="badge-count num" data-cart-count>۰</span>
+          </a>
+        </div>
+      </div>
+
+      <nav class="header-nav" aria-label="منوی اصلی">
+        <div class="mega" id="mega">
+          <button class="mega-trigger" type="button" aria-expanded="false" aria-controls="megaPanel">
+            <i class="ph ph-list" aria-hidden="true"></i>دسته‌بندی کالاها
+          </button>
+          <div class="mega__panel" id="megaPanel">
+            <div class="mega__inner">
+              <div class="mega__cats" role="tablist" aria-orientation="vertical" data-mega-cats></div>
+              <div class="mega__body" data-mega-body></div>
+            </div>
+          </div>
+        </div>
+        <span class="nav-sep" aria-hidden="true"></span>
+        <a class="nav-hot" href="#amazing"><i class="ph-fill ph-lightning" aria-hidden="true"></i>شگفت‌انگیزها</a>
+        <a href="#bikes">موتورسیکلت</a>
+        <a href="#parts">قطعات یدکی</a>
+        <a href="#gear">کلاه و تجهیزات</a>
+        <a href="#videos">ویدیوها</a>
+        <a href="#mag">مجله</a>
+        <a class="nav-end" href="#"><i class="ph ph-headset" aria-hidden="true"></i>مشاوره خرید</a>
+        <a href="#"><i class="ph ph-map-pin" aria-hidden="true"></i>شهر خود را انتخاب کنید</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- hero slider -->
+    <section class="hero" aria-label="پیشنهادهای ویژه">
+      <div class="swiper" data-hero>
+        <div class="swiper-wrapper" data-hero-slides></div>
+      </div>
+      <div class="hero__pager" data-hero-pager></div>
+      <div class="hero__arrows">
+        <button type="button" data-hero-prev aria-label="اسلاید قبلی"><i class="ph ph-caret-right" aria-hidden="true"></i></button>
+        <button type="button" data-hero-next aria-label="اسلاید بعدی"><i class="ph ph-caret-left" aria-hidden="true"></i></button>
+      </div>
+    </section>
+
+    <div class="container">
+      <!-- stories -->
+      <section class="stories" aria-label="استوری‌ها">
+        <div class="swiper" data-stories>
+          <div class="swiper-wrapper" data-stories-list></div>
+        </div>
+      </section>
+
+      <!-- services -->
+      <nav class="services reveal" aria-label="خدمات هپییک" data-services></nav>
+
+      <!-- amazing offers -->
+      <section class="section reveal" id="amazing" aria-labelledby="amazingTitle">
+        <div class="amazing">
+          <div class="amazing__intro">
+            <h2 class="amazing__title" id="amazingTitle">شگفت‌<span>انگیز</span></h2>
+            <svg class="amazing__badge" aria-hidden="true" style="color:#fff"><use href="#hapeec-mark"/></svg>
+            <div class="countdown num" data-countdown aria-label="زمان باقی‌مانده">
+              <span data-h>۰۰</span><b>:</b><span data-m>۰۰</span><b>:</b><span data-s>۰۰</span>
+            </div>
+            <a class="link-more" href="#">مشاهده همه<i class="ph ph-caret-left" aria-hidden="true"></i></a>
+          </div>
+          <div class="amazing__track carousel">
+            <div class="swiper" data-rail>
+              <div class="swiper-wrapper" data-amazing-list></div>
+            </div>
+            <button class="nav-btn nav-btn--prev" type="button" aria-label="قبلی"><i class="ph ph-caret-right" aria-hidden="true"></i></button>
+            <button class="nav-btn nav-btn--next" type="button" aria-label="بعدی"><i class="ph ph-caret-left" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4 banners -->
+      <section class="section banners banners--4 reveal" aria-label="پیشنهادهای دسته‌ای" data-banners4></section>
+
+      <!-- express delivery -->
+      <section class="section reveal" aria-label="ارسال امروز">
+        <div class="express">
+          <div class="express__intro">
+            <i class="ph-fill ph-truck" aria-hidden="true"></i>
+            <div>
+              <strong>ارسال امروز</strong>
+              <span>سفارش تا ساعت ۱۴، تحویل همین امروز در تهران</span>
+            </div>
+          </div>
+          <div class="express__items" data-express></div>
+          <a class="btn btn--primary" href="#">همه‌ی کالاها<i class="ph ph-arrow-left" aria-hidden="true"></i></a>
+        </div>
+      </section>
+
+      <!-- categories -->
+      <section class="section reveal" aria-labelledby="catsTitle">
+        <div class="section-head"><h2 id="catsTitle">خرید بر اساس دسته‌بندی</h2></div>
+        <div class="cats" data-cats></div>
+      </section>
+
+      <!-- 2 banners -->
+      <section class="section banners banners--2 reveal" aria-label="پیشنهادهای ویژه" data-banners2></section>
+
+      <!-- picks -->
+      <section class="section reveal" aria-labelledby="picksTitle">
+        <div class="section-head"><h2 id="picksTitle"><i class="ph-fill ph-star" aria-hidden="true"></i>پیشنهاد هپییک</h2></div>
+        <div class="picks" data-picks></div>
+      </section>
+
+      <!-- product rails are injected here -->
+      <div data-rails></div>
+
+      <!-- brands -->
+      <section class="section reveal" aria-labelledby="brandsTitle">
+        <div class="section-head"><h2 id="brandsTitle">محبوب‌ترین برندها</h2></div>
+        <div class="carousel brands">
+          <div class="swiper" data-rail>
+            <div class="swiper-wrapper" data-brands></div>
+          </div>
+          <button class="nav-btn nav-btn--prev" type="button" aria-label="قبلی"><i class="ph ph-caret-right" aria-hidden="true"></i></button>
+          <button class="nav-btn nav-btn--next" type="button" aria-label="بعدی"><i class="ph ph-caret-left" aria-hidden="true"></i></button>
+        </div>
+      </section>
+
+      <!-- bestsellers -->
+      <section class="section reveal" aria-labelledby="bestTitle">
+        <div class="box">
+          <div class="section-head">
+            <h2 id="bestTitle"><i class="ph-fill ph-fire" aria-hidden="true"></i>پرفروش‌ترین‌های هفته</h2>
+            <a class="link-more" href="#">مشاهده همه<i class="ph ph-caret-left" aria-hidden="true"></i></a>
+          </div>
+          <div class="carousel ranked">
+            <div class="swiper" data-rail>
+              <div class="swiper-wrapper" data-ranked></div>
+            </div>
+            <button class="nav-btn nav-btn--prev" type="button" aria-label="قبلی"><i class="ph ph-caret-right" aria-hidden="true"></i></button>
+            <button class="nav-btn nav-btn--next" type="button" aria-label="بعدی"><i class="ph ph-caret-left" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- videos (from the previous HAPEEC design) -->
+      <section class="section reveal" id="videos" aria-labelledby="videosTitle">
+        <div class="section-head">
+          <div>
+            <h2 id="videosTitle"><i class="ph-fill ph-play-circle" aria-hidden="true"></i>برترین ویدیوها</h2>
+            <p>آموزش، بررسی و تجربه‌ی موتورسواری</p>
+          </div>
+          <a class="link-more" href="#">همه‌ی ویدیوها<i class="ph ph-caret-left" aria-hidden="true"></i></a>
+        </div>
+        <div class="carousel videos">
+          <div class="swiper" data-rail>
+            <div class="swiper-wrapper" data-videos></div>
+          </div>
+          <button class="nav-btn nav-btn--prev" type="button" aria-label="قبلی"><i class="ph ph-caret-right" aria-hidden="true"></i></button>
+          <button class="nav-btn nav-btn--next" type="button" aria-label="بعدی"><i class="ph ph-caret-left" aria-hidden="true"></i></button>
+        </div>
+      </section>
+
+      <!-- magazine -->
+      <section class="section reveal" id="mag" aria-labelledby="magTitle">
+        <div class="section-head">
+          <h2 id="magTitle">مجله‌ی هپییک</h2>
+          <a class="link-more" href="#">همه‌ی مطالب<i class="ph ph-caret-left" aria-hidden="true"></i></a>
+        </div>
+        <div class="mag" data-posts></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- footer (structure from the previous HAPEEC design) -->
+  <footer class="site-footer">
+    <div class="footer-services">
+      <ul class="container">
+        <li><i class="ph ph-headset" aria-hidden="true"></i>مشاور خرید</li>
+        <li><i class="ph ph-truck" aria-hidden="true"></i>تحویل در محل</li>
+        <li><i class="ph ph-credit-card" aria-hidden="true"></i>تسهیل پرداخت</li>
+        <li><i class="ph ph-shield-check" aria-hidden="true"></i>ضمانت</li>
+        <li><i class="ph ph-seal-check" aria-hidden="true"></i>اصالت کالا</li>
+        <li><i class="ph ph-wrench" aria-hidden="true"></i>آموزش نصب و نگهداری</li>
+      </ul>
+    </div>
+
+    <div class="container footer-main">
+      <div class="footer-brand">
+        <a class="logo" href="./" aria-label="هپییک">
+          <svg class="logo__mark" aria-hidden="true"><use href="#hapeec-mark"/></svg>
+          <span class="logo__type">
+            <span class="wordmark">H<span class="wordmark__a" aria-hidden="true"></span>PEEC</span>
+            <span class="logo__tag">MOTORCYCLE PLATFORM</span>
+          </span>
+        </a>
+        <p>هپییک پلتفرم جامع خرید موتورسیکلت، قطعات یدکی و تجهیزات موتورسواری است. از مشاوره‌ی خرید تا نصب و نگهداری، کنار شما هستیم.</p>
+        <div class="socials">
+          <a href="#" aria-label="اینستاگرام"><i class="ph ph-instagram-logo" aria-hidden="true"></i></a>
+          <a href="#" aria-label="تلگرام"><i class="ph ph-telegram-logo" aria-hidden="true"></i></a>
+          <a href="#" aria-label="یوتیوب"><i class="ph ph-youtube-logo" aria-hidden="true"></i></a>
+          <a href="#" aria-label="لینکدین"><i class="ph ph-linkedin-logo" aria-hidden="true"></i></a>
+          <a href="#" aria-label="ایکس"><i class="ph ph-x-logo" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h3>اطلاعات</h3>
+        <a href="#"><i class="ph ph-caret-left" aria-hidden="true"></i>درباره‌ی هپییک</a>
+        <a href="#"><i class="ph ph-caret-left" aria-hidden="true"></i>مجله</a>
+        <a href="#"><i class="ph ph-caret-left" aria-hidden="true"></i>فرصت‌های شغلی</a>
+        <a href="#"><i class="ph ph-caret-left" aria-hidden="true"></i>فروشنده شوید</a>
+        <a href="#"><i class="ph ph-caret-left" aria-hidden="true"></i>قوانین و مقررات</a>
+        <a href="#"><i class="ph ph-caret-left" aria-hidden="true"></i>حریم خصوصی</a>
+      </div>
+
+      <div class="footer-col">
+        <h3>خدمات مشتریان</h3>
+        <a href="#"><i class="ph ph-caret-left" aria-hidden="true"></i>پیگیری سفارش</a>
+        <a href="#"><i class="ph ph-caret-left" aria-hidden="true"></i>رویه‌ی بازگشت کالا</a>
+        <a href="#"><i class="ph ph-caret-left" aria-hidden="true"></i>ضمانت و اصالت</a>
+        <a href="#"><i class="ph ph-caret-left" aria-hidden="true"></i>خرید اقساطی</a>
+        <a href="#"><i class="ph ph-caret-left" aria-hidden="true"></i>پرسش‌های متداول</a>
+      </div>
+
+      <div class="footer-col">
+        <h3>تماس با ما</h3>
+        <ul class="contact-list">
+          <li><i class="ph ph-phone" aria-hidden="true"></i><span>پشتیبانی: <a href="tel:+982100000000" class="num" dir="ltr">۰۲۱-۰۰۰۰۰۰۰۰</a></span></li>
+          <li><i class="ph ph-clock" aria-hidden="true"></i><span>شنبه تا پنج‌شنبه، ۹ تا ۲۱</span></li>
+          <li><i class="ph ph-envelope-simple" aria-hidden="true"></i><span><a href="mailto:info@hapeec.ir">info@hapeec.ir</a></span></li>
+          <li><i class="ph ph-map-pin" aria-hidden="true"></i><span>تهران، خیابان امام خمینی، بازار موتور</span></li>
+        </ul>
+      </div>
+
+      <div class="footer-col footer-newsletter">
+        <h3>خبرنامه</h3>
+        <form class="newsletter" data-newsletter novalidate>
+          <label for="nlEmail">از تخفیف‌ها و موتورهای جدید باخبر شوید</label>
+          <div class="newsletter__row">
+            <input id="nlEmail" type="email" inputmode="email" placeholder="ایمیل شما" aria-describedby="nlMsg">
+            <button class="btn btn--primary" type="submit">عضویت</button>
+          </div>
+          <p class="newsletter__msg" id="nlMsg" role="status"></p>
+        </form>
+        <div class="trust">
+          <a href="#" aria-label="نماد اعتماد الکترونیکی"><i class="ph-fill ph-seal-check" aria-hidden="true"></i>نماد اعتماد</a>
+          <a href="#" aria-label="ساماندهی"><i class="ph-fill ph-shield-check" aria-hidden="true"></i>ساماندهی</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container">
+        <span>تمامی حقوق این سایت برای هپییک محفوظ است. ۱۴۰۵</span>
+        <a class="to-top" href="#main"><i class="ph ph-arrow-up" aria-hidden="true"></i>بازگشت به بالا</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- mobile tab bar -->
+  <nav class="tabbar" aria-label="ناوبری پایین">
+    <a href="./" aria-current="page"><i class="ph-fill ph-house" aria-hidden="true"></i>خانه</a>
+    <a href="#" data-open-mega><i class="ph ph-squares-four" aria-hidden="true"></i>دسته‌بندی</a>
+    <a href="#"><i class="ph ph-shopping-cart-simple" aria-hidden="true"></i><span class="badge-count num" data-cart-count>۰</span>سبد خرید</a>
+    <a href="#"><i class="ph ph-user" aria-hidden="true"></i>هپییک من</a>
+  </nav>
+
+  <!-- story / video viewer -->
+  <div class="viewer" data-viewer role="dialog" aria-modal="true" aria-label="نمایش استوری" hidden>
+    <button class="viewer__step viewer__step--prev" type="button" data-v-prev-group aria-label="استوری قبلی"><i class="ph ph-caret-right" aria-hidden="true"></i></button>
+    <div class="viewer__stage">
+      <div class="viewer__media" data-v-media></div>
+      <div class="viewer__shade"></div>
+      <div class="viewer__bars" data-v-bars></div>
+      <div class="viewer__head">
+        <img data-v-avatar alt="">
+        <div><span data-v-title></span><br><small>هپییک</small></div>
+        <div class="viewer__ctrl">
+          <button type="button" data-v-pause aria-label="توقف"><i class="ph-fill ph-pause" aria-hidden="true"></i></button>
+          <button type="button" data-v-close aria-label="بستن"><i class="ph ph-x" aria-hidden="true"></i></button>
+        </div>
+      </div>
+      <div class="viewer__tap">
+        <button type="button" data-v-back aria-label="قبلی"></button>
+        <button type="button" data-v-fwd aria-label="بعدی"></button>
+      </div>
+      <div class="viewer__foot">
+        <p data-v-caption></p>
+        <a class="btn btn--primary" href="#" data-v-cta></a>
+      </div>
+    </div>
+    <button class="viewer__step viewer__step--next" type="button" data-v-next-group aria-label="استوری بعدی"><i class="ph ph-caret-left" aria-hidden="true"></i></button>
+  </div>
+
+  <div class="toast" data-toast role="status" aria-live="polite"><i class="ph-fill ph-check-circle" aria-hidden="true"></i><span></span></div>
+
+  <script src="assets/vendor/swiper/swiper-bundle.min.js" defer></script>
+  <script src="assets/js/data.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+</body>
+</html>
