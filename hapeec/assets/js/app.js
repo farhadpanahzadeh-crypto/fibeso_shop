@@ -11,6 +11,10 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- templates ---------- */
+  // a photo when the item has one, otherwise a brand-coloured icon tile
+  const media = (x, attrs = 'loading="lazy" decoding="async"') =>
+    x.img ? `<img src="${x.img}" alt="" ${attrs}>` : `<span class="ph-tile"><i class="ph ${x.icon}" aria-hidden="true"></i></span>`;
+
   const finalPrice = (p) => Math.round((p.price * (100 - p.off)) / 100 / 1000) * 1000;
 
   function cardHTML(p, opts = {}) {
@@ -18,7 +22,7 @@
     return `
       <article class="p-card">
         <a class="p-card__media" href="#" aria-label="${esc(p.title)}">
-          <img src="${p.img}" alt="" loading="lazy" decoding="async" width="300" height="300">
+          ${media(p, 'loading="lazy" decoding="async" width="300" height="300"')}
           ${p.flag ? `<span class="p-card__flag"><i class="ph-fill ph-seal-check" aria-hidden="true"></i>${esc(p.flag)}</span>` : ""}
         </a>
         <h3 class="p-card__title"><a href="#">${esc(p.title)}</a></h3>
@@ -78,12 +82,12 @@
 
     $("[data-express]").innerHTML = D.express.map((p) => `
       <a class="express__item" href="#" aria-label="${esc(p.title)}">
-        <img src="${p.img}" alt="" loading="lazy">
+        ${media(p)}
         ${p.off ? `<span class="off num">٪${fa(p.off)}</span>` : ""}
       </a>`).join("");
 
     $("[data-cats]").innerHTML = D.cats.map((c) => `
-      <a class="cat" href="#"><span class="cat__img"><img src="${c.img}" alt="" loading="lazy"></span><span>${esc(c.label)}</span></a>`).join("");
+      <a class="cat" href="#"><span class="cat__img">${media(c)}</span><span>${esc(c.label)}</span></a>`).join("");
 
     $("[data-banners2]").innerHTML = D.banners2.map((b) => `
       <a class="banner" href="#">
@@ -95,7 +99,7 @@
       <div class="pick">
         <h3>${esc(k.title)}</h3>
         <p>${esc(k.text)}</p>
-        <div class="pick__grid">${k.items.map((p) => `<a href="#" aria-label="${esc(p.title)}"><img src="${p.img}" alt="" loading="lazy"></a>`).join("")}</div>
+        <div class="pick__grid">${k.items.map((p) => `<a href="#" aria-label="${esc(p.title)}">${media(p)}</a>`).join("")}</div>
         <a class="link-more" href="#">مشاهده<i class="ph ph-caret-left" aria-hidden="true"></i></a>
       </div>`).join("");
 
@@ -123,7 +127,7 @@
     for (let i = 0; i < D.bestsellers.length; i += 3) cols.push(D.bestsellers.slice(i, i + 3));
     $("[data-ranked]").innerHTML = cols.map((col, c) => `
       <div class="swiper-slide"><div class="ranked__col">${col.map((p, i) => `
-        <a class="rank-item" href="#"><img src="${p.img}" alt="" loading="lazy"><b class="num">${fa(c * 3 + i + 1)}</b><span>${esc(p.title)}</span></a>`).join("")}
+        <a class="rank-item" href="#"><span class="rank-item__img">${media(p)}</span><b class="num">${fa(c * 3 + i + 1)}</b><span>${esc(p.title)}</span></a>`).join("")}
       </div></div>`).join("");
 
     $("[data-videos]").innerHTML = D.videos.map((v, i) => `

@@ -53,6 +53,7 @@ Mobile (< 768px) adds a bottom tab bar and turns grids into swipeable rows.
 
 ## Placeholders to replace before launch
 
-- Photos are free-licensed Wikimedia Commons images used as stand-ins; replace them with real product shots
+- Photos are free-licensed Wikimedia Commons stand-ins (motorcycles, scooters, one helmet, one fuel tap).
+  Products without a matching photo show an icon tile; set `img` on the product in `data.js` once real photos exist
 - Prices, ratings, view counts and the phone number are sample data
 - Links point to `#`; trust badges need the real e-Namad / Samandehi embed codes
